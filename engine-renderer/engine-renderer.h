@@ -1,3 +1,5 @@
+#pragma once
+
 #ifdef _IS_ENGINE_RENDERER
 #define RENDERDLL __declspec(dllexport)
 #else
