@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<logicalClassDesignerModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/ModelStore" dslVersion="1.0.0.0" Id="df298fed-0f5d-4443-abc9-3c427202b61e" name="Game" linkedPackageId="02847e95-4e53-4de8-941e-c981b3016d37" xmlns="http://schemas.microsoft.com/dsltools/LogicalClassDesigner">
+  <packagedElements>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="d3bf5295-c89b-4c74-9afa-1a5b6806b158" name="World" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="9134f8e1-bfdb-4b7a-8a5c-b2cff36aa71d" />
+        <suppliersInternal>
+          <dependency Id="1cb0e362-78a7-490e-af4e-e1bfc8a4af58">
+            <packageMoniker Id="d4de62e4-fe45-452c-8f8f-fa935015b07a" LastKnownName="Objects" />
+            <elementDefinition Id="58734e79-3302-4089-9c1f-d635646fde77" />
+          </dependency>
+        </suppliersInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasPackages>
+      <package Id="d4de62e4-fe45-452c-8f8f-fa935015b07a" name="Objects">
+        <elementDefinition Id="87d8031a-f865-4590-98a0-9379b1cd92bc" />
+      </package>
+    </logicalClassDesignerModelHasPackages>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="6a716e00-c7c4-4d54-9be6-c88946352845" name="Clock" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="83d29c1d-a2bf-4c58-bb14-1064bcd54020" />
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="16be18e0-2e85-4cbe-8095-eb6daf1e1ecf" name="Event" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="6e1dd7d5-4e8f-4348-af9c-ed7f13827504" />
+        <suppliersInternal>
+          <dependency Id="8b4108be-9ea8-490e-9669-3f19fe4e003b">
+            <enumerationMoniker Id="c123425f-48e4-41b6-8dee-40ba74e57c06" LastKnownName="EventType" />
+            <elementDefinition Id="f7b613c2-4a9b-4e9b-ad10-28e505a97eb2" />
+          </dependency>
+        </suppliersInternal>
+        <ownedAttributesInternal>
+          <property Id="fccc4266-bae6-4dc1-a775-ae0c3bd865c4" name="type" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="472e9b75-11d1-4fdc-b1f2-3b95293f4d3c" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="c38fde14-f82f-40d1-b1b2-658ab6121c09" LastKnownName="EventType" />
+            </type_NamedElement>
+          </property>
+          <property Id="8c3c45e2-2d4e-46b8-b35d-47ffa4a92204" name="numArgs" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="68394aa3-75e3-4cdc-8485-682c5aa981cf" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="5ff2c279-d22d-46e0-a561-3c1aa446aff4" LastKnownName="int" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <packageHasNamedElement>
+      <referencedType Id="c38fde14-f82f-40d1-b1b2-658ab6121c09" name="EventType" isAbstract="false" isLeaf="false" cachedFullName="EventType">
+        <elementDefinition Id="3263dac0-e23d-474d-8834-0f51180a4480" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="5ff2c279-d22d-46e0-a561-3c1aa446aff4" name="int" isAbstract="false" isLeaf="false" cachedFullName="int">
+        <elementDefinition Id="e22f4979-5f03-4ded-8109-6c96b138f12d" />
+      </referencedType>
+    </packageHasNamedElement>
+    <logicalClassDesignerModelHasTypes>
+      <enumeration Id="c123425f-48e4-41b6-8dee-40ba74e57c06" name="EventType" isAbstract="false" isLeaf="false">
+        <elementDefinition Id="cc18a7f5-5bb7-4990-a0fb-ef9061e74875" />
+        <ownedLiterals>
+          <enumerationLiteral Id="59f414ad-7f59-4b23-a713-a710772a8143" name="EVENT_ATTACK">
+            <elementDefinition Id="cfb29a17-6634-4f30-b641-ce336abd388f" />
+          </enumerationLiteral>
+        </ownedLiterals>
+      </enumeration>
+    </logicalClassDesignerModelHasTypes>
+    <logicalClassDesignerModelHasTypes>
+      <class Id="0750e41e-90b0-4434-b319-3731ef765a02" name="EventAttack" isAbstract="false" isLeaf="false" isActiveClass="false">
+        <elementDefinition Id="0f0996f2-bf18-4ed2-9082-8ca351477723" />
+        <generalsInternal>
+          <generalization Id="8b836ee8-ff3f-412b-b6cc-88024b16671d" isSubstitutable="false">
+            <classMoniker Id="16be18e0-2e85-4cbe-8095-eb6daf1e1ecf" LastKnownName="Event" />
+            <elementDefinition Id="41dcb64f-5e0b-4fa7-8fa2-dfd6140dcf50" />
+          </generalization>
+        </generalsInternal>
+        <ownedAttributesInternal>
+          <property Id="ce8f7208-e636-4257-bb54-04f39c2451d6" name="damage" isLeaf="false" isStatic="false" isReadOnly="false" isUnique="false" isDerived="false" isDerivedUnion="false" aggregation="None" isComposite="false">
+            <elementDefinition Id="9f72173b-d84c-47d8-85cf-83e425019d61" />
+            <type_NamedElement>
+              <referencedTypeMoniker Id="7b80ad6f-9122-449a-a351-85fa595e56fa" LastKnownName="float" />
+            </type_NamedElement>
+          </property>
+        </ownedAttributesInternal>
+        <ownedOperationsInternal>
+          <operation Id="969ae8f7-2b6e-417b-ba7c-248a79a368de" name="getAttackInfo" isLeaf="false" isStatic="false" isAbstract="false" concurrency="Sequential" isQuery="false">
+            <elementDefinition Id="2024149b-e839-4a92-8f92-cc3347f90c88" />
+            <ownedParameters>
+              <operationHasOwnedParameters>
+                <parameter Id="4c242ddf-01a9-4338-921c-df40d9675682" direction="Return" isUnique="false">
+                  <elementDefinition Id="b71cf47d-fed0-40bd-90e0-40ab41e2a0f3" />
+                  <type_NamedElement>
+                    <referencedTypeMoniker Id="92d58b38-a4e9-4615-9a33-84a260862fee" LastKnownName="AttackInfo" />
+                  </type_NamedElement>
+                </parameter>
+              </operationHasOwnedParameters>
+            </ownedParameters>
+          </operation>
+        </ownedOperationsInternal>
+      </class>
+    </logicalClassDesignerModelHasTypes>
+    <packageHasNamedElement>
+      <referencedType Id="7b80ad6f-9122-449a-a351-85fa595e56fa" name="float" isAbstract="false" isLeaf="false" cachedFullName="float">
+        <elementDefinition Id="c2cba52c-f321-4945-909a-3d0ac9ed4d1c" />
+      </referencedType>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <referencedType Id="92d58b38-a4e9-4615-9a33-84a260862fee" name="AttackInfo" isAbstract="false" isLeaf="false" cachedFullName="AttackInfo">
+        <elementDefinition Id="899b148e-0915-4797-afd5-cdfd3ddb3554" />
+      </referencedType>
+    </packageHasNamedElement>
+  </packagedElements>
+  <package Id="02847e95-4e53-4de8-941e-c981b3016d37" name="Game">
+    <elementDefinition Id="ccce9a07-3dd7-4a89-8db0-adccf9632580" />
+    <profileInstances>
+      <packageHasProfileInstances Id="55b79dda-0f6e-47b2-9ee6-9a23a809703b">
+        <profileInstance Id="7bdca41b-bcae-4fab-81d2-28de14f1ac36" name="StandardProfileL2">
+          <elementDefinition Id="e34d544e-0fea-4ed6-ac5e-1b74119ac791" />
+        </profileInstance>
+        <elementDefinition Id="0caec977-1f8c-4ba3-a7db-8cc9ad9cc73b" />
+      </packageHasProfileInstances>
+      <packageHasProfileInstances Id="69d28dd4-6e28-4c15-877e-cdec4d5a7250">
+        <profileInstance Id="35828b8e-6e46-44c1-8558-d438bff435cd" name="StandardProfileL3">
+          <elementDefinition Id="532ea607-fb19-44b8-8502-3351b05452be" />
+        </profileInstance>
+        <elementDefinition Id="29349502-908c-4fda-9054-c48619c59ed0" />
+      </packageHasProfileInstances>
+    </profileInstances>
+  </package>
+</logicalClassDesignerModel>
