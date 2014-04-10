@@ -1,8 +1,9 @@
 #include "GameObjectId.h"
 #include "GameObject.h"
+#include "engine-core.h"
 
 #pragma once
-class GameObjectHandle
+class COREDLL GameObjectHandle
 {
 private:
 	int handlerIndex;

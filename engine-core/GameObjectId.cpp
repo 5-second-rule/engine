@@ -19,9 +19,8 @@ bool GameObjectId::operator==(GameObjectId g){
 }
 
 GameObjectId GameObjectId::operator=(GameObjectId g){
-	GameObjectId tmp;
-	tmp.id = g.id;
-	return tmp;
+	this->id = g.id;
+	return g;
 }
 
 GameObjectId GameObjectId::assignUniqueObjectId(){

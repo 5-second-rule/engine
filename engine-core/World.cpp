@@ -42,3 +42,7 @@ int World::findFreeSlotInHandleTable(){
 
 	return nextIndex;
 }
+
+int World::getObjectCounter(){
+	return objectCounter;
+}

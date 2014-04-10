@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "GameObjectHandle.h"
 #include "engine-core.h"
 
 #pragma once
@@ -18,4 +19,5 @@ public:
 
 	~World();
 	static World* getInstance();
+	static int getObjectCounter();
 };

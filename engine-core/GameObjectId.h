@@ -1,5 +1,7 @@
+#include "engine-core.h"
+
 #pragma once
-class GameObjectId
+class COREDLL GameObjectId
 {
 private:
 	static int counter;

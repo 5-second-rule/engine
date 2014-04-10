@@ -1,7 +1,8 @@
 #include "GameObjectId.h"
+#include "engine-core.h"
 
 #pragma once
-class GameObject
+class COREDLL GameObject
 {
 private:
 	friend class GameObjectHandle;

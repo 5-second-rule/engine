@@ -1,9 +1,8 @@
 #pragma once
 #include "engine-renderer.h"
+#include "..\engine-core\GameObject.h"
 
-#include "engine-core/Entity.h"
-
-class RENDERDLL RenderableEntity : public Entity
+class RENDERDLL RenderableEntity : public GameObject
 {
 public:
 	RenderableEntity();
