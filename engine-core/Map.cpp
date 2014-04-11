@@ -1,11 +1,6 @@
 #include "Map.h"
+#include <iostream>
 
-
-Map::Map()
-{
-}
-
-
-Map::~Map()
-{
+int main(){
+	std::cout << "Hello World\n";
 }
