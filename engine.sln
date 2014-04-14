@@ -9,8 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine-renderer", "engine-r
 EndProject
 Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "Game", "Game\Game.modelproj", "{80AC821E-7CBE-42CA-98FE-7E88D0871A92}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleApp", "ConsoleApp\ConsoleApp.vcxproj", "{F51EA575-C9F5-45CA-A1C2-787502B00461}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine-core-tests", "engine-core-tests\engine-core-tests.vcxproj", "{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataStructure", "DataStructure\DataStructure.vcxproj", "{7B4614D9-D9E4-499A-B069-BB5BB57D98F9}"
@@ -72,20 +70,6 @@ Global
 		{80AC821E-7CBE-42CA-98FE-7E88D0871A92}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{80AC821E-7CBE-42CA-98FE-7E88D0871A92}.Release|Win32.ActiveCfg = Release|Any CPU
 		{80AC821E-7CBE-42CA-98FE-7E88D0871A92}.Release|x64.ActiveCfg = Release|Any CPU
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Debug|ARM.ActiveCfg = Debug|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Debug|Win32.Build.0 = Debug|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Debug|x64.ActiveCfg = Debug|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Release|Any CPU.ActiveCfg = Release|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Release|ARM.ActiveCfg = Release|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Release|Win32.ActiveCfg = Release|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Release|Win32.Build.0 = Release|Win32
-		{F51EA575-C9F5-45CA-A1C2-787502B00461}.Release|x64.ActiveCfg = Release|Win32
 		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|ARM.ActiveCfg = Debug|Win32
 		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32

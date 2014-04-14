@@ -1,48 +1,42 @@
 #include "World.h"
-#include <Windows.h>
 #include <iostream>
 
-bool World::instanceFlag = false;
-int World::objectCounter = 0;
-GameObject* World::objectTable[World::MAX_GAME_OBJECTS] = { nullptr };
-World* World::world = World::getInstance();
-
-World::World()
-{
+World::World() {
+	this->objectCount = 0;
+	this->lastAllocatedSlot = 0;
+	memset(this->objectTable, 0, sizeof(this->objectTable));
 }
 
-
-World::~World()
-{
-	delete world;
-
+World::~World() {
+	// TODO not entirely clear if this is the right place to do destruction of these objects
 	for (int i = 0; i < World::MAX_GAME_OBJECTS; ++i){
 		delete objectTable[i];
 	}
 }
 
-World* World::getInstance(){
-	if (!World::instanceFlag){
-		World::world = new World();
-		World::instanceFlag = true;
-	}
-	return World::world;
-}
-
-int World::findFreeSlotInHandleTable(){
-	static int nextIndex = 0;
-
-	if (World::objectCounter > MAX_GAME_OBJECTS){
-		// todo 
+int World::findFreeSlotInHandleTable() {
+	int nextIndex = this->lastAllocatedSlot;
+	if (this->objectCount > MAX_GAME_OBJECTS){
+		// TODO
 	}
 
 	while (objectTable[nextIndex] != nullptr){
 		nextIndex = (nextIndex + 1) % World::MAX_GAME_OBJECTS;
 	}
 
-	return nextIndex;
+	return this->lastAllocatedSlot = nextIndex;
 }
 
-int World::getObjectCounter(){
-	return objectCounter;
+int World::getObjectCount() {
+	return objectCount;
+}
+
+void World::insert(int index, WorldObject* object) {
+	this->objectTable[index] = object;
+	this->objectCount++;
+}
+
+void World::remove(int index) {
+	this->objectTable[index] = nullptr;
+	this->objectCount--;
 }
