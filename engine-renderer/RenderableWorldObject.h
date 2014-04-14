@@ -1,7 +1,9 @@
-#include "engine-core/WorldObject.h"
-
 #pragma once
-class RenderableWorldObject : WorldObject
+
+#include "engine-core/WorldObject.h"
+#include "engine-renderer.h"
+
+class RENDERDLL RenderableWorldObject : public WorldObject
 {
 public:
 	RenderableWorldObject();

@@ -25,9 +25,15 @@
     <ClInclude Include="RenderableWorldObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderableWorld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableWorldObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

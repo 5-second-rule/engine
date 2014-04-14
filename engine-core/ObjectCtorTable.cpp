@@ -11,10 +11,12 @@ ObjectCtorTable::~ObjectCtorTable() {
 	delete this->ctors;
 }
 
-void ObjectCtorTable::setCtor(ihwo_ctor ctor, int index) {
+void ObjectCtorTable::setCtor(int index, ihwo_ctor ctor) {
 	if (index < 0 || index >= size) {
 		throw std::runtime_error("Attempt to set ctor outside of bounds.");
 	}
+
+	this->ctors[index] = ctor;
 }
 
 IHasWorldObject* ObjectCtorTable::invoke(int index) {

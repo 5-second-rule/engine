@@ -2,7 +2,7 @@
 #include "engine-core.h"
 
 #pragma once
-class World
+class COREDLL World
 {
 private:
 	static const int MAX_WORLD_OBJECTS = 10000;
@@ -10,11 +10,13 @@ private:
 	int findFreeSlotInHandleTable();
 	int lastAllocatedSlot;
 	
-	World();
+	
 public:
 	IHasWorldObject* objectTable[MAX_WORLD_OBJECTS];
 
+	World();
 	~World();
+
 	int getObjectCount();
 
 	void insert(int index, IHasWorldObject* object);

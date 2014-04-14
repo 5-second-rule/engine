@@ -1,10 +1,11 @@
 #pragma once
 
 #include "IHasWorldObject.h"
+#include "engine-core.h"
 
 typedef IHasWorldObject* (*ihwo_ctor)();
 
-class ObjectCtorTable
+class COREDLL ObjectCtorTable
 {
 private:
 	int size;
@@ -14,7 +15,7 @@ public:
 	ObjectCtorTable(int size);
 	~ObjectCtorTable();
 
-	void setCtor(ihwo_ctor ctor, int index);
+	void setCtor(int index, ihwo_ctor ctor);
 	IHasWorldObject* invoke(int index);
 };
 

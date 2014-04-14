@@ -1,7 +1,7 @@
 #include "engine-core.h"
 
 #pragma once
-class WorldObject
+class COREDLL WorldObject
 {
 private:
 	int uniqueId;
