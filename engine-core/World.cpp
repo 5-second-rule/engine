@@ -9,19 +9,19 @@ World::World() {
 
 World::~World() {
 	// TODO not entirely clear if this is the right place to do destruction of these objects
-	for (int i = 0; i < World::MAX_GAME_OBJECTS; ++i){
+	for (int i = 0; i < World::MAX_WORLD_OBJECTS; ++i){
 		delete objectTable[i];
 	}
 }
 
 int World::findFreeSlotInHandleTable() {
 	int nextIndex = this->lastAllocatedSlot;
-	if (this->objectCount > MAX_GAME_OBJECTS){
+	if (this->objectCount > MAX_WORLD_OBJECTS){
 		// TODO
 	}
 
 	while (objectTable[nextIndex] != nullptr){
-		nextIndex = (nextIndex + 1) % World::MAX_GAME_OBJECTS;
+		nextIndex = (nextIndex + 1) % World::MAX_WORLD_OBJECTS;
 	}
 
 	return this->lastAllocatedSlot = nextIndex;
@@ -31,7 +31,7 @@ int World::getObjectCount() {
 	return objectCount;
 }
 
-void World::insert(int index, WorldObject* object) {
+void World::insert(int index, IHasWorldObject* object) {
 	this->objectTable[index] = object;
 	this->objectCount++;
 }

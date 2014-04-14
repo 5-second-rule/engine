@@ -81,6 +81,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="engine-core.h" />
+    <ClInclude Include="IHasWorldObject.h" />
     <ClInclude Include="WorldObject.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
