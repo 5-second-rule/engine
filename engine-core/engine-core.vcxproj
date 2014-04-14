@@ -81,11 +81,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="engine-core.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="WorldObject.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="WorldObject.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,12 +1,12 @@
-#include "GameObject.h"
+#include "WorldObject.h"
 #include "World.h"
 
-GameObject::GameObject()
+WorldObject::WorldObject()
 {
 }
 
 
-GameObject::~GameObject()
+WorldObject::~WorldObject()
 {
 	
 }
