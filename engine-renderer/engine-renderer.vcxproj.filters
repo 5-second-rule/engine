@@ -28,9 +28,15 @@
     <ClInclude Include="IRenderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderingEngineInstance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngineInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
