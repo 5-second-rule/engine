@@ -9,10 +9,16 @@ public:
 	T first;
 	U second;
 
+	Pair();
 	~Pair();
 	bool operator==(const Pair) const;
 	static Pair make_pair(T, U);
 };
+
+template< class T, class U >
+Pair< T, U >::Pair(){
+
+}
 
 template< class T, class U >
 Pair< T, U >::Pair(T f, U s){
