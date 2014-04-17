@@ -1,23 +1,32 @@
-#include "GameObject.h"
-#include "GameObjectHandle.h"
-#include "engine-core.h"
-
 #pragma once
+
+#include "engine-core.h"
+#include "Handle.h"
+#include "IHasHandle.h"
+#include "IUpdatable.h"
+#include "ISerializable.h"
+
+#include <vector>
+
 class COREDLL World
 {
-	friend class GameObject;
 private:
-	static const int MAX_GAME_OBJECTS = 10000;
-	static bool instanceFlag;
-	static World* world;
-	static int objectCounter;
-	static int findFreeSlotInHandleTable();
-	
-	World();
-public:
-	static GameObject* objectTable[MAX_GAME_OBJECTS];
+	static const int DEFAULT_OBJECT_ALLOC = 10000;
 
+	int lastAllocatedIndex[2];
+	int objectIds[2];
+
+	std::vector<IHasHandle *> objects[2];
+	std::vector<Handle> updatable;
+	std::vector<Handle> serializable;
+	
+public:
+	World();
 	~World();
-	static World* getInstance();
-	static int getObjectCounter();
+
+	
+	void allocateHandle(IHasHandle *object, HandleType type);
+	virtual void insert(IHasHandle *object);
+	void remove(Handle *handle);
+	IHasHandle * get(Handle *handle);
 };

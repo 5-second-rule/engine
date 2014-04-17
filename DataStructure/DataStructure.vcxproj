@@ -16,7 +16,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -64,13 +64,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\engine-core\Map.cpp" />
     <ClCompile Include="AVL.cpp" />
     <ClCompile Include="Iterator.cpp" />
     <ClCompile Include="Pair.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\engine-core\Map.h" />
     <ClInclude Include="AVL.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="Pair.h" />

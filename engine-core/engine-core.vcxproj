@@ -81,15 +81,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="engine-core.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameObjectHandle.h" />
-    <ClInclude Include="GameObjectId.h" />
+    <ClInclude Include="EngineInstance.h" />
+    <ClInclude Include="Handle.h" />
+    <ClInclude Include="IHasHandle.h" />
+    <ClInclude Include="ISerializable.h" />
+    <ClInclude Include="IUpdatable.h" />
+    <ClInclude Include="ObjectCtorTable.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameObjectHandle.cpp" />
-    <ClCompile Include="GameObjectId.cpp" />
+    <ClCompile Include="EngineInstance.cpp" />
+    <ClCompile Include="Handle.cpp" />
+    <ClCompile Include="ObjectCtorTable.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

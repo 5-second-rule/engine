@@ -1,48 +1,65 @@
 #include "World.h"
-#include <Windows.h>
 #include <iostream>
 
-bool World::instanceFlag = false;
-int World::objectCounter = 0;
-GameObject* World::objectTable[World::MAX_GAME_OBJECTS] = { nullptr };
-World* World::world = World::getInstance();
-
-World::World()
-{
+World::World() {
+	for (int type = 0; type < 2; type++) {
+		this->lastAllocatedIndex[type] = 0;
+		this->objectIds[type] = 0;
+		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
+	}
+	
+	this->updatable.reserve(DEFAULT_OBJECT_ALLOC);
+	this->serializable.reserve(DEFAULT_OBJECT_ALLOC);
 }
 
+World::~World() {
+}
 
-World::~World()
-{
-	delete world;
+void World::allocateHandle(IHasHandle *object, HandleType handleType) {
+	int nextIndex = this->lastAllocatedIndex[handleType];
 
-	for (int i = 0; i < World::MAX_GAME_OBJECTS; ++i){
-		delete objectTable[i];
+	// TODO implement better allocator, with wrap around
+	while (objects[handleType].at(nextIndex) != nullptr){
+		nextIndex = (nextIndex + 1);
+	}
+
+	this->lastAllocatedIndex[handleType] = nextIndex;
+	object->setHandle(Handle(nextIndex, objectIds[handleType]++, handleType));
+}
+
+void World::insert(IHasHandle *object) {
+	Handle handle = object->getHandle();
+	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
+
+	storage->insert(storage->begin() + handle.index, object);
+
+	if (dynamic_cast<IUpdatable*>(object) != nullptr) {
+		this->updatable.push_back(handle);
+	}
+
+	if (dynamic_cast<ISerializable*>(object) != nullptr) {
+		this->serializable.push_back(handle);
 	}
 }
 
-World* World::getInstance(){
-	if (!World::instanceFlag){
-		World::world = new World();
-		World::instanceFlag = true;
+void World::remove(Handle *handle) {
+	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
+
+	IHasHandle *object = storage->at(handle->id);
+	if (object != nullptr && object->getHandle().id == handle->id) {
+		storage->at(handle->id) = nullptr;
 	}
-	return World::world;
+
+	// TODO remove from updatable and serializable vectors, in a separate pass
 }
 
-int World::findFreeSlotInHandleTable(){
-	static int nextIndex = 0;
+IHasHandle * World::get(Handle *handle) {
+	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
 
-	if (World::objectCounter > MAX_GAME_OBJECTS){
-		// todo 
+	IHasHandle *object = storage->at(handle->id);
+	if (object != nullptr && object->getHandle().id == handle->id) {
+		return object;
 	}
 
-	while (objectTable[nextIndex] != nullptr){
-		nextIndex = (nextIndex + 1) % World::MAX_GAME_OBJECTS;
-	}
-
-	return nextIndex;
-}
-
-int World::getObjectCounter(){
-	return objectCounter;
+	return nullptr;
 }
