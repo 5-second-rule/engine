@@ -82,15 +82,17 @@
   <ItemGroup>
     <ClInclude Include="engine-core.h" />
     <ClInclude Include="EngineInstance.h" />
-    <ClInclude Include="IHasWorldObject.h" />
+    <ClInclude Include="Handle.h" />
+    <ClInclude Include="IHasHandle.h" />
+    <ClInclude Include="ISerializable.h" />
+    <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ObjectCtorTable.h" />
-    <ClInclude Include="WorldObject.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineInstance.cpp" />
+    <ClCompile Include="Handle.cpp" />
     <ClCompile Include="ObjectCtorTable.cpp" />
-    <ClCompile Include="WorldObject.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

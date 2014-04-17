@@ -12,8 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine-renderer.h" />
+    <ClInclude Include="IRenderable.h" />
     <ClInclude Include="RenderableWorld.h" />
-    <ClInclude Include="RenderableWorldObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\engine-core\engine-core.vcxproj">
@@ -22,7 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableWorld.cpp" />
-    <ClCompile Include="RenderableWorldObject.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}</ProjectGuid>

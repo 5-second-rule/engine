@@ -1,21 +1,21 @@
 #pragma once
 
-#include "IHasWorldObject.h"
 #include "engine-core.h"
+#include "IHasHandle.h"
 
-typedef IHasWorldObject* (*ihwo_ctor)();
+typedef IHasHandle* (*ihashandle_ctor)();
 
 class COREDLL ObjectCtorTable
 {
 private:
 	int size;
-	ihwo_ctor *ctors;
+	ihashandle_ctor *ctors;
 
 public:
 	ObjectCtorTable(int size);
 	~ObjectCtorTable();
 
-	void setCtor(int index, ihwo_ctor ctor);
-	IHasWorldObject* invoke(int index);
+	void setCtor(int index, ihashandle_ctor ctor);
+	IHasHandle* invoke(int index);
 };
 

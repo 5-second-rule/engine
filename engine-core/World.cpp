@@ -2,41 +2,64 @@
 #include <iostream>
 
 World::World() {
-	this->objectCount = 0;
-	this->lastAllocatedSlot = 0;
-	memset(this->objectTable, 0, sizeof(this->objectTable));
+	for (int type = 0; type < 2; type++) {
+		this->lastAllocatedIndex[type] = 0;
+		this->objectIds[type] = 0;
+		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
+	}
+	
+	this->updatable.reserve(DEFAULT_OBJECT_ALLOC);
+	this->serializable.reserve(DEFAULT_OBJECT_ALLOC);
 }
 
 World::~World() {
-	// TODO not entirely clear if this is the right place to do destruction of these objects
-	for (int i = 0; i < World::MAX_WORLD_OBJECTS; ++i){
-		delete objectTable[i];
+}
+
+void World::allocateHandle(IHasHandle *object, HandleType handleType) {
+	int nextIndex = this->lastAllocatedIndex[handleType];
+
+	// TODO implement better allocator, with wrap around
+	while (objects[handleType].at(nextIndex) != nullptr){
+		nextIndex = (nextIndex + 1);
+	}
+
+	this->lastAllocatedIndex[handleType] = nextIndex;
+	object->setHandle(Handle(nextIndex, objectIds[handleType]++, handleType));
+}
+
+void World::insert(IHasHandle *object) {
+	Handle handle = object->getHandle();
+	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
+
+	storage->insert(storage->begin() + handle.index, object);
+
+	if (dynamic_cast<IUpdatable*>(object) != nullptr) {
+		this->updatable.push_back(handle);
+	}
+
+	if (dynamic_cast<ISerializable*>(object) != nullptr) {
+		this->serializable.push_back(handle);
 	}
 }
 
-int World::findFreeSlotInHandleTable() {
-	int nextIndex = this->lastAllocatedSlot;
-	if (this->objectCount > MAX_WORLD_OBJECTS){
-		// TODO
+void World::remove(Handle *handle) {
+	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
+
+	IHasHandle *object = storage->at(handle->id);
+	if (object != nullptr && object->getHandle().id == handle->id) {
+		storage->at(handle->id) = nullptr;
 	}
 
-	while (objectTable[nextIndex] != nullptr){
-		nextIndex = (nextIndex + 1) % World::MAX_WORLD_OBJECTS;
+	// TODO remove from updatable and serializable vectors, in a separate pass
+}
+
+IHasHandle * World::get(Handle *handle) {
+	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
+
+	IHasHandle *object = storage->at(handle->id);
+	if (object != nullptr && object->getHandle().id == handle->id) {
+		return object;
 	}
 
-	return this->lastAllocatedSlot = nextIndex;
-}
-
-int World::getObjectCount() {
-	return objectCount;
-}
-
-void World::insert(int index, IHasWorldObject* object) {
-	this->objectTable[index] = object;
-	this->objectCount++;
-}
-
-void World::remove(int index) {
-	this->objectTable[index] = nullptr;
-	this->objectCount--;
+	return nullptr;
 }
