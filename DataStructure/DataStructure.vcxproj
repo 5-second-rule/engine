@@ -67,6 +67,7 @@
     <ClCompile Include="BinaryTree.cpp" />
     <ClCompile Include="Iterator.cpp" />
     <ClCompile Include="DoublyLinkedList.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pair.cpp" />
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="Stack.cpp" />
@@ -75,6 +76,7 @@
     <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="DoublyLinkedList.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Pair.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="Stack.h" />

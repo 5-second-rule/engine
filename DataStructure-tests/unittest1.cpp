@@ -5,6 +5,8 @@
 #include "..\DataStructure\Pair.h"
 #include "..\DataStructure\Stack.h"
 #include "..\DataStructure\Queue.h"
+#include "..\DataStructure\Map.h"
+#include <map>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -37,7 +39,7 @@ namespace DataStructuretests
 			Assert::IsTrue(7 == tree.size());
 			tree.remove(4);
 			Assert::IsTrue(3 == *(tree.find(3)));
-			tree.erase();
+			tree.clear();
 			Assert::AreEqual(0, tree.size());
 		}
 
@@ -117,6 +119,22 @@ namespace DataStructuretests
 			}
 			queue.clear();
 			Assert::AreEqual(0, queue.size());
+		}
+
+		TEST_METHOD(Map_TEST){
+			Map< int, int > m;
+			m.insert(1, 2);
+			m.insert(Pair< int, int >::make_pair(2, 3));
+
+			Assert::AreEqual(2, m[1]);
+			m.insert(1, 3);
+			Assert::AreEqual(3, m[1]);
+			Assert::AreNotEqual(2, m[1]);
+			Assert::AreEqual(3, m[2]);
+			Assert::AreEqual(2, m.size());
+
+			m.clear();
+			Assert::AreEqual(0, m.size());
 		}
 
 	};

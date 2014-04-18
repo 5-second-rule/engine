@@ -6,7 +6,7 @@ template< class T >
 class Stack
 {
 private:
-	DoublyLinkedList< T > *list;
+	DoublyLinkedList< T > list;
 public:
 	Stack();
 	void push(T);
@@ -19,40 +19,38 @@ public:
 
 template< class T >
 Stack< T >::Stack(){
-	list = new DoublyLinkedList< T >();
 }
 
 template< class T >
 Stack< T >::~Stack(){
-	list->clear();
-	delete list;
+	list.clear();
 }
 
 template< class T >
 void Stack< T >::push(T e){
-	list->push_back(e);
+	list.push_back(e);
 }
 
 template< class T >
 T Stack< T >::pop(){
 	T tmp = top();
-	list->pop_back();
+	list.pop_back();
 	return tmp;
 }
 
 template< class T >
 T Stack< T >::top(){
-	return list->back();
+	return list.back();
 }
 
 template< class T >
 int Stack< T >::size(){
-	return list->size();
+	return list.size();
 }
 
 template< class T >
 void Stack< T >::clear(){
-	list->clear();
+	list.clear();
 }
 
 

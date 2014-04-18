@@ -19,7 +19,7 @@ private:
 	Node* root;
 	int elemCounter;
 
-	void erase(Node*);
+	void clear(Node*);
 	Pair< T, bool > insert(T const&, Node*);
 	T* find(T, Node*);
 	bool remove(T const&, Node*);
@@ -29,7 +29,7 @@ public:
 	BinaryTree();
 	~BinaryTree();
 	int size();
-	void erase();
+	void clear();
 	Pair< T, bool > insert(T const&);
 	T* find(T);
 	bool remove(T const&);
@@ -51,7 +51,7 @@ BinaryTree< T >::BinaryTree(){
 
 template< class T >
 BinaryTree< T >::~BinaryTree(){
-	this->erase();
+	this->clear();
 }
 
 template< class T >
@@ -60,16 +60,16 @@ int BinaryTree< T >::size(){
 }
 
 template< class T >
-void BinaryTree< T >::erase(){
-	this->erase(root);
+void BinaryTree< T >::clear(){
+	this->clear(root);
 	root = nullptr;
 }
 
 template< class T >
-void BinaryTree< T >::erase(Node* n){
+void BinaryTree< T >::clear(Node* n){
 	if (n != nullptr){
-		this->erase(n->left);
-		this->erase(n->right);
+		this->clear(n->left);
+		this->clear(n->right);
 		delete n;
 		elemCounter--;
 	}
@@ -118,7 +118,7 @@ Pair< T, bool > BinaryTree< T >::insert(T const &e, Node* n){
 		}
 	}
 	else {
-		int tmp = n->keyValue;
+		T tmp = n->keyValue;
 		n->keyValue = e;
 		return Pair< T, bool >::make_pair(tmp, false);
 	}
