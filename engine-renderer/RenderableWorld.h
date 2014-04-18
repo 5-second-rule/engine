@@ -16,5 +16,7 @@ public:
 	~RenderableWorld();
 
 	virtual void insert(IHasHandle *object);
+
+	void renderAll();
 };
 

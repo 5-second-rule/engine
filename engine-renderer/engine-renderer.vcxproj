@@ -14,6 +14,7 @@
     <ClInclude Include="engine-renderer.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="RenderableWorld.h" />
+    <ClInclude Include="RenderingEngineInstance.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\engine-core\engine-core.vcxproj">
@@ -22,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RenderableWorld.cpp" />
+    <ClCompile Include="RenderingEngineInstance.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}</ProjectGuid>
@@ -54,7 +56,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../rendering-framework/;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)../engine/Debug;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

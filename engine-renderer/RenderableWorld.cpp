@@ -18,3 +18,11 @@ void RenderableWorld::insert(IHasHandle *object) {
 		this->renderable.push_back(handle);
 	}
 }
+
+void RenderableWorld::renderAll() {
+	auto iterator = this->renderable.begin();
+	while (iterator != this->renderable.end()) {
+		((IRenderable *)this->get(&*iterator))->render();
+		iterator++;
+	}
+}
