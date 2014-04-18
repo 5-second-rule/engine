@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataStructure", "DataStruct
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataStructure-tests", "DataStructure-tests\DataStructure-tests.vcxproj", "{0EA06CB5-ED68-41F8-A66C-0CF2A85A38C0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\ConsoleTest.vcxproj", "{ED5613FF-3588-44B7-8953-313474B5147A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +114,20 @@ Global
 		{0EA06CB5-ED68-41F8-A66C-0CF2A85A38C0}.Release|Win32.ActiveCfg = Release|Win32
 		{0EA06CB5-ED68-41F8-A66C-0CF2A85A38C0}.Release|Win32.Build.0 = Release|Win32
 		{0EA06CB5-ED68-41F8-A66C-0CF2A85A38C0}.Release|x64.ActiveCfg = Release|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Debug|ARM.ActiveCfg = Debug|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Debug|Win32.Build.0 = Debug|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Debug|x64.ActiveCfg = Debug|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Release|Any CPU.ActiveCfg = Release|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Release|ARM.ActiveCfg = Release|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Release|Win32.ActiveCfg = Release|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Release|Win32.Build.0 = Release|Win32
+		{ED5613FF-3588-44B7-8953-313474B5147A}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -64,14 +64,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AVL.cpp" />
+    <ClCompile Include="BinaryTree.cpp" />
     <ClCompile Include="Iterator.cpp" />
+    <ClCompile Include="DoublyLinkedList.cpp" />
     <ClCompile Include="Pair.cpp" />
+    <ClCompile Include="Queue.cpp" />
+    <ClCompile Include="Stack.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AVL.h" />
+    <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="Iterator.h" />
+    <ClInclude Include="DoublyLinkedList.h" />
     <ClInclude Include="Pair.h" />
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="Stack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
