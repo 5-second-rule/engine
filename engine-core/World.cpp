@@ -45,9 +45,9 @@ void World::insert(IHasHandle *object) {
 void World::remove(Handle *handle) {
 	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
 
-	IHasHandle *object = storage->at(handle->id);
+	IHasHandle *object = storage->at(handle->index);
 	if (object != nullptr && object->getHandle().id == handle->id) {
-		storage->at(handle->id) = nullptr;
+		storage->at(handle->index) = nullptr;
 	}
 
 	// TODO remove from updatable and serializable vectors, in a separate pass
@@ -56,7 +56,7 @@ void World::remove(Handle *handle) {
 IHasHandle * World::get(Handle *handle) {
 	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
 
-	IHasHandle *object = storage->at(handle->id);
+	IHasHandle *object = storage->at(handle->index);
 	if (object != nullptr && object->getHandle().id == handle->id) {
 		return object;
 	}
