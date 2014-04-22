@@ -14,9 +14,10 @@ private:
 	
 public:
 	int index;
-	int id;
+	unsigned int id;
 
-	Handle(int index, int id, HandleType type);
+	Handle();
+	Handle(int index, unsigned int id, HandleType type);
 	~Handle();
 	HandleType getType();
 };

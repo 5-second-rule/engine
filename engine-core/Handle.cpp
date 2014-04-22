@@ -1,7 +1,11 @@
 #include "Handle.h"
 
+Handle::Handle() : Handle(0, 0, HandleType::LOCAL)
+{
+}
 
-Handle::Handle(int index, int id, HandleType type)
+
+Handle::Handle(int index, unsigned int id, HandleType type)
 {
 	this->index = index;
 	this->id = id;
@@ -17,5 +21,5 @@ Handle::~Handle()
 }
 
 HandleType Handle::getType() {
-	return (HandleType)(this->id & LOCAL_MASK != LOCAL_MASK);
+	return (HandleType)((this->id & LOCAL_MASK) != LOCAL_MASK);
 }

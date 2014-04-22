@@ -1,5 +1,7 @@
 #include "RenderingEngineInstance.h"
 
+#include <stdexcept> 
+
 RenderingEngineInstance::RenderingEngineInstance(
 	RenderableWorld *world,
 	ObjectCtorTable *objectCtors,
@@ -28,3 +30,28 @@ void RenderingEngineInstance::frame() {
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 }
+
+int RenderingEngineInstance::loadModelFile(char *filename) {
+	ModelData data;
+
+	if (this->renderer->loadModelFile(
+		filename, 
+		&data.vertexBuffer, 
+		&data.indexBuffer)) {
+
+		this->modelData.push_back(data);
+		return this->modelData.size() - 1;
+	}
+	
+	return -1;
+}
+
+Model * RenderingEngineInstance::createModelFromIndex(int modelIndex) {
+	if (modelIndex < 0 || modelIndex >= this->modelData.size()) {
+		throw std::runtime_error("Model index out of range.");
+	}
+
+	ModelData data = this->modelData.at(modelIndex);
+	this->renderer->createModel(data.vertexBuffer, data.indexBuffer);
+}
+
