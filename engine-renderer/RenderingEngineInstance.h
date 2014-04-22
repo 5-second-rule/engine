@@ -25,7 +25,5 @@ public:
 		ObjectCtorTable *objectCtors,
 		void *appHandle);
 	~RenderingEngineInstance();
-
-	void run();
 };
 
