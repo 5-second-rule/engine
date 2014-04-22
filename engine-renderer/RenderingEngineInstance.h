@@ -25,5 +25,7 @@ public:
 		ObjectCtorTable *objectCtors,
 		void *appHandle);
 	~RenderingEngineInstance();
+
+	Model* createModelFromFile(char* f, VertexBuffer**, IndexBuffer**);
 };
 

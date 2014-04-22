@@ -28,3 +28,7 @@ void RenderingEngineInstance::frame() {
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 }
+
+Model* RenderingEngineInstance::createModelFromFile(char* f, VertexBuffer** vbuf, IndexBuffer** ibuf) {
+	return this->renderer->createModelFromFile(f, vbuf, ibuf);
+}

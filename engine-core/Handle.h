@@ -16,6 +16,7 @@ public:
 	int index;
 	int id;
 
+	Handle();
 	Handle(int index, int id, HandleType type);
 	~Handle();
 	HandleType getType();

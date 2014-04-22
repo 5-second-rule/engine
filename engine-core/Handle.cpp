@@ -1,5 +1,9 @@
 #include "Handle.h"
 
+Handle::Handle() : Handle(0, 0, HandleType::LOCAL)
+{
+}
+
 
 Handle::Handle(int index, int id, HandleType type)
 {

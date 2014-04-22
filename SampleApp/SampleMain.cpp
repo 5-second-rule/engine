@@ -35,18 +35,31 @@ private:
 	VertexBuffer* vbuf;
 	IndexBuffer* ibuf;
 	Model *model;
+	Handle handle;
 
 public:
-	TestObject(Renderer *renderer) {
+	TestObject(RenderingEngineInstance *engine) {
 		char* whiteBloodFbxFilePath = "../SampleApp/whitey.fbx";
 		char* ecoliFbxFilePath = "../SampleApp/ecoli4_animated_binary.fbx";
 		char* ecoliObjFilePath = "../SampleApp/Ecoli4_Object.obj";
 
-		Model* model = renderer->createModelFromFile(ecoliFbxFilePath, &vbuf, &ibuf);
+		Model* model = engine->createModelFromFile(ecoliFbxFilePath, &vbuf, &ibuf);
 	};
 
 	~TestObject() {
 		delete model;
+	};
+
+	virtual Handle getHandle(){
+		return this->handle;
+	};
+
+	virtual void setHandle(Handle handle){
+		this->handle = handle;
+	};
+
+	virtual void render() {
+		this->model->draw();
 	};
 };
 
@@ -54,6 +67,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RenderableWorld *world = new RenderableWorld();
 	ObjectCtorTable *ctors = new ObjectCtorTable(10);
 	RenderingEngineInstance *engineInstance = new RenderingEngineInstance(world, ctors, hInstance);
+
+	TestObject *object = new TestObject(engineInstance);
+	world->allocateHandle(object, HandleType::LOCAL);
+	world->insert(object);
 
 	engineInstance->run();
 

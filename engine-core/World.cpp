@@ -19,11 +19,11 @@ void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 	int nextIndex = this->lastAllocatedIndex[handleType];
 
 	// TODO implement better allocator, with wrap around
-	while (objects[handleType].at(nextIndex) != nullptr){
-		nextIndex = (nextIndex + 1);
-	}
+	//while (objects[handleType].at(nextIndex) != nullptr){
+		//nextIndex = (nextIndex + 1);
+	//}
 
-	this->lastAllocatedIndex[handleType] = nextIndex;
+	this->lastAllocatedIndex[handleType] = nextIndex++;
 	object->setHandle(Handle(nextIndex, objectIds[handleType]++, handleType));
 }
 
@@ -31,7 +31,11 @@ void World::insert(IHasHandle *object) {
 	Handle handle = object->getHandle();
 	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
 
-	storage->insert(storage->begin() + handle.index, object);
+	while (storage->size() <= handle.index) {
+		storage->push_back(nullptr);
+	}
+
+	*(storage->begin() + handle.index) = object;
 
 	if (dynamic_cast<IUpdatable*>(object) != nullptr) {
 		this->updatable.push_back(handle);
