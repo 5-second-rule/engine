@@ -34,14 +34,16 @@ void RenderingEngineInstance::frame() {
 int RenderingEngineInstance::loadModelFile(char *filename) {
 	ModelData data;
 
-	// TODO make abstraction without unnecessary model creation
-	Model * model = this->renderer->createModelFromFile(
+	if (this->renderer->loadModelFile(
 		filename, 
 		&data.vertexBuffer, 
-		&data.indexBuffer);
+		&data.indexBuffer)) {
 
-	this->modelData.push_back(data);
-	return this->modelData.size() - 1;
+		this->modelData.push_back(data);
+		return this->modelData.size() - 1;
+	}
+	
+	return -1;
 }
 
 Model * RenderingEngineInstance::createModelFromIndex(int modelIndex) {
