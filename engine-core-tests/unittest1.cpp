@@ -2,8 +2,11 @@
 #include "CppUnitTest.h"
 #include "..\engine-core\World.h"
 #include "..\engine-core\WorldObject.h"
+#include "..\engine-core\ConfigSettings.h"
+#include <string>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace std;
 
 namespace enginecoretests
 {		
@@ -40,6 +43,34 @@ namespace enginecoretests
 
 		*/
 
+		TEST_METHOD(TestConfiguration){
+			int testInt;
+			double testDouble;
+			float testFloat;
+			bool testBool;
+			string testString;
 
+			Assert::IsTrue(ConfigSettings::config->checkIfLoaded());
+			ConfigSettings::config->getValue("TestConfig#int", testInt);
+			ConfigSettings::config->getValue("TestConfig#float", testFloat);
+			ConfigSettings::config->getValue("TestConfig#double", testDouble);
+			ConfigSettings::config->getValue("TestConfig#bool", testBool);
+			ConfigSettings::config->getValue("TestConfig#string", testString);
+
+			Assert::AreEqual(1004, testInt);
+			Assert::AreEqual(true, testBool);
+			Assert::AreEqual((float)200.1, testFloat);
+			Assert::AreEqual(200.1, testDouble);
+			Assert::AreEqual("bife", testString.c_str());
+
+			ConfigSettings::config->updateValue("TestConfig#newValue", 24);
+			ConfigSettings::config->saveSettingsFile();
+
+			ConfigSettings::config->reloadSettingsFile();
+			
+			Assert::IsTrue(ConfigSettings::config->checkIfLoaded());
+			ConfigSettings::config->getValue("TestConfig#newValue", testInt);
+			Assert::AreEqual(24, testInt);
+		}
 	};
 }

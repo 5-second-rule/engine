@@ -97,10 +97,6 @@
     <ClCompile Include="ObjectCtorTable.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ConfigTemplate.ini" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

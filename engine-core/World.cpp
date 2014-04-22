@@ -13,6 +13,9 @@ World::World() {
 }
 
 World::~World() {
+	for (int i = 0; i < 2; ++i)
+		for (std::vector<IHasHandle *>::iterator it = objects[i].begin(); it != objects[i].end(); ++it)
+			delete *it;
 }
 
 void World::allocateHandle(IHasHandle *object, HandleType handleType) {

@@ -101,6 +101,9 @@
       <Project>{792aba4b-52b0-4430-8d1a-34c3f8ff0202}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\engine-core\ConfigTemplate.ini" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
