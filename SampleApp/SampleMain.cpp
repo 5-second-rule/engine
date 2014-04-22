@@ -1,7 +1,6 @@
 #include <windows.h>
 
-#include "engine-renderer/IRenderable.h"
-#include "engine-core/IHasHandle.h"
+#include "engine-renderer/RenderableObject.h"
 #include "engine-renderer/RenderingEngineInstance.h"
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -29,46 +28,20 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 //	}
 //}
 
-class TestObject : public IRenderable, public IHasHandle
-{
-private:
-	VertexBuffer* vbuf;
-	IndexBuffer* ibuf;
-	Model *model;
-	Handle handle;
-
-public:
-	TestObject(RenderingEngineInstance *engine) {
-		char* whiteBloodFbxFilePath = "../SampleApp/whitey.fbx";
-		char* ecoliFbxFilePath = "../SampleApp/ecoli4_animated_binary.fbx";
-		char* ecoliObjFilePath = "../SampleApp/Ecoli4_Object.obj";
-
-		Model* model = engine->createModelFromFile(ecoliFbxFilePath, &vbuf, &ibuf);
-	};
-
-	~TestObject() {
-		delete model;
-	};
-
-	virtual Handle getHandle(){
-		return this->handle;
-	};
-
-	virtual void setHandle(Handle handle){
-		this->handle = handle;
-	};
-
-	virtual void render() {
-		this->model->draw();
-	};
-};
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	RenderableWorld *world = new RenderableWorld();
 	ObjectCtorTable *ctors = new ObjectCtorTable(10);
 	RenderingEngineInstance *engineInstance = new RenderingEngineInstance(world, ctors, hInstance);
 
-	TestObject *object = new TestObject(engineInstance);
+	char* whiteBloodFbxFilePath = "../SampleApp/whitey.fbx";
+	char* ecoliFbxFilePath = "../SampleApp/ecoli4_animated_binary.fbx";
+	char* ecoliObjFilePath = "../SampleApp/Ecoli4_Object.obj";
+
+	int ecoliIndex = engineInstance->loadModelFile(ecoliFbxFilePath);
+
+	RenderableObject *object = new RenderableObject(
+		engineInstance->createModelFromIndex(ecoliIndex));
+
 	world->allocateHandle(object, HandleType::LOCAL);
 	world->insert(object);
 

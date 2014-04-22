@@ -22,7 +22,7 @@ void RenderableWorld::insert(IHasHandle *object) {
 void RenderableWorld::renderAll() {
 	auto iterator = this->renderable.begin();
 	while (iterator != this->renderable.end()) {
-		IRenderable *renderable = (IRenderable *)this->get(&*iterator);
+		IRenderable *renderable = dynamic_cast<IRenderable *>(this->get(&*iterator));
 
 		if (renderable != nullptr) {
 			renderable->render();

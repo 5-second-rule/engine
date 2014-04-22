@@ -1,5 +1,7 @@
 #include "RenderingEngineInstance.h"
 
+#include <stdexcept> 
+
 RenderingEngineInstance::RenderingEngineInstance(
 	RenderableWorld *world,
 	ObjectCtorTable *objectCtors,
@@ -29,6 +31,25 @@ void RenderingEngineInstance::frame() {
 	renderer->drawFrame();
 }
 
-Model* RenderingEngineInstance::createModelFromFile(char* f, VertexBuffer** vbuf, IndexBuffer** ibuf) {
-	return this->renderer->createModelFromFile(f, vbuf, ibuf);
+int RenderingEngineInstance::loadModelFile(char *filename) {
+	ModelData data;
+
+	// TODO make abstraction without unnecessary model creation
+	Model * model = this->renderer->createModelFromFile(
+		filename, 
+		&data.vertexBuffer, 
+		&data.indexBuffer);
+
+	this->modelData.push_back(data);
+	return this->modelData.size() - 1;
 }
+
+Model * RenderingEngineInstance::createModelFromIndex(int modelIndex) {
+	if (modelIndex < 0 || modelIndex >= this->modelData.size()) {
+		throw std::runtime_error("Model index out of range.");
+	}
+
+	ModelData data = this->modelData.at(modelIndex);
+	this->renderer->createModel(data.vertexBuffer, data.indexBuffer);
+}
+

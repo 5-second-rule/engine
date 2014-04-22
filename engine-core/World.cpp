@@ -31,7 +31,7 @@ void World::insert(IHasHandle *object) {
 	Handle handle = object->getHandle();
 	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
 
-	while (storage->size() <= handle.index) {
+	while ((int)storage->size() <= handle.index) {
 		storage->push_back(nullptr);
 	}
 
