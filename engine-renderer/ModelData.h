@@ -4,6 +4,6 @@
 #include "renderer/IndexBuffer.h"
 
 struct ModelData {
-	VertexBuffer *vertexBuffer;
-	IndexBuffer *indexBuffer;
+	Transmission::VertexBuffer *vertexBuffer;
+	Transmission::IndexBuffer *indexBuffer;
 };

@@ -8,11 +8,11 @@
 class RENDERDLL RenderableObject : public IRenderable, public IHasHandle
 {
 private:
-	Model *model;
+	Transmission::Model *model;
 	Handle handle;
 
 public:
-	RenderableObject(Model *model);
+	RenderableObject(Transmission::Model *model);
 	~RenderableObject();
 
 	virtual Handle getHandle();

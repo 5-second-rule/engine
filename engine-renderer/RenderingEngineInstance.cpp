@@ -2,6 +2,8 @@
 
 #include <stdexcept> 
 
+using namespace Transmission;
+
 RenderingEngineInstance::RenderingEngineInstance(
 	RenderableWorld *world,
 	ObjectCtorTable *objectCtors,
@@ -31,7 +33,7 @@ void RenderingEngineInstance::frame() {
 	renderer->drawFrame();
 }
 
-int RenderingEngineInstance::loadModelFile(char *filename) {
+int RenderingEngineInstance::loadModel(char *filename) {
 	ModelData data;
 
 	if (this->renderer->loadModelFile(
@@ -39,19 +41,34 @@ int RenderingEngineInstance::loadModelFile(char *filename) {
 		&data.vertexBuffer, 
 		&data.indexBuffer)) {
 
-		this->modelData.push_back(data);
-		return this->modelData.size() - 1;
+		this->models.push_back(data);
+		return this->models.size() - 1;
 	}
 	
 	return -1;
 }
 
-Model * RenderingEngineInstance::createModelFromIndex(int modelIndex) {
-	if (modelIndex < 0 || modelIndex >= this->modelData.size()) {
-		throw std::runtime_error("Model index out of range.");
+int RenderingEngineInstance::loadTexture(char *filename) {
+	Texture *texture = this->renderer->createTextureFromFile(filename);
+
+	// TODO validate this error check
+	if (texture != nullptr) {
+		this->textures.push_back(texture);
+		return this->textures.size() - 1;
 	}
 
-	ModelData data = this->modelData.at(modelIndex);
-	this->renderer->createModel(data.vertexBuffer, data.indexBuffer);
+	return -1;
+}
+
+Model * RenderingEngineInstance::createModelFromIndex(int modelIndex, int textureIndex) {
+	if (modelIndex < 0 || modelIndex >= this->models.size()) {
+		throw std::runtime_error("Model index out of range.");
+	} else if (textureIndex < 0 || textureIndex >= this->textures.size()) {
+		throw std::runtime_error("Texture index out of range.");
+	}
+
+	ModelData data = this->models.at(modelIndex);
+	Texture *texture = this->textures.at(textureIndex);
+	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture);
 }
 

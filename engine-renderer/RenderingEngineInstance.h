@@ -8,16 +8,18 @@
 
 #include "renderer/Window.h"
 #include "renderer/Renderer.h"
+#include "renderer/Texture.h"
 
 #include <vector>
 
 class RENDERDLL RenderingEngineInstance : public EngineInstance
 {
 private:
-	Window *window;
-	Renderer *renderer;
+	Transmission::Window *window;
+	Transmission::Renderer *renderer;
 	RenderableWorld *renderableWorld;
-	std::vector<ModelData> modelData;
+	std::vector<ModelData> models;
+	std::vector<Transmission::Texture *> textures;
 
 protected:
 	virtual bool shouldContinueFrames();
@@ -30,7 +32,8 @@ public:
 		void *appHandle);
 	~RenderingEngineInstance();
 
-	int loadModelFile(char *filename);
-	Model * createModelFromIndex(int modelIndex);
+	int loadModel(char *filename);
+	int loadTexture(char *filename);
+	Transmission::Model * createModelFromIndex(int modelIndex, int textureIndex);
 };
 

@@ -1,11 +1,11 @@
 #include "RenderableObject.h"
 
+using namespace Transmission;
 
 RenderableObject::RenderableObject(Model *model)
 {
 	this->model = model;
 }
-
 
 RenderableObject::~RenderableObject()
 {
