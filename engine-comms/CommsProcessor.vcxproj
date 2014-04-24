@@ -10,28 +10,11 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="engine-renderer.h" />
-    <ClInclude Include="IRenderable.h" />
-    <ClInclude Include="ModelData.h" />
-    <ClInclude Include="RenderableObject.h" />
-    <ClInclude Include="RenderableWorld.h" />
-    <ClInclude Include="RenderingEngineInstance.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\engine-core\engine-core.vcxproj">
-      <Project>{792aba4b-52b0-4430-8d1a-34c3f8ff0202}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="RenderableObject.cpp" />
-    <ClCompile Include="RenderableWorld.cpp" />
-    <ClCompile Include="RenderingEngineInstance.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}</ProjectGuid>
+    <ProjectGuid>{BB7F64D6-89EB-40EB-A45F-96A392D6AF02}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>enginerenderer</RootNamespace>
+    <RootNamespace>CommsProcessor</RootNamespace>
+    <ProjectName>engine-comms</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -41,7 +24,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -57,33 +40,21 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)../rendering-framework/;</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(SolutionDir)../engine/Debug;$(SolutionDir)../rendering-framework/Debug;</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_IS_ENGINE_RENDERER;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BrowseInformation>true</BrowseInformation>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_IS_ENGINE_CORE;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;Renderer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Bscmake>
-      <PreserveSbr>true</PreserveSbr>
-    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -93,15 +64,31 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_IS_ENGINE_CORE;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CommsProcessor.h" />
+    <ClInclude Include="Socket.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CommsProcessor.cpp" />
+    <ClCompile Include="Socket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source.def" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
