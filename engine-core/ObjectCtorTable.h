@@ -3,7 +3,7 @@
 #include "engine-core.h"
 #include "IHasHandle.h"
 
-typedef IHasHandle* (*ihashandle_ctor)();
+typedef IHasHandle* (*ihashandle_ctor)(void *thisObj);
 
 class COREDLL ObjectCtorTable
 {

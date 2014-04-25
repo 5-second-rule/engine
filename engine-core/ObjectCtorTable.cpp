@@ -30,5 +30,5 @@ IHasHandle* ObjectCtorTable::invoke(int index) {
 		throw std::runtime_error("Attempt to invoke unset ctor.");
 	}
 
-	return ctor();
+	return ctor(this);
 }
