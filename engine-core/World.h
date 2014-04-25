@@ -5,8 +5,11 @@
 #include "IHasHandle.h"
 #include "IUpdatable.h"
 #include "ISerializable.h"
-
 #include <vector>
+
+using namespace std;
+template class COREDLL vector< Handle >;
+template class COREDLL vector< IHasHandle* >;
 
 class COREDLL World
 {

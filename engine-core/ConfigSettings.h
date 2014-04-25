@@ -12,6 +12,7 @@
 #include "engine-core.h"
 
 using namespace std;
+template class COREDLL hash_map< string, string >;
 
 const string str_settings_file = "..\\engine-core\\Config.ini";
 const string str_template_settings_file = "..\\engine-core\\ConfigTemplate.ini";

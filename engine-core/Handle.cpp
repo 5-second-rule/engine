@@ -23,3 +23,11 @@ Handle::~Handle()
 HandleType Handle::getType() {
 	return (HandleType)((this->id & LOCAL_MASK) != LOCAL_MASK);
 }
+
+bool Handle::operator==(Handle const& handle) const{
+	if (this->id == handle.id){
+		assert(this->index == handle.index);
+		return true;
+	}
+	return false;
+}
