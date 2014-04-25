@@ -1,20 +1,17 @@
 #include "Event.h"
 
-
-Event::Event(){
-
-}
+const double Event::SmallestDelay = 0.02f;
 
 Event::~Event()
 {
 }
 
-Event::Event(Handle &sender, Handle &receiver, EventType type, void* extranInfo)
+Event::Event(double time, Handle &sender, Handle &receiver, EventType type, void* extranInfo)
 {
 	this->sender = sender;
 	this->receiver = receiver;
 	this->type = type;
-	this->dispatchTime = high_resolution_clock::now();
+	this->dispatchTime = time;
 
 	switch (type)
 	{
@@ -44,11 +41,11 @@ bool Event::operator==(Event const& event) const{
 		(event.type == this->type));
 }
 
-void Event::setDispatchTime(high_resolution_clock::time_point &time){
+void Event::setDispatchTime(double time){
 	dispatchTime = time;
 }
 
-high_resolution_clock::time_point Event::getDispatchTime() const{
+double Event::getDispatchTime() const{
 	return dispatchTime;
 }
 

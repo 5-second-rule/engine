@@ -17,32 +17,34 @@ void EventDispatcher::discharge(Handle &receiver, Event &event){
 	}
 }
 
-void EventDispatcher::dispatchEvent(high_resolution_clock::duration delay,
+void EventDispatcher::dispatchEvent(
 	Handle &sender,
 	Handle &receiver,
 	EventType eventType,
+	double delay,
 	void* extraInfo)
 {
-	Event event(sender, receiver, eventType, extraInfo);
-	high_resolution_clock::time_point currentTime = high_resolution_clock::now();
+	Event event(delay, sender, receiver, eventType, extraInfo);
+	double currentTime;
 
-	if (delay == std::chrono::duration< int >(0)){
+	if (delay == SEND_EVENT_IMMEDIATELY){
 		discharge(receiver, event);
 	}
 	else {
-		event.setDispatchTime(high_resolution_clock::now() + delay);
+		currentTime = Clock->GetCurrentTime();
+		event.dispatchTime = currentTime + delay;
 		eventQueue.insert(event);
 	}
 }
 
 void EventDispatcher::dispatchDelayedEvents(){
-	high_resolution_clock::time_point currentTime = high_resolution_clock::now();
+	double currentTime = Clock->GetCurrentTime();
 
 	while ((eventQueue.begin() != eventQueue.end()) &&
-		(eventQueue.begin()->getDispatchTime() < currentTime)){
+		(eventQueue.begin()->dispatchTime < currentTime)){
 		Event event = *eventQueue.begin();
 
-		discharge(event.getReceiver(), event);
+		discharge(event.receiver, event);
 
 		eventQueue.erase(eventQueue.begin());
 	}

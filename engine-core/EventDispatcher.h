@@ -3,9 +3,13 @@
 #include "Handle.h"
 #include "IRecentReceiver.h"
 #include "Event.h"
+#include "CrudeTimer.h"
 #include <set>
 using namespace std;
 template class COREDLL set< Event >;
+
+const double SEND_EVENT_IMMEDIATELY = 0.0f;
+const int NO_ADDITIONAL_INFO = (int)nullptr;
 
 class EventDispatcher
 {
@@ -19,10 +23,10 @@ public:
 	EventDispatcher();
 	~EventDispatcher();
 	void EventDispatcher::dispatchDelayedEvents();
-	void dispatchEvent(	high_resolution_clock::duration delay,
-						Handle &sender,
+	void dispatchEvent(	Handle &sender,
 						Handle &receiver,
 						EventType eventType,
-						void* extraInfo);
+						double delay = SEND_EVENT_IMMEDIATELY,
+						void* extraInfo = nullptr);
 };
 
