@@ -2,12 +2,26 @@
 #include <string>            // For string
 #include <exception>         // For exception class
 
+#ifdef WIN32
+// disable warning about zero-length arrays in MSVC
+// and exporting STL classes
+#pragma warning( disable : 4200 )
+#pragma warning( disable : 4251 )
+#ifdef _IS_ENGINE_CORE
+#define SOCKETDLL __declspec(dllexport)
+#else
+#define SOCKETDLL __declspec(dllimport)
+#endif
+#elif
+#define SOCKETDLL
+#endif
+
 using namespace std;
 
 /**
 *   Signals a problem with the execution of a socket call.
 */
-class SocketException : public exception
+class SOCKETDLL SocketException : public exception
 {
 public:
 	/**
@@ -36,7 +50,7 @@ private:
 /**
 *   Base class representing basic communication endpoint
 */
-class Socket
+class SOCKETDLL Socket
 {
 public:
 	/**
@@ -113,7 +127,7 @@ protected:
 /**
 *   Socket which is able to connect, send, and receive
 */
-class CommunicatingSocket : public Socket
+class SOCKETDLL CommunicatingSocket : public Socket
 {
 public:
 	/**
@@ -172,7 +186,7 @@ protected:
 /**
 *   TCP socket for communication with other TCP sockets
 */
-class TCPSocket : public CommunicatingSocket
+class SOCKETDLL TCPSocket : public CommunicatingSocket
 {
 public:
 	/**
@@ -199,7 +213,7 @@ private:
 /**
 *   TCP socket class for servers
 */
-class TCPServerSocket : public Socket
+class SOCKETDLL TCPServerSocket : public Socket
 {
 public:
 	/**
@@ -238,7 +252,7 @@ private:
 /**
 *   UDP socket class
 */
-class UDPSocket : public CommunicatingSocket
+class SOCKETDLL UDPSocket : public CommunicatingSocket
 {
 public:
 	/**

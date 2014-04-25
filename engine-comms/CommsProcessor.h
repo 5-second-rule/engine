@@ -9,7 +9,9 @@
 
 #ifdef WIN32
 // disable warning about zero-length arrays in MSVC
+// and exporting STL classes
 #pragma warning( disable : 4200 )
+#pragma warning( disable : 4251 )
 #ifdef _IS_ENGINE_CORE
 #define COMMSDLL __declspec(dllexport)
 #else
@@ -19,12 +21,18 @@
 #define COMMSDLL
 #endif
 
+// constants
+const string mcastAddr = "224.0.23.189";
+const int svrPort = 61616;
+const int clntPort = 16161;
+const int maxMsgSize = 65507; // max UDP size
+
 using namespace std;
 
 /**
 *   Message Header Struct
 */
-struct Message
+struct COMMSDLL Message
 {
 	struct _header
 	{
@@ -39,7 +47,7 @@ struct Message
 /**
 *   Queue Header Struct
 */
-struct QueueItem
+struct COMMSDLL QueueItem
 {
 	char *data;
 	size_t len;
@@ -78,7 +86,7 @@ private:
 /**
 *   Not Implemented Exception
 */
-class NotImplementedException : public exception
+class COMMSDLL NotImplementedException : public exception
 {
 public:
 	/**
@@ -108,7 +116,7 @@ private:
 /**
  * Support Enumerations
  */
-enum CommsProcessorRole
+enum COMMSDLL CommsProcessorRole
 {
 	SERVER,
 	CLIENT,
@@ -116,7 +124,7 @@ enum CommsProcessorRole
 	CUSTOM
 };
 
-enum MessageType
+enum COMMSDLL MessageType
 {
 	WORLD_UPDATE,
 	CLIENT_UPDATE,
@@ -126,7 +134,7 @@ enum MessageType
 /**
 *   CommsProcessor class
 */
-class CommsProcessor
+class COMMSDLL CommsProcessor
 {
 public:
   // object lifecycle methods
@@ -145,11 +153,6 @@ public:
 	void waitAnnouce();
 
 private:
-	// constants
-	const string mcastAddr = "224.0.23.189";
-	static const int svrPort = 61616;
-	static const int clntPort = 16161;
-	static const int maxMsgSize = 65507; // max UDP size
 
 	// listen thread related
 	thread listenThread;

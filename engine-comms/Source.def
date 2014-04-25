@@ -1,8 +1,0 @@
-LIBRARY CommsProcessor
-EXPORTS
-  setHandoffQ
-  sendUpdates
-  sendAnnouce
-  waitAnnouce
-  ??0CommsProcessor@@QAE@W4CommsProcessorRole@@@Z
-  ??1CommsProcessor@@QAE@XZ
