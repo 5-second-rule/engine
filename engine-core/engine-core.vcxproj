@@ -41,6 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -84,10 +85,15 @@
   <ItemGroup>
     <ClInclude Include="CommsProcessor.h" />
     <ClInclude Include="ConfigSettings.h" />
+    <ClInclude Include="CrudeTimer.h" />
     <ClInclude Include="engine-core.h" />
     <ClInclude Include="EngineInstance.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventDispatcher.h" />
+    <ClInclude Include="EventType.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="IHasHandle.h" />
+    <ClInclude Include="IRecentReceiver.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ObjectCtorTable.h" />
@@ -97,7 +103,10 @@
   <ItemGroup>
     <ClCompile Include="CommsProcessor.cpp" />
     <ClCompile Include="ConfigSettings.cpp" />
+    <ClCompile Include="CrudeTimer.cpp" />
     <ClCompile Include="EngineInstance.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="EventDispatcher.cpp" />
     <ClCompile Include="Handle.cpp" />
     <ClCompile Include="ObjectCtorTable.cpp" />
     <ClCompile Include="Socket.cpp" />

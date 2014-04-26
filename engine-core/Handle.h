@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine-core.h"
+#include <cassert>
 
 enum HandleType {
 	LOCAL = 0,
@@ -20,5 +21,6 @@ public:
 	Handle(int index, unsigned int id, HandleType type);
 	~Handle();
 	HandleType getType();
+	bool operator==(Handle const&) const;
 };
 

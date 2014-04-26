@@ -8,6 +8,10 @@
 
 #include <vector>
 
+using namespace std;
+template class COREDLL vector< Handle >;
+template class COREDLL vector< IHasHandle* >;
+
 class COREDLL World
 {
 private:
