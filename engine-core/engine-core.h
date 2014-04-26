@@ -10,7 +10,6 @@
 #define COREDLL __declspec(dllexport)
 #else
 #define COREDLL __declspec(dllimport)
-<<<<<<< HEAD
 #endif
 #else
 #define COREDLL
