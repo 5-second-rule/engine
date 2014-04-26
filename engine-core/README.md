@@ -9,8 +9,6 @@
 ## Components
 * `CommsProcessor`
 * `Socket`
-* `Server`
-* `SampleClient`
 
 ## Licensing
 Copying it is punishable by death if I find you!
