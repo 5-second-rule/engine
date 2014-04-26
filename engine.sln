@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30324.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine-core", "engine-core\engine-core.vcxproj", "{792ABA4B-52B0-4430-8D1A-34C3F8FF0202}"
 EndProject
@@ -46,6 +46,7 @@ Global
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Debug|ARM.ActiveCfg = Debug|Win32
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Debug|Win32.ActiveCfg = Debug|Win32
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Debug|Win32.Build.0 = Debug|Win32
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Debug|x64.ActiveCfg = Debug|Win32

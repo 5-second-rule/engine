@@ -33,4 +33,6 @@ public:
 	virtual void insert(IHasHandle *object);
 	void remove(Handle *handle);
 	IHasHandle * get(Handle *handle);
+
+	void updateAll(int dt);
 };

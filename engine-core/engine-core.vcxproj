@@ -97,6 +97,7 @@
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ObjectCtorTable.h" />
+    <ClInclude Include="ServerEngineInstance.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
@@ -109,6 +110,7 @@
     <ClCompile Include="EventDispatcher.cpp" />
     <ClCompile Include="Handle.cpp" />
     <ClCompile Include="ObjectCtorTable.cpp" />
+    <ClCompile Include="ServerEngineInstance.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

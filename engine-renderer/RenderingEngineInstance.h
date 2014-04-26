@@ -23,7 +23,7 @@ private:
 
 protected:
 	virtual bool shouldContinueFrames();
-	virtual void frame();
+	virtual void frame(int dt);
 
 public:
 	RenderingEngineInstance(

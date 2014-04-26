@@ -70,3 +70,16 @@ IHasHandle * World::get(Handle *handle) {
 
 	return nullptr;
 }
+
+void World::updateAll(int dt) {
+	auto iterator = this->updatable.begin();
+	while (iterator != this->updatable.end()) {
+		IUpdatable *updatable = dynamic_cast<IUpdatable *>(this->get(&*iterator));
+
+		if (updatable != nullptr) {
+			updatable->update(dt);
+		}
+
+		iterator++;
+	}
+}
