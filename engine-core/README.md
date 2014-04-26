@@ -1,4 +1,4 @@
-# Communcations Processor
+# Engine Core
 
 ## Requirements
 * C++11 (Clang 3.4, GCC 4.8, Visual Studio 2013)

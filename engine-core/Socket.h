@@ -2,18 +2,14 @@
 #include <string>            // For string
 #include <exception>         // For exception class
 
+#include "engine-core.h"
+
 #ifdef WIN32
 // disable warning about zero-length arrays in MSVC
-// and exporting STL classes
+// exporting STL classes, and strerror security warning
 #pragma warning( disable : 4200 )
 #pragma warning( disable : 4251 )
-#ifdef _IS_ENGINE_CORE
-#define SOCKETDLL __declspec(dllexport)
-#else
-#define SOCKETDLL __declspec(dllimport)
-#endif
-#elif
-#define SOCKETDLL
+#pragma warning( disable : 4996 )
 #endif
 
 using namespace std;
@@ -21,7 +17,7 @@ using namespace std;
 /**
 *   Signals a problem with the execution of a socket call.
 */
-class SOCKETDLL SocketException : public exception
+class COREDLL SocketException : public exception
 {
 public:
 	/**
@@ -50,7 +46,7 @@ private:
 /**
 *   Base class representing basic communication endpoint
 */
-class SOCKETDLL Socket
+class COREDLL Socket
 {
 public:
 	/**
@@ -127,7 +123,7 @@ protected:
 /**
 *   Socket which is able to connect, send, and receive
 */
-class SOCKETDLL CommunicatingSocket : public Socket
+class COREDLL CommunicatingSocket : public Socket
 {
 public:
 	/**
@@ -186,7 +182,7 @@ protected:
 /**
 *   TCP socket for communication with other TCP sockets
 */
-class SOCKETDLL TCPSocket : public CommunicatingSocket
+class COREDLL TCPSocket : public CommunicatingSocket
 {
 public:
 	/**
@@ -213,7 +209,7 @@ private:
 /**
 *   TCP socket class for servers
 */
-class SOCKETDLL TCPServerSocket : public Socket
+class COREDLL TCPServerSocket : public Socket
 {
 public:
 	/**
@@ -252,7 +248,7 @@ private:
 /**
 *   UDP socket class
 */
-class SOCKETDLL UDPSocket : public CommunicatingSocket
+class COREDLL UDPSocket : public CommunicatingSocket
 {
 public:
 	/**

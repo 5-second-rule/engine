@@ -5,20 +5,15 @@
 #include <mutex>
 #include <condition_variable>
 
+#include "engine-core.h"
 #include "Socket.h"
 
 #ifdef WIN32
 // disable warning about zero-length arrays in MSVC
-// and exporting STL classes
+// exporting STL classes, and strerror security warning
 #pragma warning( disable : 4200 )
 #pragma warning( disable : 4251 )
-#ifdef _IS_ENGINE_CORE
-#define COMMSDLL __declspec(dllexport)
-#else
-#define COMMSDLL __declspec(dllimport)
-#endif
-#elif
-#define COMMSDLL
+#pragma warning( disable : 4996 )
 #endif
 
 // constants
@@ -32,7 +27,7 @@ using namespace std;
 /**
 *   Message Header Struct
 */
-struct COMMSDLL Message
+struct COREDLL Message
 {
 	struct _header
 	{
@@ -47,7 +42,7 @@ struct COMMSDLL Message
 /**
 *   Queue Header Struct
 */
-struct COMMSDLL QueueItem
+struct COREDLL QueueItem
 {
 	char *data;
 	size_t len;
@@ -56,7 +51,7 @@ struct COMMSDLL QueueItem
 /**
 *   Argument Exception
 */
-class COMMSDLL ArgumentException : public exception
+class COREDLL ArgumentException : public exception
 {
 public:
 	/**
@@ -86,7 +81,7 @@ private:
 /**
 *   Not Implemented Exception
 */
-class COMMSDLL NotImplementedException : public exception
+class COREDLL NotImplementedException : public exception
 {
 public:
 	/**
@@ -116,7 +111,7 @@ private:
 /**
  * Support Enumerations
  */
-enum COMMSDLL CommsProcessorRole
+enum COREDLL CommsProcessorRole
 {
 	SERVER,
 	CLIENT,
@@ -124,7 +119,7 @@ enum COMMSDLL CommsProcessorRole
 	CUSTOM
 };
 
-enum COMMSDLL MessageType
+enum COREDLL MessageType
 {
 	WORLD_UPDATE,
 	CLIENT_UPDATE,
@@ -134,7 +129,7 @@ enum COMMSDLL MessageType
 /**
 *   CommsProcessor class
 */
-class COMMSDLL CommsProcessor
+class COREDLL CommsProcessor
 {
 public:
   // object lifecycle methods

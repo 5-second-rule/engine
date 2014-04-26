@@ -57,6 +57,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -77,9 +78,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CommsProcessor.h" />
     <ClInclude Include="ConfigSettings.h" />
     <ClInclude Include="engine-core.h" />
     <ClInclude Include="EngineInstance.h" />
@@ -88,14 +91,20 @@
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ObjectCtorTable.h" />
+    <ClInclude Include="Socket.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CommsProcessor.cpp" />
     <ClCompile Include="ConfigSettings.cpp" />
     <ClCompile Include="EngineInstance.cpp" />
     <ClCompile Include="Handle.cpp" />
     <ClCompile Include="ObjectCtorTable.cpp" />
+    <ClCompile Include="Socket.cpp" />
     <ClCompile Include="World.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
