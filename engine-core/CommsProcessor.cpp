@@ -78,7 +78,7 @@ CommsProcessor::~CommsProcessor()
 	listenThread.join();
 }
 
-void CommsProcessor::setHandoffQ( queue<QueueItem> *q )
+void CommsProcessor::setHandoffQ(DoubleBufferedQueue<QueueItem> *q)
 {
 	if( q )
 	{
@@ -90,7 +90,7 @@ void CommsProcessor::setHandoffQ( queue<QueueItem> *q )
 	}
 }
 
-queue<QueueItem> *CommsProcessor::getHandoffQ()
+DoubleBufferedQueue<QueueItem> *CommsProcessor::getHandoffQ()
 {
 	return handoffQ;
 }

@@ -4,13 +4,12 @@
 #include "World.h"
 #include "engine-core.h"
 #include "CommsProcessor.h"
-
-#include <queue>
+#include "DoubleBufferedQueue.h"
 
 class COREDLL EngineInstance
 {
 private:
-	queue<QueueItem> networkUpdates;
+	DoubleBufferedQueue<QueueItem> networkUpdates;
 
 protected:
 	CommsProcessor *comms;

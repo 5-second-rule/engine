@@ -86,6 +86,7 @@
     <ClInclude Include="CommsProcessor.h" />
     <ClInclude Include="ConfigSettings.h" />
     <ClInclude Include="CrudeTimer.h" />
+    <ClInclude Include="DoubleBufferedQueue.h" />
     <ClInclude Include="engine-core.h" />
     <ClInclude Include="EngineInstance.h" />
     <ClInclude Include="Event.h" />

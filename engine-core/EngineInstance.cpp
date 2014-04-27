@@ -42,12 +42,14 @@ void EngineInstance::frame(int dt) {
 }
 
 void EngineInstance::processNetworkUpdates() {
-	while (!this->networkUpdates.empty()) {
-		std::cout << this->networkUpdates.size() << std::endl;
-		QueueItem update = this->networkUpdates.front();
+	// bring new updates forward
+	this->networkUpdates.swap();
+
+	while (!this->networkUpdates.readEmpty()) {
+		std::cout << "========= handling update =========" << std::endl;
+		QueueItem update = this->networkUpdates.pop();
 		dispatchUpdate(update);
 		delete[] update.data;
-		this->networkUpdates.pop();
 	}
 
 	std::cout << "finsihed updates" << std::endl;

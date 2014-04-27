@@ -1,12 +1,12 @@
 #pragma once
 #include <thread>
 #include <string>
-#include <queue>
 #include <mutex>
 #include <condition_variable>
 
 #include "engine-core.h"
 #include "Socket.h"
+#include "DoubleBufferedQueue.h"
 
 #ifdef WIN32
 // disable warning about zero-length arrays in MSVC
@@ -137,8 +137,8 @@ public:
   ~CommsProcessor();
 
 	// configuration methods
-	void setHandoffQ( queue<QueueItem> *q );
-	queue<QueueItem> *getHandoffQ();
+	void setHandoffQ( DoubleBufferedQueue<QueueItem> *q );
+	DoubleBufferedQueue<QueueItem> *getHandoffQ();
 
 	// Sending methods
 	void sendUpdates( const char *data, size_t len );
@@ -161,7 +161,7 @@ private:
 	CommsProcessorRole role;
 
 	// handoffQ private pointer
-	queue<QueueItem> *handoffQ;
+	DoubleBufferedQueue<QueueItem> *handoffQ;
 
 	// send update related
 	UDPSocket sendSocket;
