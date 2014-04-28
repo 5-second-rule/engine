@@ -9,6 +9,7 @@
 #include "ISerializable.h"
 #include "CommsProcessor.h"
 #include "Event.h"
+#include "DirectedEvent.h"
 
 using namespace std;
 template class COREDLL vector< Handle >;
@@ -40,5 +41,5 @@ public:
 	// IUpdateable Methods
 	virtual void update( int dt );
 
-	//void dispatctEvent(DirectedEvent *evt);
+	void dispatchEvent(DirectedEvent *evt);
 };

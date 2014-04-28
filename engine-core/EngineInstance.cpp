@@ -52,7 +52,7 @@ void EngineInstance::processNetworkUpdates() {
 		delete[] update.data;
 	}
 
-	std::cout << "finsihed updates" << std::endl;
+	std::cout << "finished updates" << std::endl;
 }
 
 void EngineInstance::dispatchUpdate(QueueItem &item) {
@@ -61,10 +61,17 @@ void EngineInstance::dispatchUpdate(QueueItem &item) {
 	if (header->type == EventType::OBJECT_UPDATE) {
 		readBuffer->reserve(sizeof(struct EventHeader));
 		this->dispatchObjectUpdate(readBuffer);
+	} else if (header->type == EventType::SPECIAL) {
+		// TODO handle special events (e.g. requests from client, etc)
+	} else {
+		DirectedEvent *directed = DirectedEvent::forReading();
+		directed->rehydrate(readBuffer);
+		world->dispatchEvent(directed);
+
+		// no delete for event, event queue on objects responsible
 	}
-	else {
-		// TODO handle directed events
-	}
+
+	delete readBuffer;
 }
 
 void EngineInstance::dispatchObjectUpdate(BufferBuilder *buffer) {

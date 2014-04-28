@@ -75,41 +75,6 @@ IHasHandle * World::get(Handle *handle) {
 	return nullptr;
 }
 
-
-
-//
-//void World::dehydrate( char *dst, size_t &size, size_t dstSize ) {
-//	size = 0;
-//
-//	auto iterator = this->serializable.begin();
-//	while( iterator != this->serializable.end() ) {
-//		size_t tmpSize = 0;
-//		
-//		//TODO throw exception
-//		if( size > dstSize )
-//			return;
-//
-//		ISerializable *serializable = dynamic_cast<ISerializable *>(this->get( &*iterator ));
-//
-//		if( serializable != nullptr ) {
-//			serializable->dehydrate(dst + size, tmpSize, dstSize - size );
-//		}
-//
-//		size += tmpSize;
-//		iterator++;
-//	}
-//}
-//
-//void World::rehydrate( char *data ) {
-//	/*	Array of bytes contains tagged data, one after another
-//			------------------------------------------------------------------------
-//			| index | id | position[3] | velocity[3] | accleration[3] | force[3]
-//			------------------------------------------------------------------------
-//	*/
-//
-//
-//}
-
 void World::update(int dt) {
 	auto iterator = this->updatable.begin();
 	while (iterator != this->updatable.end()) {
@@ -150,5 +115,16 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 		}
 
 		iterator++;
+	}
+}
+
+void World::dispatchEvent(DirectedEvent *evt) {
+	IHasHandle *obj = this->get(&evt->getReceiver());
+	if (obj != nullptr) {
+		// TODO send to object; but for now, dismiss
+		delete evt;
+	} else  {
+		// this little event is going places; not to an object, but places
+		delete evt;
 	}
 }

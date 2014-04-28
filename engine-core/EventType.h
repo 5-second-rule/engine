@@ -3,15 +3,8 @@
 #include "Handle.h"
 
 enum COREDLL EventType{
-	OBJECT_UPDATE = 0
-};
-
-class COREDLL EventAttack{
-	int damage;
-};
-
-class COREDLL EventMove{
-	int blablabla;
+	OBJECT_UPDATE = 0,
+	SPECIAL = 1
 };
 
 struct COREDLL ObjectUpdateHeader {

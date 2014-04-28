@@ -71,9 +71,15 @@ Event::Event(EventType type)
 //	// no pop
 //}
 
+void Event::dehydrateInternal(BufferBuilder *buffer) {
+}
+
 
 void Event::dehydrate(BufferBuilder *buffer) {
 	buffer->reserve(sizeof(struct EventHeader));
+
+	// HACK right now, make better abstraction
+	this->dehydrateInternal(buffer);
 
 	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer->getPointer());
 

@@ -40,8 +40,6 @@ void ServerEngineInstance::frame(int dt) {
 
 	this->world->broadcastUpdates(comms);
 
-	//comms->sendUpdates(testData, strlen(testData));
-
 	// get end time
 	steady_clock::time_point end = steady_clock::now();
 

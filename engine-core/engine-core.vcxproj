@@ -92,7 +92,6 @@
     <ClInclude Include="engine-core.h" />
     <ClInclude Include="EngineInstance.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="EventDispatcher.h" />
     <ClInclude Include="EventType.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Handle.h" />
@@ -113,7 +112,6 @@
     <ClCompile Include="DirectedEvent.cpp" />
     <ClCompile Include="EngineInstance.cpp" />
     <ClCompile Include="Event.cpp" />
-    <ClCompile Include="EventDispatcher.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Handle.cpp" />
     <ClCompile Include="ObjectCtorTable.cpp" />

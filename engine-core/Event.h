@@ -9,28 +9,20 @@ struct COREDLL EventHeader {
 	int type;
 };
 
-//struct COREDLL DirectedEventHeader {
-//	Handle sender;
-//	Handle receiver;
-//};
+
 
 class COREDLL Event : public ISerializable
 {
 private:
 	EventType type;
-	//Handle sender;
-	//Handle receiver;
-	//ISerializable *child;
+
+protected:
+	// HACK
+	virtual void dehydrateInternal(BufferBuilder *buffer);
 
 public:
-	/*Event(Handle &sender,
-		Handle &receiver,
-		EventType type,
-		ISerializable* extraInfo);*/
 	Event(EventType type);
 	~Event();
-
-	//Handle &getReceiver();
 
 	virtual void dehydrate(BufferBuilder *buffer);
 	virtual void rehydrate(BufferBuilder *buffer);
