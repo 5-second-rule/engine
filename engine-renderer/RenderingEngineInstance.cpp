@@ -32,7 +32,7 @@ bool RenderingEngineInstance::shouldContinueFrames() {
 
 void RenderingEngineInstance::frame(int dt) {
 	this->processNetworkUpdates();
-	this->world->updateAll(dt);
+	this->world->update(dt);
 
 	renderer->clearFrame();
 	this->renderableWorld->renderAll();

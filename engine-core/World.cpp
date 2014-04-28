@@ -71,7 +71,39 @@ IHasHandle * World::get(Handle *handle) {
 	return nullptr;
 }
 
-void World::updateAll(int dt) {
+void World::dehydrate( char *dst, size_t &size, size_t dstSize ) {
+	size = 0;
+
+	auto iterator = this->serializable.begin();
+	while( iterator != this->serializable.end() ) {
+		size_t tmpSize = 0;
+		
+		//TODO throw exception
+		if( size > dstSize )
+			return;
+
+		ISerializable *serializable = dynamic_cast<ISerializable *>(this->get( &*iterator ));
+
+		if( serializable != nullptr ) {
+			serializable->dehydrate(dst + size, tmpSize, dstSize - size );
+		}
+
+		size += tmpSize;
+		iterator++;
+	}
+}
+
+void World::rehydrate( char *data ) {
+	/*	Array of bytes contains tagged data, one after another
+			------------------------------------------------------------------------
+			| index | id | position[3] | velocity[3] | accleration[3] | force[3]
+			------------------------------------------------------------------------
+	*/
+
+
+}
+
+void World::update(int dt) {
 	auto iterator = this->updatable.begin();
 	while (iterator != this->updatable.end()) {
 		IUpdatable *updatable = dynamic_cast<IUpdatable *>(this->get(&*iterator));

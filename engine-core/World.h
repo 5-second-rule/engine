@@ -1,19 +1,18 @@
 #pragma once
 
+#include <vector>
+
 #include "engine-core.h"
 #include "Handle.h"
 #include "IHasHandle.h"
 #include "IUpdatable.h"
 #include "ISerializable.h"
 
-#include <vector>
-
 using namespace std;
 template class COREDLL vector< Handle >;
 template class COREDLL vector< IHasHandle* >;
 
-class COREDLL World
-{
+class COREDLL World : public ISerializable, public IUpdatable {
 private:
 	static const int DEFAULT_OBJECT_ALLOC = 10000;
 
@@ -34,5 +33,10 @@ public:
 	void remove(Handle *handle);
 	IHasHandle * get(Handle *handle);
 
-	void updateAll(int dt);
+	// ISerializable Methods
+	virtual void dehydrate( char  *dst, size_t &size, size_t dstSize );
+	virtual void rehydrate( char *data );
+
+	// IUpdateable Methods
+	virtual void update( int dt );
 };

@@ -28,7 +28,7 @@ void ServerEngineInstance::frame(int dt) {
 	steady_clock::time_point start = steady_clock::now();
 
 	this->processNetworkUpdates();
-	this->world->updateAll(dt);
+	this->world->update(dt);
 
 	// TESTING CODE
 	static int elapsedCount = 0;
