@@ -50,3 +50,7 @@ void DirectedEvent::rehydrate(BufferBuilder *buffer) {
 
 	// no pop
 }
+
+Handle& DirectedEvent::getReceiver() {
+	return this->receiver;
+}

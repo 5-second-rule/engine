@@ -8,7 +8,7 @@ ObjectCtorTable::ObjectCtorTable(int size) {
 }
 
 ObjectCtorTable::~ObjectCtorTable() {
-	delete this->ctors;
+	delete[] this->ctors;
 }
 
 void ObjectCtorTable::setCtor(int index, ihashandle_ctor ctor) {
