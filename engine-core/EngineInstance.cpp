@@ -56,9 +56,36 @@ void EngineInstance::processNetworkUpdates() {
 }
 
 void EngineInstance::dispatchUpdate(QueueItem &item) {
-	static char tmpBuf[65536];
-	memcpy(tmpBuf, item.data, item.len);
-	tmpBuf[item.len] = '\0';
-	std::cout << tmpBuf;
+	BufferBuilder *readBuffer = BufferBuilder::forReading(item.data, item.len);
+	struct EventHeader *header = reinterpret_cast<struct EventHeader *>(readBuffer->getPointer());
+	if (header->type == EventType::OBJECT_UPDATE) {
+		readBuffer->reserve(sizeof(struct EventHeader));
+		this->dispatchObjectUpdate(readBuffer);
+	}
+	else {
+		// TODO handle directed events
+	}
 }
 
+void EngineInstance::dispatchObjectUpdate(BufferBuilder *buffer) {
+	buffer->reserve(sizeof(struct ObjectUpdateHeader));
+	struct ObjectUpdateHeader *header = reinterpret_cast<struct ObjectUpdateHeader *>(buffer->getPointer());
+
+	IHasHandle *object = this->world->get(&header->handle);
+	bool isNew = false;
+	if (object == nullptr) {
+		object = this->objectCtors->invoke(header->objectType);
+		isNew = true;
+	}
+
+	ISerializable *serializable = dynamic_cast<ISerializable *>(object);
+	if (serializable == nullptr) {
+		throw new std::runtime_error("Expected serializable object, but it's not; wat.");
+	}
+
+	serializable->rehydrate(buffer);
+
+	if (isNew) {
+		world->insert(object);
+	}
+}

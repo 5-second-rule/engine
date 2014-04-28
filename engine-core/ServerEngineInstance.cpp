@@ -38,7 +38,9 @@ void ServerEngineInstance::frame(int dt) {
 		comms->sendAnnouce();
 	}
 
-	comms->sendUpdates(testData, strlen(testData));
+	this->world->broadcastUpdates(comms);
+
+	//comms->sendUpdates(testData, strlen(testData));
 
 	// get end time
 	steady_clock::time_point end = steady_clock::now();
@@ -50,6 +52,12 @@ void ServerEngineInstance::frame(int dt) {
 void ServerEngineInstance::run(){
 	// TODO no already running checks, not important right now
 	this->running = true;
+
+	// TEST HACK
+	IHasHandle * obj = this->objectCtors->invoke(0);
+	world->allocateHandle(obj, HandleType::GLOBAL);
+	world->insert(obj);
+
 	EngineInstance::run();
 }
 

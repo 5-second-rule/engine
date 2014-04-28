@@ -19,6 +19,8 @@ protected:
 	virtual void frame(int dt);
 	virtual void dispatchUpdate(QueueItem &item);
 
+	virtual void dispatchObjectUpdate(BufferBuilder *buffer);
+
 	void processNetworkUpdates();
 
 public:

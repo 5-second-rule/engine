@@ -8,7 +8,7 @@ enum HandleType {
 	GLOBAL = 1
 };
 
-class COREDLL Handle
+struct COREDLL Handle
 {
 private:
 	static const unsigned int LOCAL_MASK = 1 << 31;

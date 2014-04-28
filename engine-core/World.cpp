@@ -63,6 +63,10 @@ void World::remove(Handle *handle) {
 IHasHandle * World::get(Handle *handle) {
 	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
 
+	if (handle->index >= storage->size()) {
+		return nullptr;
+	}
+
 	IHasHandle *object = storage->at(handle->index);
 	if (object != nullptr && object->getHandle().id == handle->id) {
 		return object;
@@ -71,37 +75,40 @@ IHasHandle * World::get(Handle *handle) {
 	return nullptr;
 }
 
-void World::dehydrate( char *dst, size_t &size, size_t dstSize ) {
-	size = 0;
-
-	auto iterator = this->serializable.begin();
-	while( iterator != this->serializable.end() ) {
-		size_t tmpSize = 0;
-		
-		//TODO throw exception
-		if( size > dstSize )
-			return;
-
-		ISerializable *serializable = dynamic_cast<ISerializable *>(this->get( &*iterator ));
-
-		if( serializable != nullptr ) {
-			serializable->dehydrate(dst + size, tmpSize, dstSize - size );
-		}
-
-		size += tmpSize;
-		iterator++;
-	}
-}
-
-void World::rehydrate( char *data ) {
-	/*	Array of bytes contains tagged data, one after another
-			------------------------------------------------------------------------
-			| index | id | position[3] | velocity[3] | accleration[3] | force[3]
-			------------------------------------------------------------------------
-	*/
 
 
-}
+//
+//void World::dehydrate( char *dst, size_t &size, size_t dstSize ) {
+//	size = 0;
+//
+//	auto iterator = this->serializable.begin();
+//	while( iterator != this->serializable.end() ) {
+//		size_t tmpSize = 0;
+//		
+//		//TODO throw exception
+//		if( size > dstSize )
+//			return;
+//
+//		ISerializable *serializable = dynamic_cast<ISerializable *>(this->get( &*iterator ));
+//
+//		if( serializable != nullptr ) {
+//			serializable->dehydrate(dst + size, tmpSize, dstSize - size );
+//		}
+//
+//		size += tmpSize;
+//		iterator++;
+//	}
+//}
+//
+//void World::rehydrate( char *data ) {
+//	/*	Array of bytes contains tagged data, one after another
+//			------------------------------------------------------------------------
+//			| index | id | position[3] | velocity[3] | accleration[3] | force[3]
+//			------------------------------------------------------------------------
+//	*/
+//
+//
+//}
 
 void World::update(int dt) {
 	auto iterator = this->updatable.begin();
@@ -110,6 +117,36 @@ void World::update(int dt) {
 
 		if (updatable != nullptr) {
 			updatable->update(dt);
+		}
+
+		iterator++;
+	}
+}
+
+void World::broadcastUpdates(CommsProcessor *comms) {
+	auto iterator = this->serializable.begin();
+	while (iterator != this->serializable.end()) {
+		IHasHandle *object = this->get(&*iterator);
+		ISerializable *serializable = dynamic_cast<ISerializable *>(object);
+
+		if (serializable != nullptr) {
+			BufferBuilder *buffer = new BufferBuilder();
+			buffer->reserve(sizeof(struct EventHeader));
+			buffer->reserve(sizeof(struct ObjectUpdateHeader));
+
+			serializable->dehydrate(buffer);
+
+			struct ObjectUpdateHeader *ouHeader = (struct ObjectUpdateHeader*)buffer->getPointer();
+			ouHeader->handle = object->getHandle();
+			ouHeader->objectType = object->getType();
+
+			buffer->pop();
+
+			((struct EventHeader*)buffer->getPointer())->type = EventType::OBJECT_UPDATE;
+
+			buffer->pop();
+
+			comms->sendUpdates(buffer->getBasePointer(), buffer->getSize());
 		}
 
 		iterator++;

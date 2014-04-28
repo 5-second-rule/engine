@@ -1,54 +1,93 @@
 #include "Event.h"
 
-const double Event::SmallestDelay = 0.02f;
-
 Event::~Event()
 {
 }
 
-Event::Event(double time, Handle &sender, Handle &receiver, EventType type, void* extranInfo)
+Event::Event(EventType type)
 {
-	this->sender = sender;
-	this->receiver = receiver;
+	//this->sender = sender;
+	//this->receiver = receiver;
 	this->type = type;
-	this->dispatchTime = time;
+	//this->child = child;
+}
+//
+//bool Event::operator<(Event const& event) const{
+//	if (event == *this)
+//		return false;
+//	else
+//		return event.dispatchTime < this->dispatchTime;
+//}
+//
+//bool Event::operator==(Event const& event) const{
+//	return (this->dispatchTime == event.dispatchTime &&
+//		(event.sender == this->sender) &&
+//		(event.receiver == this->receiver) &&
+//		(event.type == this->type));
+//}
+//
+//void Event::setDispatchTime(double time){
+//	dispatchTime = time;
+//}
+//
+//double Event::getDispatchTime() const{
+//	return dispatchTime;
+//}
 
-	switch (type)
-	{
-	case Event_Attack:
-		break;
-		this->extraInfo = (EventAttack*)extraInfo;
-	case Event_Move:
-		this->extraInfo = (EventMove*)extraInfo;
-		break;
-	default:
-		this->extraInfo = nullptr;
-		break;
-	}
+//Handle &Event::getReceiver(){
+//	return receiver;
+//}
+
+//void Event::dehydrate(BufferBuilder *buffer) {
+//	buffer->reserve(sizeof(struct EventHeader));
+//
+//	// must call allocate
+//	if (this->child != nullptr) {
+//		this->child->dehydrate(buffer);
+//	}
+//
+//	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer->getPointer());
+//
+//	hdr->type = this->type;
+//	hdr->sender = this->sender;
+//	hdr->receiver = this->receiver;
+//
+//	buffer->pop();
+//}
+//
+//void Event::rehydrate(BufferBuilder *buffer) {
+//	buffer->reserve(sizeof(struct EventHeader));
+//
+//	if (this->child != nullptr) {
+//		this->child->rehydrate(buffer);
+//	}
+//
+//	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer->getPointer());
+//
+//	this->type = (EventType)hdr->type;
+//	this->sender = hdr->sender;
+//	this->receiver = hdr->receiver;
+//
+//	// no pop
+//}
+
+
+void Event::dehydrate(BufferBuilder *buffer) {
+	buffer->reserve(sizeof(struct EventHeader));
+
+	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer->getPointer());
+
+	hdr->type = this->type;
+
+	buffer->pop();
 }
 
-bool Event::operator<(Event const& event) const{
-	if (event == *this)
-		return false;
-	else
-		return event.dispatchTime < this->dispatchTime;
-}
+void Event::rehydrate(BufferBuilder *buffer) {
+	buffer->reserve(sizeof(struct EventHeader));
 
-bool Event::operator==(Event const& event) const{
-	return (this->dispatchTime == event.dispatchTime &&
-		(event.sender == this->sender) &&
-		(event.receiver == this->receiver) &&
-		(event.type == this->type));
-}
+	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer->getPointer());
 
-void Event::setDispatchTime(double time){
-	dispatchTime = time;
-}
+	this->type = (EventType)hdr->type;
 
-double Event::getDispatchTime() const{
-	return dispatchTime;
-}
-
-Handle &Event::getReceiver(){
-	return receiver;
+	// no pop
 }
