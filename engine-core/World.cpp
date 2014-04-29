@@ -1,4 +1,6 @@
 #include "World.h"
+
+#include "IEventReceiver.h"
 #include <iostream>
 
 World::World() {
@@ -122,9 +124,11 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 
 void World::dispatchEvent(DirectedEvent *evt) {
 	IHasHandle *obj = this->get(&evt->getReceiver());
-	if (obj != nullptr) {
-		// TODO send to object; but for now, dismiss
-		delete evt;
+	IEventReceiver *reciever = dynamic_cast<IEventReceiver *>(obj);
+
+	if (reciever != nullptr) {
+		// object responsible for deletion
+		reciever->onEvent(evt);
 	} else  {
 		// this little event is going places; not to an object, but places
 		delete evt;

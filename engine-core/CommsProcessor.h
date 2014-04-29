@@ -7,7 +7,6 @@
 #include "engine-core.h"
 #include "Socket.h"
 #include "DoubleBufferedQueue.h"
-#include "BufferBuilder.h"
 
 #ifdef WIN32
 // disable warning about zero-length arrays in MSVC

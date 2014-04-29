@@ -33,10 +33,7 @@ public:
 
 	virtual void rehydrate(BufferBuilder *buffer);
 
-	static DirectedEvent *forReading() {
-		DirectedEvent *event = new DirectedEvent();
-		event->child = new BufferRemainder();
-		return event;
+	static DirectedEvent *forReading();
 	}
 };
 

@@ -17,6 +17,9 @@ DirectedEvent::DirectedEvent() : Event((EventType)0) {
 
 
 DirectedEvent::~DirectedEvent() {
+	if (this->child != nullptr) {
+		delete this->child;
+	}
 }
 
 void DirectedEvent::dehydrateInternal(BufferBuilder *buffer) {
@@ -53,4 +56,10 @@ void DirectedEvent::rehydrate(BufferBuilder *buffer) {
 
 Handle& DirectedEvent::getReceiver() {
 	return this->receiver;
+}
+
+DirectedEvent * DirectedEvent::forReading() {
+	DirectedEvent *event = new DirectedEvent();
+	event->child = new BufferRemainder();
+	return event;
 }
