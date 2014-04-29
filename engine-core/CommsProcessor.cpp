@@ -2,13 +2,9 @@
 
 
 
-/**
-*   Argument Exception
-*/
-ArgumentException::ArgumentException( const string &message, bool inclSysMsg ) : userMessage( message )
-{
-	if( inclSysMsg )
-	{
+// Argument Exception
+ArgumentException::ArgumentException( const string &message, bool inclSysMsg ) : userMessage( message ) {
+	if( inclSysMsg ) {
 		userMessage.append( ": " );
 		userMessage.append( strerror( errno ) );
 	}
@@ -23,13 +19,9 @@ const char *ArgumentException::what() const _NOEXCEPT
 	return userMessage.c_str();
 }
 
-/**
-*   Not Implemented Exception
-*/
-NotImplementedException::NotImplementedException( const string &message, bool inclSysMsg ) : userMessage( message )
-{
-	if( inclSysMsg )
-	{
+// Not Implemented Exception
+NotImplementedException::NotImplementedException( const string &message, bool inclSysMsg ) : userMessage( message ) {
+	if( inclSysMsg ) {
 		userMessage.append( ": " );
 		userMessage.append( strerror( errno ) );
 	}
@@ -44,18 +36,14 @@ const char *NotImplementedException::what() const _NOEXCEPT
 	return userMessage.c_str();
 }
 
-/**
-*   CommsProcessor class
-*/
-CommsProcessor::CommsProcessor( CommsProcessorRole r )
-{
+// CommsProcessor class
+CommsProcessor::CommsProcessor( CommsProcessorRole r ) {
 	//TODO Make TTL variable and accessors instead of hardcoded
 	role = r;
 	sendSocket.setMulticastTTL( 255 );
 	running = true;
 	announceSignaled = false;
-	switch( r )
-	{
+	switch( r ) {
 		case SERVER:
 			listenThread = thread( &CommsProcessor::serverCallback, this );
 			break;
@@ -72,52 +60,42 @@ CommsProcessor::CommsProcessor( CommsProcessorRole r )
 	}
 }
 
-CommsProcessor::~CommsProcessor()
-{
+CommsProcessor::~CommsProcessor() {
 	running = false;
 	listenThread.join();
 }
 
-void CommsProcessor::setHandoffQ( queue<QueueItem> *q )
-{
-	if( q )
-	{
+void CommsProcessor::setHandoffQ( DoubleBufferedQueue<QueueItem> *q ) {
+	if( q ) {
 		handoffQ = q;
-	}
-	else
-	{
+	} else {
 		throw ArgumentException( "MessageCallback was attempted to be set to NULL" );
 	}
 }
 
-queue<QueueItem> *CommsProcessor::getHandoffQ()
-{
+DoubleBufferedQueue<QueueItem> *CommsProcessor::getHandoffQ() const {
 	return handoffQ;
 }
 
-void CommsProcessor::serverCallback()
-{
+void CommsProcessor::serverCallback() {
 	string sourceAddress;								// Address of datagram source
 	unsigned short sourcePort;					// Port of datagram source
-	UDPSocket listenSocket( svrPort );
+	listenSocket.setLocalPort( svrPort );
 
 	// set up the listening socket
-	listenSocket.joinGroup( mcastAddr );
 	listenSocket.setRecvTimeout( 500 ); // 500 ms
 
-	while( running )
-	{
+	while( running ) {
 		int bytesRcvd;
 
 		bytesRcvd = listenSocket.recvFrom( recvBuf, maxMsgSize, sourceAddress, sourcePort );
-	
+
 		// if recieve call timedout then just start loop over
 		if( bytesRcvd == 0 )
 			continue;
 
 		Message *buf = (Message*)recvBuf;
-		switch( buf->header.msgType )
-		{
+		switch( buf->header.msgType ) {
 			case CLIENT_UPDATE:
 			{
 				QueueItem item;
@@ -130,22 +108,18 @@ void CommsProcessor::serverCallback()
 				break;
 		}
 	}
-
-	listenSocket.leaveGroup( mcastAddr );
 }
 
-void CommsProcessor::clientCallback()
-{
+void CommsProcessor::clientCallback() {
 	string sourceAddress;								// Address of datagram source
 	unsigned short sourcePort;					// Port of datagram source
-	UDPSocket listenSocket( clntPort );
+	listenSocket.setLocalPort( clntPort );
 
 	// set up the listening socket
 	listenSocket.joinGroup( mcastAddr );
 	listenSocket.setRecvTimeout( 500 ); // 500 ms
 
-	while( running )
-	{
+	while( running ) {
 		int bytesRcvd;
 
 		bytesRcvd = listenSocket.recvFrom( recvBuf, maxMsgSize, sourceAddress, sourcePort );
@@ -155,8 +129,7 @@ void CommsProcessor::clientCallback()
 			continue;
 
 		Message *buf = (Message*)recvBuf;
-		switch( buf->header.msgType )
-		{
+		switch( buf->header.msgType ) {
 			case WORLD_UPDATE:
 			{
 				QueueItem item;
@@ -177,32 +150,31 @@ void CommsProcessor::clientCallback()
 	listenSocket.leaveGroup( mcastAddr );
 }
 
-void CommsProcessor::monitorCallback()
-{
+void CommsProcessor::monitorCallback() {
 
 }
 
-void CommsProcessor::sendUpdates( const char *data, size_t len )
-{
-	if( len > (maxMsgSize - sizeof(Message) ) )
-	{
+void CommsProcessor::sendUpdates( const char *data, size_t len ) {
+	if( len > (maxMsgSize - sizeof( Message )) ) {
 		throw ArgumentException( "Message len is too big" );
 	}
 
 	int port;
+	string dstAddr;
 	Message *buf = (Message*)sendBuf;
 	memcpy( buf->payload, data, len );
 	buf->header.reserved1 = 0;
 	buf->header.reserved2 = 0;
 
-	switch( role )
-	{
+	switch( role ) {
 		case SERVER:
 			buf->header.msgType = WORLD_UPDATE;
+			dstAddr = mcastAddr;
 			port = clntPort;
 			break;
 		case CLIENT:
 			buf->header.msgType = CLIENT_UPDATE;
+			dstAddr = serverAddr;
 			port = svrPort;
 			break;
 		case MONITOR:
@@ -213,18 +185,16 @@ void CommsProcessor::sendUpdates( const char *data, size_t len )
 			throw ArgumentException( "An invalid mode was specified" );
 	}
 
-	sendSocket.sendTo( buf, sizeof( Message ) + len, mcastAddr, port );
+	sendSocket.sendTo( buf, sizeof( Message ) + len, dstAddr, port );
 }
 
-void CommsProcessor::sendAnnouce()
-{
+void CommsProcessor::sendAnnouce() {
 	Message buf;
 	buf.header.msgType = SERVER_ANNOUNCE;
 	buf.header.reserved1 = 0;
 	buf.header.reserved2 = 0;
 
-	switch( role )
-	{
+	switch( role ) {
 		case SERVER:
 			break;
 		case CLIENT:
@@ -240,9 +210,7 @@ void CommsProcessor::sendAnnouce()
 	sendSocket.sendTo( &buf, sizeof( Message ), mcastAddr, clntPort );
 }
 
-void CommsProcessor::waitAnnouce()
-{
-	// Wait until main() sends data
+void CommsProcessor::waitAnnouce() {
 	std::unique_lock<std::mutex> lk( m );
 	cv.wait( lk, [=] { return announceSignaled; } );
 }

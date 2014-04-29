@@ -2,23 +2,14 @@
 
 using namespace Transmission;
 
-RenderableObject::RenderableObject(Model *model)
-{
+RenderableObject::RenderableObject(int objectType, Model *model) 
+		: BaseObject(objectType) {
 	this->model = model;
 }
 
-RenderableObject::~RenderableObject()
-{
+RenderableObject::~RenderableObject() {
 	delete this->model;
 }
-
-Handle RenderableObject::getHandle() {
-	return this->handle;
-}
-
-void RenderableObject::setHandle(Handle handle){
-	this->handle = handle;
-};
 
 void RenderableObject::render() {
 	this->model->draw();

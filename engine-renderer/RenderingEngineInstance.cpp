@@ -1,14 +1,17 @@
 #include "RenderingEngineInstance.h"
 
-#include <stdexcept> 
+#include <stdexcept>
 
 using namespace Transmission;
+
+// constants
+static const char *testData = "This is a client update!!!\n";
 
 RenderingEngineInstance::RenderingEngineInstance(
 	RenderableWorld *world,
 	ObjectCtorTable *objectCtors,
 	void *appHandle) 
-		: EngineInstance(world, objectCtors) {
+		: EngineInstance(world, objectCtors, CommsProcessorRole::CLIENT) {
 	
 	this->window = Window::createWindow(appHandle);
 	this->renderer = Renderer::createRenderer(this->window);
@@ -27,10 +30,21 @@ bool RenderingEngineInstance::shouldContinueFrames() {
 	return true;
 }
 
-void RenderingEngineInstance::frame() {
+void RenderingEngineInstance::frame(int dt) {
+	this->processNetworkUpdates();
+	this->world->update(dt);
+
 	renderer->clearFrame();
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
+
+	// TEST
+	static int updates = 0;
+	updates++;
+	if (updates >= 200) {
+		comms->sendUpdates(testData, strlen(testData));
+		updates = 0;
+	}
 }
 
 int RenderingEngineInstance::loadModel(char *filename) {
@@ -60,7 +74,7 @@ int RenderingEngineInstance::loadTexture(char *filename) {
 	return -1;
 }
 
-Model * RenderingEngineInstance::createModelFromIndex(int modelIndex, int textureIndex) {
+Model * RenderingEngineInstance::createModelFromIndex(size_t modelIndex, size_t textureIndex) {
 	if (modelIndex < 0 || modelIndex >= this->models.size()) {
 		throw std::runtime_error("Model index out of range.");
 	} else if (textureIndex < 0 || textureIndex >= this->textures.size()) {

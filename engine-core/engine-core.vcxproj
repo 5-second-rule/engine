@@ -54,6 +54,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_IS_ENGINE_CORE;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
+      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -83,32 +84,43 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BufferBuilder.h" />
+    <ClInclude Include="BufferReader.h" />
+    <ClInclude Include="BufferRemainder.h" />
     <ClInclude Include="CommsProcessor.h" />
     <ClInclude Include="ConfigSettings.h" />
     <ClInclude Include="CrudeTimer.h" />
+    <ClInclude Include="DirectedEvent.h" />
+    <ClInclude Include="DoubleBufferedQueue.h" />
     <ClInclude Include="engine-core.h" />
     <ClInclude Include="EngineInstance.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="EventDispatcher.h" />
     <ClInclude Include="EventType.h" />
+    <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="IHasHandle.h" />
-    <ClInclude Include="IRecentReceiver.h" />
+    <ClInclude Include="IEventReceiver.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ObjectCtorTable.h" />
+    <ClInclude Include="ServerEngineInstance.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BufferBuilder.cpp" />
+    <ClCompile Include="BufferReader.cpp" />
+    <ClCompile Include="BufferRemainder.cpp" />
     <ClCompile Include="CommsProcessor.cpp" />
     <ClCompile Include="ConfigSettings.cpp" />
     <ClCompile Include="CrudeTimer.cpp" />
+    <ClCompile Include="DirectedEvent.cpp" />
     <ClCompile Include="EngineInstance.cpp" />
     <ClCompile Include="Event.cpp" />
-    <ClCompile Include="EventDispatcher.cpp" />
+    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Handle.cpp" />
     <ClCompile Include="ObjectCtorTable.cpp" />
+    <ClCompile Include="ServerEngineInstance.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

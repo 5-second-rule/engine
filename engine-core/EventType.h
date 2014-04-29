@@ -1,15 +1,13 @@
 #pragma once
 #include "engine-core.h"
+#include "Handle.h"
 
 enum COREDLL EventType{
-	Event_Attack = 0,
-	Event_Move = 1
+	OBJECT_UPDATE = 0,
+	SPECIAL = 1
 };
 
-class COREDLL EventAttack{
-	int damage;
-};
-
-class COREDLL EventMove{
-	int blablabla;
+struct COREDLL ObjectUpdateHeader {
+	Handle handle;
+	int objectType;
 };
