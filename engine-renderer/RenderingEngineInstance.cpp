@@ -27,7 +27,7 @@ void RenderingEngineInstance::handleInput() {
 	Input::Key key;
 	Input::KeyState state;
 
-	while (!queue.empty() && this->inputHandler != NULL) {
+	while (!queue.empty() && this->inputHandler != nullptr) {
 		key = queue.front.first();
 		state = queue.front.second();
 		this->sendOutboundEvent(inputHandler(key, state));
