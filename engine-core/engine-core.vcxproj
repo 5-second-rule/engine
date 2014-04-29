@@ -97,7 +97,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="IHasHandle.h" />
-    <ClInclude Include="IRecentReceiver.h" />
+    <ClInclude Include="IEventReceiver.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ObjectCtorTable.h" />

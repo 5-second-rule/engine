@@ -15,7 +15,6 @@ DirectedEvent::DirectedEvent(
 DirectedEvent::DirectedEvent() : Event((EventType)0) {
 }
 
-
 DirectedEvent::~DirectedEvent() {
 	if (this->child != nullptr) {
 		delete this->child;

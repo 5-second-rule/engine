@@ -34,6 +34,5 @@ public:
 	virtual void rehydrate(BufferBuilder *buffer);
 
 	static DirectedEvent *forReading();
-	}
 };
 
