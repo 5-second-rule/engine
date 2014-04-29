@@ -22,7 +22,7 @@ EngineInstance::~EngineInstance() {
 }
 
 void EngineInstance::run() {
-	long lastFrameTime = 0;
+	long long lastFrameTime = 0;
 	while (this->shouldContinueFrames()) {
 		steady_clock::time_point start = steady_clock::now();
 

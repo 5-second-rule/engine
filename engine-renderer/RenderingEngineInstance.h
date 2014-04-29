@@ -34,6 +34,6 @@ public:
 
 	int loadModel(char *filename);
 	int loadTexture(char *filename);
-	Transmission::Model * createModelFromIndex(int modelIndex, int textureIndex);
+	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
 };
 

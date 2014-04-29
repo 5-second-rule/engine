@@ -14,7 +14,7 @@ private:
 	static const unsigned int LOCAL_MASK = 1 << 31;
 	
 public:
-	int index;
+	size_t index;
 	unsigned int id;
 
 	Handle();

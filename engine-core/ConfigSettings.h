@@ -1,18 +1,16 @@
-#ifndef _CONFIG_SETTINGS_H_
-#define _CONFIG_SETTINGS_H_
-
+#pragma once
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <stdio.h>
-#include <stdlib.h>
 #include <hash_map>
 #include <iterator>
+
 #include "engine-core.h"
 
 using namespace std;
-template class COREDLL hash_map< string, string >;
 
 const string str_settings_file = "..\\engine-core\\Config.ini";
 const string str_template_settings_file = "..\\engine-core\\ConfigTemplate.ini";
@@ -52,12 +50,9 @@ private:
 	ConfigSettings(string file_name=str_settings_file, string template_file_name=str_template_settings_file);
 
 
-	hash_map<string,string> settings;
+	hash_map<string,string> *settings;
 	bool settings_loaded;
 
 	string file_name;
 	string template_file_name;
 };
-
-
-#endif

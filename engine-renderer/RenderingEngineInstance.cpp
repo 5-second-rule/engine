@@ -74,7 +74,7 @@ int RenderingEngineInstance::loadTexture(char *filename) {
 	return -1;
 }
 
-Model * RenderingEngineInstance::createModelFromIndex(int modelIndex, int textureIndex) {
+Model * RenderingEngineInstance::createModelFromIndex(size_t modelIndex, size_t textureIndex) {
 	if (modelIndex < 0 || modelIndex >= this->models.size()) {
 		throw std::runtime_error("Model index out of range.");
 	} else if (textureIndex < 0 || textureIndex >= this->textures.size()) {

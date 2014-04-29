@@ -1,6 +1,7 @@
+#include <stdexcept>
+
 #include "BufferBuilder.h"
 
-#include <stdexcept>:
 
 BufferBuilder::BufferBuilder() {
 	this->buffer = nullptr;
