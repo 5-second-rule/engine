@@ -7,23 +7,15 @@ using namespace std::this_thread;
 
 static const char *testData = "This is the latest edition of the world from your local neighborhood server\n";
 
-ServerEngineInstance::ServerEngineInstance(
-	World *world,
-	ObjectCtorTable *objectCtors,
-	int minimumFrameTime)
-		: EngineInstance(world, objectCtors, CommsProcessorRole::SERVER) {
+ServerEngineInstance::ServerEngineInstance(World *world, ObjectCtorTable *objectCtors, float secondsPerTick)
+	: EngineInstance(world, objectCtors, CommsProcessorRole::SERVER)
+	, secondsPerTick(secondsPerTick)
+{}
 
-	this->running = false;
-}
+ServerEngineInstance::~ServerEngineInstance() {}
 
-ServerEngineInstance::~ServerEngineInstance() {
-}
 
-bool ServerEngineInstance::shouldContinueFrames() {
-	return this->running;
-}
-
-void ServerEngineInstance::frame(int dt) {
+void ServerEngineInstance::frame(float dt) {
 	// get start time
 	steady_clock::time_point start = steady_clock::now();
 
@@ -48,8 +40,6 @@ void ServerEngineInstance::frame(int dt) {
 }
 
 void ServerEngineInstance::run(){
-	// TODO no already running checks, not important right now
-	this->running = true;
 
 	// TEST HACK
 	IHasHandle * obj = this->objectCtors->invoke(0);
@@ -57,10 +47,6 @@ void ServerEngineInstance::run(){
 	world->insert(obj);
 
 	EngineInstance::run();
-}
-
-void ServerEngineInstance::stop() {
-	this->running = false;
 }
 
 

@@ -45,14 +45,14 @@ void DirectedEvent::fillBuffer(BufferBuilder *buffer) {
 	}
 }
 
-void DirectedEvent::deserialize(BufferReader *buffer) {
+void DirectedEvent::deserialize(BufferReader& buffer) {
 	Event::deserialize(buffer);
 
-	const struct DirectedEventHeader *hdr = reinterpret_cast<const struct DirectedEventHeader *>(buffer->getPointer());
+	const struct DirectedEventHeader *hdr = reinterpret_cast<const struct DirectedEventHeader *>(buffer.getPointer());
 	this->receiver = hdr->receiver;
 	this->sender = hdr->sender;
 
-	buffer->finished(sizeof(struct EventHeader));
+	buffer.finished(sizeof(struct EventHeader));
 
 	if (this->child != nullptr) {
 		this->child->deserialize(buffer);

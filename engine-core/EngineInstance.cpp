@@ -1,14 +1,17 @@
 #include "EngineInstance.h"
-#include <chrono>
 
 #include <iostream>
+
+#define TICKS_PER_SEC 25
 
 using namespace std::chrono;
 
 EngineInstance::EngineInstance(
 		World *world, 
 		ObjectCtorTable *objectCtors, 
-		CommsProcessorRole role) {
+		CommsProcessorRole role)
+	: secondsPerTick(1.0f / (float)TICKS_PER_SEC)
+{
 	this->world = world;
 	this->objectCtors = objectCtors;
 
@@ -22,23 +25,32 @@ EngineInstance::~EngineInstance() {
 }
 
 void EngineInstance::run() {
-	long long lastFrameTime = 0;
+
+	steady_clock::time_point lastTickTime = steady_clock::now();
+
+	this->running = true;
+
 	while (this->shouldContinueFrames()) {
 		steady_clock::time_point start = steady_clock::now();
+		float dt = (float)duration_cast<milliseconds>(start - lastTickTime).count() / 1000.0f;
 
-		this->frame((int)lastFrameTime);
-		
-		steady_clock::time_point end = steady_clock::now();
-		lastFrameTime = duration_cast<microseconds>(end - start).count();
+		if (this->checkForTick(dt)) {
+			this->tick(dt);
+
+			lastTickTime = start;
+			dt = 0.0f;
+		}
+
+		this->frame(dt);		
 	}
 }
 
-bool EngineInstance::shouldContinueFrames() {
-	return true;
+void EngineInstance::stop() {
+	running = false;
 }
 
-void EngineInstance::frame(int dt) {
-	// TODO do stuff
+bool EngineInstance::shouldContinueFrames() {
+	return running;
 }
 
 void EngineInstance::processNetworkUpdates() {
@@ -46,25 +58,25 @@ void EngineInstance::processNetworkUpdates() {
 	this->networkUpdates.swap();
 
 	while (!this->networkUpdates.readEmpty()) {
-		std::cout << "========= handling update =========" << std::endl;
+		if(_DEBUG) std::cout << "========= handling update =========" << std::endl;
 		QueueItem update = this->networkUpdates.pop();
 		dispatchUpdate(update);
 		delete[] update.data;
 	}
 
-	std::cout << "finished updates" << std::endl;
+	if(_DEBUG) std::cout << "finished updates" << std::endl;
 }
 
 void EngineInstance::dispatchUpdate(QueueItem &item) {
-	BufferReader *readBuffer = new BufferReader(item.data, item.len);
-	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer->getPointer());
+	BufferReader readBuffer(item.data, item.len);
+	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer.getPointer());
 	
 	if (header->type == EventType::OBJECT_UPDATE) {
-		readBuffer->finished(sizeof(struct EventHeader));
-		this->dispatchObjectUpdate(readBuffer);
+		readBuffer.finished(sizeof(struct EventHeader));
+		this->updateObject(readBuffer);
 
 	} else if (header->type == EventType::SPECIAL) {
-		readBuffer->finished(sizeof(struct EventHeader));
+		readBuffer.finished(sizeof(struct EventHeader));
 		special_event_handler handler = this->specialEventHandler;
 		if (handler != nullptr) {
 			handler(readBuffer);
@@ -77,11 +89,10 @@ void EngineInstance::dispatchUpdate(QueueItem &item) {
 		// no delete for event, event queue on objects responsible
 	}
 
-	delete readBuffer;
 }
 
-void EngineInstance::dispatchObjectUpdate(BufferReader *buffer) {
-	const struct ObjectUpdateHeader *header = reinterpret_cast<const struct ObjectUpdateHeader *>(buffer->getPointer());
+void EngineInstance::updateObject(BufferReader& buffer) {
+	const struct ObjectUpdateHeader *header = reinterpret_cast<const struct ObjectUpdateHeader *>(buffer.getPointer());
 
 	IHasHandle *object = this->world->get(&header->handle);
 	bool isNew = false;
@@ -95,7 +106,7 @@ void EngineInstance::dispatchObjectUpdate(BufferReader *buffer) {
 		throw new std::runtime_error("Expected serializable object, but it's not; wat.");
 	}
 
-	buffer->finished(sizeof(struct ObjectUpdateHeader));
+	buffer.finished(sizeof(struct ObjectUpdateHeader));
 	serializable->deserialize(buffer);
 
 	if (isNew) {

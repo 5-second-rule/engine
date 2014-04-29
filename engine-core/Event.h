@@ -22,7 +22,7 @@ public:
 
 	virtual void reserveSize(BufferBuilder *buffer);
 	virtual void fillBuffer(BufferBuilder *buffer);
-	virtual void deserialize(BufferReader *buffer);
+	virtual void deserialize(BufferReader& buffer);
 
 	/*bool operator<(Event const&) const;
 	bool operator==(Event const&) const;*/
