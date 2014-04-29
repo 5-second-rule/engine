@@ -41,8 +41,13 @@ void BaseObject::rehydrate(BufferBuilder *buffer) {
 	buffer->pop();
 }
 
-void BaseObject::update(int dt) {}
+void BaseObject::update(int dt) {
+}
 
 int BaseObject::getType() {
 	return this->objectType;
+}
+
+void BaseObject::onEvent(DirectedEvent *evt) {
+	waitingEvents.push(evt);
 }

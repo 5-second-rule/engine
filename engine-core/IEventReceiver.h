@@ -5,5 +5,5 @@
 
 class COREDLL IEventReceiver {
 public:
-	virtual bool onEvent(DirectedEvent *evt) = 0;
+	virtual void onEvent(DirectedEvent *evt) = 0;
 };

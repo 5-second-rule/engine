@@ -4,6 +4,9 @@
 #include "Handle.h"
 #include "ISerializable.h"
 #include "IUpdatable.h"
+#include "IEventReceiver.h"
+
+#include <queue>
 
 struct BaseObjectInfo {
 	/*	Array of bytes contains tagged data, one after another
@@ -18,12 +21,17 @@ struct BaseObjectInfo {
 	float force[3];
 };
 
-class COREDLL BaseObject : public IHasHandle, public ISerializable, public IUpdatable {
+class COREDLL BaseObject
+	: public IHasHandle, 
+		public ISerializable, 
+		public IUpdatable,
+		public IEventReceiver {
 private:
 	Handle handle;
 	int objectType;
 	float position[3];
 	float force[3];
+	std::queue<DirectedEvent *> waitingEvents;
 
 public:
 	BaseObject(int objectType);
@@ -38,4 +46,6 @@ public:
 
 	// IUpdateable Methods
 	virtual void update(int dt);
+
+	virtual void onEvent(DirectedEvent *evt);
 };
