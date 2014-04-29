@@ -112,6 +112,8 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 			buffer->pop();
 
 			comms->sendUpdates(buffer->getBasePointer(), buffer->getSize());
+
+			delete buffer;
 		}
 
 		iterator++;

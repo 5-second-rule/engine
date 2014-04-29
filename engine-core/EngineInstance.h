@@ -6,10 +6,13 @@
 #include "CommsProcessor.h"
 #include "DoubleBufferedQueue.h"
 
+typedef void(*special_event_handler)(BufferBuilder *buffer);
+
 class COREDLL EngineInstance
 {
 private:
 	DoubleBufferedQueue<QueueItem> networkUpdates;
+	special_event_handler specialEventHandler;
 
 protected:
 	CommsProcessor *comms;
@@ -32,5 +35,7 @@ public:
 	~EngineInstance();
 
 	virtual void run();
+	void sendOutboundEvent(Event *evt);
+	void setInboundEventHandler(special_event_handler handler);
 };
 

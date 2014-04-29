@@ -10,6 +10,9 @@ BufferBuilder::BufferBuilder() {
 }
 
 BufferBuilder::~BufferBuilder() {
+	if (!this->reading && this->buffer != nullptr) {
+		delete[] this->buffer;
+	}
 }
 
 void BufferBuilder::reserve(int size) {

@@ -58,11 +58,16 @@ void EngineInstance::processNetworkUpdates() {
 void EngineInstance::dispatchUpdate(QueueItem &item) {
 	BufferBuilder *readBuffer = BufferBuilder::forReading(item.data, item.len);
 	struct EventHeader *header = reinterpret_cast<struct EventHeader *>(readBuffer->getPointer());
+	
 	if (header->type == EventType::OBJECT_UPDATE) {
 		readBuffer->reserve(sizeof(struct EventHeader));
 		this->dispatchObjectUpdate(readBuffer);
+
 	} else if (header->type == EventType::SPECIAL) {
-		// TODO handle special events (e.g. requests from client, etc)
+		special_event_handler handler = this->specialEventHandler;
+		if (handler != nullptr) {
+			handler(readBuffer);
+		}
 	} else {
 		DirectedEvent *directed = DirectedEvent::forReading();
 		directed->rehydrate(readBuffer);
@@ -95,4 +100,17 @@ void EngineInstance::dispatchObjectUpdate(BufferBuilder *buffer) {
 	if (isNew) {
 		world->insert(object);
 	}
+}
+
+void EngineInstance::sendOutboundEvent(Event *evt) {
+	BufferBuilder *buffer = new BufferBuilder();
+	evt->dehydrate(buffer);
+
+	this->comms->sendUpdates(buffer->getBasePointer(), buffer->getSize());
+
+	delete buffer;
+}
+
+void EngineInstance::setInboundEventHandler(special_event_handler handler) {
+	this->specialEventHandler = handler;
 }
