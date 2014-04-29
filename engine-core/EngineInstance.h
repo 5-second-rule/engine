@@ -6,7 +6,7 @@
 #include "CommsProcessor.h"
 #include "DoubleBufferedQueue.h"
 
-typedef void(*special_event_handler)(BufferBuilder *buffer);
+typedef void(*special_event_handler)(BufferReader *buffer);
 
 class COREDLL EngineInstance
 {
@@ -22,7 +22,7 @@ protected:
 	virtual void frame(int dt);
 	virtual void dispatchUpdate(QueueItem &item);
 
-	virtual void dispatchObjectUpdate(BufferBuilder *buffer);
+	virtual void dispatchObjectUpdate(BufferReader *buffer);
 
 	void processNetworkUpdates();
 

@@ -34,7 +34,7 @@ public:
 	void allocateHandle(IHasHandle *object, HandleType type);
 	virtual void insert(IHasHandle *object);
 	void remove(Handle *handle);
-	IHasHandle * get(Handle *handle);
+	IHasHandle * get(const Handle *handle);
 
 	void broadcastUpdates(CommsProcessor *comms);
 

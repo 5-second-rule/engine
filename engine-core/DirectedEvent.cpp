@@ -21,36 +21,42 @@ DirectedEvent::~DirectedEvent() {
 	}
 }
 
-void DirectedEvent::dehydrateInternal(BufferBuilder *buffer) {
+void DirectedEvent::reserveSize(BufferBuilder *buffer) {
+	Event::reserveSize(buffer);
+
 	buffer->reserve(sizeof(struct EventHeader));
 
 	if (this->child != nullptr) {
-		this->child->dehydrate(buffer);
+		this->child->reserveSize(buffer);
 	}
+}
+
+void DirectedEvent::fillBuffer(BufferBuilder *buffer) {
+	Event::fillBuffer(buffer);
 
 	struct DirectedEventHeader *hdr = reinterpret_cast<struct DirectedEventHeader *>(buffer->getPointer());
-
 	hdr->receiver = this->receiver;
 	hdr->sender = this->sender;
 
 	buffer->pop();
+
+	if (this->child != nullptr) {
+		this->child->fillBuffer(buffer);
+	}
 }
 
-void DirectedEvent::rehydrate(BufferBuilder *buffer) {
-	Event::rehydrate(buffer);
+void DirectedEvent::deserialize(BufferReader *buffer) {
+	Event::deserialize(buffer);
 
-	buffer->reserve(sizeof(struct EventHeader));
-
-	struct DirectedEventHeader *hdr = reinterpret_cast<struct DirectedEventHeader *>(buffer->getPointer());
-
+	const struct DirectedEventHeader *hdr = reinterpret_cast<const struct DirectedEventHeader *>(buffer->getPointer());
 	this->receiver = hdr->receiver;
 	this->sender = hdr->sender;
 
-	if (this->child != nullptr) {
-		this->child->rehydrate(buffer);
-	}
+	buffer->finished(sizeof(struct EventHeader));
 
-	// no pop
+	if (this->child != nullptr) {
+		this->child->deserialize(buffer);
+	}
 }
 
 Handle& DirectedEvent::getReceiver() {

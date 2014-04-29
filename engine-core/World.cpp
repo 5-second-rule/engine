@@ -62,7 +62,7 @@ void World::remove(Handle *handle) {
 	// TODO remove from updatable and serializable vectors, in a separate pass
 }
 
-IHasHandle * World::get(Handle *handle) {
+IHasHandle * World::get(const Handle *handle) {
 	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
 
 	if (handle->index >= storage->size()) {
@@ -100,21 +100,21 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 			BufferBuilder *buffer = new BufferBuilder();
 			buffer->reserve(sizeof(struct EventHeader));
 			buffer->reserve(sizeof(struct ObjectUpdateHeader));
+			serializable->reserveSize(buffer);
 
-			serializable->dehydrate(buffer);
+			buffer->allocate();
+
+			((struct EventHeader*)buffer->getPointer())->type = EventType::OBJECT_UPDATE;
+			buffer->pop();
 
 			struct ObjectUpdateHeader *ouHeader = (struct ObjectUpdateHeader*)buffer->getPointer();
 			ouHeader->handle = object->getHandle();
 			ouHeader->objectType = object->getType();
-
 			buffer->pop();
 
-			((struct EventHeader*)buffer->getPointer())->type = EventType::OBJECT_UPDATE;
-
-			buffer->pop();
+			serializable->fillBuffer(buffer);
 
 			comms->sendUpdates(buffer->getBasePointer(), buffer->getSize());
-
 			delete buffer;
 		}
 

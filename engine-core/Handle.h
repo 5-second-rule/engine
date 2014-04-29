@@ -20,7 +20,7 @@ public:
 	Handle();
 	Handle(int index, unsigned int id, HandleType type);
 	~Handle();
-	HandleType getType();
+	HandleType getType() const;
 	bool operator==(Handle const&) const;
 };
 

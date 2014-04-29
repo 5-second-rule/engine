@@ -16,16 +16,13 @@ class COREDLL Event : public ISerializable
 private:
 	EventType type;
 
-protected:
-	// HACK
-	virtual void dehydrateInternal(BufferBuilder *buffer);
-
 public:
 	Event(EventType type);
 	~Event();
 
-	virtual void dehydrate(BufferBuilder *buffer);
-	virtual void rehydrate(BufferBuilder *buffer);
+	virtual void reserveSize(BufferBuilder *buffer);
+	virtual void fillBuffer(BufferBuilder *buffer);
+	virtual void deserialize(BufferReader *buffer);
 
 	/*bool operator<(Event const&) const;
 	bool operator==(Event const&) const;*/

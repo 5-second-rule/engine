@@ -56,21 +56,22 @@ void EngineInstance::processNetworkUpdates() {
 }
 
 void EngineInstance::dispatchUpdate(QueueItem &item) {
-	BufferBuilder *readBuffer = BufferBuilder::forReading(item.data, item.len);
-	struct EventHeader *header = reinterpret_cast<struct EventHeader *>(readBuffer->getPointer());
+	BufferReader *readBuffer = new BufferReader(item.data, item.len);
+	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer->getPointer());
 	
 	if (header->type == EventType::OBJECT_UPDATE) {
-		readBuffer->reserve(sizeof(struct EventHeader));
+		readBuffer->finished(sizeof(struct EventHeader));
 		this->dispatchObjectUpdate(readBuffer);
 
 	} else if (header->type == EventType::SPECIAL) {
+		readBuffer->finished(sizeof(struct EventHeader));
 		special_event_handler handler = this->specialEventHandler;
 		if (handler != nullptr) {
 			handler(readBuffer);
 		}
 	} else {
 		DirectedEvent *directed = DirectedEvent::forReading();
-		directed->rehydrate(readBuffer);
+		directed->deserialize(readBuffer);
 		world->dispatchEvent(directed);
 
 		// no delete for event, event queue on objects responsible
@@ -79,9 +80,8 @@ void EngineInstance::dispatchUpdate(QueueItem &item) {
 	delete readBuffer;
 }
 
-void EngineInstance::dispatchObjectUpdate(BufferBuilder *buffer) {
-	buffer->reserve(sizeof(struct ObjectUpdateHeader));
-	struct ObjectUpdateHeader *header = reinterpret_cast<struct ObjectUpdateHeader *>(buffer->getPointer());
+void EngineInstance::dispatchObjectUpdate(BufferReader *buffer) {
+	const struct ObjectUpdateHeader *header = reinterpret_cast<const struct ObjectUpdateHeader *>(buffer->getPointer());
 
 	IHasHandle *object = this->world->get(&header->handle);
 	bool isNew = false;
@@ -95,7 +95,8 @@ void EngineInstance::dispatchObjectUpdate(BufferBuilder *buffer) {
 		throw new std::runtime_error("Expected serializable object, but it's not; wat.");
 	}
 
-	serializable->rehydrate(buffer);
+	buffer->finished(sizeof(struct ObjectUpdateHeader));
+	serializable->deserialize(buffer);
 
 	if (isNew) {
 		world->insert(object);
@@ -104,7 +105,7 @@ void EngineInstance::dispatchObjectUpdate(BufferBuilder *buffer) {
 
 void EngineInstance::sendOutboundEvent(Event *evt) {
 	BufferBuilder *buffer = new BufferBuilder();
-	evt->dehydrate(buffer);
+	evt->serialize(buffer);
 
 	this->comms->sendUpdates(buffer->getBasePointer(), buffer->getSize());
 

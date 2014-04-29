@@ -84,6 +84,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BufferBuilder.h" />
+    <ClInclude Include="BufferReader.h" />
     <ClInclude Include="BufferRemainder.h" />
     <ClInclude Include="CommsProcessor.h" />
     <ClInclude Include="ConfigSettings.h" />
@@ -107,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BufferBuilder.cpp" />
+    <ClCompile Include="BufferReader.cpp" />
     <ClCompile Include="BufferRemainder.cpp" />
     <ClCompile Include="CommsProcessor.cpp" />
     <ClCompile Include="ConfigSettings.cpp" />

@@ -6,37 +6,23 @@ BufferBuilder::BufferBuilder() {
 	this->buffer = nullptr;
 	this->size = 0;
 	this->offset = 0;
-	this->reading = false;
+	this->allocated = false;
 }
 
 BufferBuilder::~BufferBuilder() {
-	if (!this->reading && this->buffer != nullptr) {
+	if (this->buffer != nullptr) {
 		delete[] this->buffer;
 	}
 }
 
-void BufferBuilder::reserve(int size) {
-	if (!this->sizes.empty()) {
-		this->offset += this->sizes.top();
-	}
-
+void BufferBuilder::reserve(size_t size) {
 	this->sizes.push(size);
-
-	if (this->reading) {
-		if (this->offset + size > this->size) {
-			throw new std::runtime_error("buffer too small");
-		}
-	} else {
-		this->size += size;
-	}
+	this->size += size;
 }
 
 void BufferBuilder::pop() {
+	this->offset += this->sizes.front();
 	this->sizes.pop();
-
-	if (!this->sizes.empty()) {
-		this->offset -= this->sizes.top();
-	}
 }
 
 void BufferBuilder::allocate() {
@@ -55,17 +41,14 @@ char * BufferBuilder::getBasePointer() {
 	return this->buffer;
 }
 
-int BufferBuilder::getSize() {
-	return this->size;
+const char * BufferBuilder::getPointer() const {
+	return this->buffer + this->offset;
 }
 
-BufferBuilder * BufferBuilder::forReading(char * buffer, int size) {
-	// TODO add some sanity checks
+const char * BufferBuilder::getBasePointer() const {
+	return this->buffer;
+}
 
-	BufferBuilder *builder = new BufferBuilder();
-	builder->buffer = buffer;
-	builder->size = size;
-	builder->reading = true;
-
-	return builder;
+size_t BufferBuilder::getSize() const {
+	return this->size;
 }

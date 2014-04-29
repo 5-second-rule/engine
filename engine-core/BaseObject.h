@@ -41,8 +41,9 @@ public:
 	virtual int getType();
 
 	// ISerializable Methods
-	virtual void dehydrate(BufferBuilder *buffer);
-	virtual void rehydrate(BufferBuilder *buffer);
+	virtual void reserveSize(BufferBuilder *buffer);
+	virtual void fillBuffer(BufferBuilder *buffer);
+	virtual void deserialize(BufferReader *buffer);
 
 	// IUpdateable Methods
 	virtual void update(int dt);

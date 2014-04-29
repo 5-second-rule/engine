@@ -2,31 +2,33 @@
 
 #include "engine-core.h"
 
-#include <stack>
+#include <queue>
 
 // handles single child chaining in current form, doesn't handle multiple children paths
 class COREDLL BufferBuilder
 {
 private:
 	char * buffer;
-	int size;
+	size_t size;
 
-	std::stack<int> sizes;
-	int offset;
-	
-	bool reading;
+	std::queue<size_t> sizes;
+	size_t offset;
+
+	bool allocated;
 
 public:
 	BufferBuilder();
 	~BufferBuilder();
 
-	void reserve(int size);
+	void reserve(size_t size);
 	void allocate();
 	void pop();
+
 	char * getPointer();
 	char * getBasePointer();
-	int getSize();
 
-	static BufferBuilder * forReading(char * buffer, int size);
+	const char * getPointer() const;
+	const char * getBasePointer() const;
+	size_t getSize() const;
 };
 

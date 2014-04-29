@@ -10,7 +10,8 @@ public:
 	BufferRemainder();
 	~BufferRemainder();
 
-	virtual void dehydrate(BufferBuilder *buffer);
-	virtual void rehydrate(BufferBuilder *buffer);
+	virtual void reserveSize(BufferBuilder *buffer);
+	virtual void fillBuffer(BufferBuilder *buffer);
+	virtual void deserialize(BufferReader *buffer);
 };
 

@@ -17,9 +17,6 @@ private:
 
 	DirectedEvent();
 
-protected:
-	virtual void dehydrateInternal(BufferBuilder *buffer);
-
 public:
 	DirectedEvent(
 		int eventType, 
@@ -31,7 +28,9 @@ public:
 
 	Handle &getReceiver();
 
-	virtual void rehydrate(BufferBuilder *buffer);
+	virtual void reserveSize(BufferBuilder *buffer);
+	virtual void fillBuffer(BufferBuilder *buffer);
+	virtual void deserialize(BufferReader *buffer);
 
 	static DirectedEvent *forReading();
 };
