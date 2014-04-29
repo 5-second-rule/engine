@@ -3,28 +3,27 @@
 #include "engine-core.h"
 #include "EventType.h"
 #include "Handle.h"
+#include "ISerializable.h"
 
-class COREDLL Event
+struct COREDLL EventHeader {
+	int type;
+};
+
+
+
+class COREDLL Event : public ISerializable
 {
-	friend class EventDispatcher;
 private:
-	static const double SmallestDelay;
 	EventType type;
-	Handle sender;
-	Handle receiver;
-	double dispatchTime;
-	void *extraInfo;
+
 public:
-	Event(double time,
-		Handle &sender,
-		Handle &receiver,
-		EventType type,
-		void* extraInfo);
+	Event(EventType type);
 	~Event();
 
-	void setDispatchTime(double time);
-	double getDispatchTime() const;
-	Handle &getReceiver();
-	bool operator<(Event const&) const;
-	bool operator==(Event const&) const;
+	virtual void reserveSize(BufferBuilder *buffer);
+	virtual void fillBuffer(BufferBuilder *buffer);
+	virtual void deserialize(BufferReader *buffer);
+
+	/*bool operator<(Event const&) const;
+	bool operator==(Event const&) const;*/
 };

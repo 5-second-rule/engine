@@ -20,7 +20,7 @@ Handle::~Handle()
 {
 }
 
-HandleType Handle::getType() {
+HandleType Handle::getType() const {
 	return (HandleType)((this->id & LOCAL_MASK) != LOCAL_MASK);
 }
 

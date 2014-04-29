@@ -24,6 +24,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int textureIndex = engineInstance->loadTexture(textureLocationW);
 
 	RenderableObject *object = new RenderableObject(
+		0,
 		engineInstance->createModelFromIndex(ecoliIndex, textureIndex));
 
 	world->allocateHandle(object, HandleType::LOCAL);

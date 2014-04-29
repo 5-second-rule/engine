@@ -1,12 +1,12 @@
 #pragma once
 #include <thread>
 #include <string>
-#include <queue>
 #include <mutex>
 #include <condition_variable>
 
 #include "engine-core.h"
 #include "Socket.h"
+#include "DoubleBufferedQueue.h"
 
 #ifdef WIN32
 // disable warning about zero-length arrays in MSVC
@@ -24,13 +24,9 @@ const int maxMsgSize = 65507; // max UDP size
 
 using namespace std;
 
-/**
-*   Message Header Struct
-*/
-struct COREDLL Message
-{
-	struct _header
-	{
+/// <summary>Structure containing the Message header and data</summary>
+struct COREDLL Message {
+	struct _header {
 		uint8_t msgType;
 		uint8_t reserved1;
 		short reserved2;
@@ -39,112 +35,100 @@ struct COREDLL Message
 	uint8_t payload[0];
 };
 
-/**
-*   Queue Header Struct
-*/
-struct COREDLL QueueItem
-{
+/// <summary>Structure that encapsulated Queued Items </summary>
+struct COREDLL QueueItem {
 	char *data;
 	size_t len;
 };
 
-/**
-*   Argument Exception
-*/
-class COREDLL ArgumentException : public exception
-{
+class COREDLL ArgumentException : public exception {
 public:
-	/**
-	*   Construct a ArgumentException with a explanatory message.
-	*   @param message explanatory message
-	*   @param incSysMsg true if system message (from strerror(errno))
-	*   should be postfixed to the user provided message
-	*/
+	/// <summary> Construct a ArgumentException with a explanatory message.</summary>
+	/// <param name="message">explanatory message</param>
+	/// <param name="incSysMsg">true if system message (from strerror(errno)) 
+	///  should be postfixed to the user provided message</param>
 	ArgumentException( const string &message, bool inclSysMsg = false );
 
-	/**
-	*   Provided just to guarantee that no exceptions are thrown.
-	*/
+	/// <summary>Deconstructor</summary>
 	~ArgumentException() _NOEXCEPT;
 
-	/**
-	*   Get the exception message
-	*   @return exception message
-	*/
+	/// <summary>Get the exception message</summary>
+	/// <returns>exception message</returns>
 	const char *what() const _NOEXCEPT;
 
 private:
-	string userMessage;  // Exception message
+	/// <summary>Stores the exception message</summary>
+	string userMessage;
 };
 
-
-/**
-*   Not Implemented Exception
-*/
-class COREDLL NotImplementedException : public exception
-{
+/// <summary> Not Implemented Exception </summary>
+class COREDLL NotImplementedException : public exception {
 public:
-	/**
-	*   Construct a NotImplementedException with a explanatory message.
-	*   @param message explanatory message
-	*   @param incSysMsg true if system message (from strerror(errno))
-	*   should be postfixed to the user provided message
-	*/
+
+	/// <summary>Construct a NotImplementedException with a explanatory message.</summary>
+	/// <param name="message">explanatory message</param>
+	/// <param name="incSysMsg">true if system message (from strerror(errno)) 
+	///  should be postfixed to the user provided message</param>
 	NotImplementedException( const string &message, bool inclSysMsg = false );
 
-	/**
-	*   Provided just to guarantee that no exceptions are thrown.
-	*/
+	/// <summary>Deconstructor</summary>
 	~NotImplementedException() _NOEXCEPT;
 
-	/**
-	*   Get the exception message
-	*   @return exception message
-	*/
+	/// <summary>Get the exception message</summary>
+	/// <returns>exception message</returns>
 	const char *what() const _NOEXCEPT;
 
 private:
-	string userMessage;  // Exception message
+	/// <summary>Stores the exception message</summary>
+	string userMessage;
 };
 
 
-/**
- * Support Enumerations
- */
-enum COREDLL CommsProcessorRole
-{
+/// <summary>Role Type Enumerations</summary>
+enum COREDLL CommsProcessorRole {
 	SERVER,
 	CLIENT,
 	MONITOR,
 	CUSTOM
 };
 
-enum COREDLL MessageType
-{
+
+/// <summary>Message Type Enumerations</summary>
+enum COREDLL MessageType {
 	WORLD_UPDATE,
 	CLIENT_UPDATE,
 	SERVER_ANNOUNCE
 };
 
-/**
-*   CommsProcessor class
-*/
-class COREDLL CommsProcessor
-{
+/// <summary>CommsProcessor class handle sending and recieving messages</summary>
+class COREDLL CommsProcessor {
 public:
-  // object lifecycle methods
+	/// <summary>Constructor</summary>
+	/// <param name="role">The role of this CommsProcessor object</param>
 	CommsProcessor( CommsProcessorRole role );
-  ~CommsProcessor();
 
-	// configuration methods
-	void setHandoffQ( queue<QueueItem> *q );
-	queue<QueueItem> *getHandoffQ();
+	/// <summary>Deconstructor</summary>
+	~CommsProcessor();
 
-	// Sending methods
+	/// <summary>Sets the queue to handoff client or server updates too</summary>
+	/// <param name="q">The queue to use</param>
+	void setHandoffQ( DoubleBufferedQueue<QueueItem> *q );
+
+	/// <summary>Gets the currently assigned queue to handoff client or server updates too</summary>
+	/// <returns>The currently assigned handoff queue</returns>
+	DoubleBufferedQueue<QueueItem> *getHandoffQ() const;
+
+	/// <summary>Sends a message</summary>
+	/// <param name="data">the byte stream representing a Message</param>
+	/// <param name="len">the length of the byte stream to send</param>
 	void sendUpdates( const char *data, size_t len );
+
+	/// <summary>Sends a server announce message</summary>
+	/// <exception cref="NotImplementedException">Thrown when an the role is Custom</exception>
+	/// <exception cref="ArgumentException">Thrown when an the role is unknown</exception>
 	void sendAnnouce();
 
-	// waiting functions
+	/// <summary>Blocks until an announce message is recieved from a server</summary>
 	void waitAnnouce();
 
 private:
@@ -161,13 +145,15 @@ private:
 	CommsProcessorRole role;
 
 	// handoffQ private pointer
-	queue<QueueItem> *handoffQ;
+	DoubleBufferedQueue<QueueItem> *handoffQ;
 
 	// send update related
 	UDPSocket sendSocket;
+	UDPSocket listenSocket;
 	char sendBuf[maxMsgSize];
 
 	mutex m;
 	condition_variable cv;
 	bool announceSignaled;
+	string serverAddr;
 };

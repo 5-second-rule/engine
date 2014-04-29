@@ -8,19 +8,19 @@ enum HandleType {
 	GLOBAL = 1
 };
 
-class COREDLL Handle
+struct COREDLL Handle
 {
 private:
 	static const unsigned int LOCAL_MASK = 1 << 31;
 	
 public:
-	int index;
+	size_t index;
 	unsigned int id;
 
 	Handle();
 	Handle(int index, unsigned int id, HandleType type);
 	~Handle();
-	HandleType getType();
+	HandleType getType() const;
 	bool operator==(Handle const&) const;
 };
 

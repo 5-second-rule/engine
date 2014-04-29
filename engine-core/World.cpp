@@ -1,4 +1,6 @@
 #include "World.h"
+
+#include "IEventReceiver.h"
 #include <iostream>
 
 World::World() {
@@ -60,8 +62,12 @@ void World::remove(Handle *handle) {
 	// TODO remove from updatable and serializable vectors, in a separate pass
 }
 
-IHasHandle * World::get(Handle *handle) {
+IHasHandle * World::get(const Handle *handle) {
 	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
+
+	if (handle->index >= storage->size()) {
+		return nullptr;
+	}
 
 	IHasHandle *object = storage->at(handle->index);
 	if (object != nullptr && object->getHandle().id == handle->id) {
@@ -69,4 +75,62 @@ IHasHandle * World::get(Handle *handle) {
 	}
 
 	return nullptr;
+}
+
+void World::update(int dt) {
+	auto iterator = this->updatable.begin();
+	while (iterator != this->updatable.end()) {
+		IUpdatable *updatable = dynamic_cast<IUpdatable *>(this->get(&*iterator));
+
+		if (updatable != nullptr) {
+			updatable->update(dt);
+		}
+
+		iterator++;
+	}
+}
+
+void World::broadcastUpdates(CommsProcessor *comms) {
+	auto iterator = this->serializable.begin();
+	while (iterator != this->serializable.end()) {
+		IHasHandle *object = this->get(&*iterator);
+		ISerializable *serializable = dynamic_cast<ISerializable *>(object);
+
+		if (serializable != nullptr) {
+			BufferBuilder *buffer = new BufferBuilder();
+			buffer->reserve(sizeof(struct EventHeader));
+			buffer->reserve(sizeof(struct ObjectUpdateHeader));
+			serializable->reserveSize(buffer);
+
+			buffer->allocate();
+
+			((struct EventHeader*)buffer->getPointer())->type = EventType::OBJECT_UPDATE;
+			buffer->pop();
+
+			struct ObjectUpdateHeader *ouHeader = (struct ObjectUpdateHeader*)buffer->getPointer();
+			ouHeader->handle = object->getHandle();
+			ouHeader->objectType = object->getType();
+			buffer->pop();
+
+			serializable->fillBuffer(buffer);
+
+			comms->sendUpdates(buffer->getBasePointer(), buffer->getSize());
+			delete buffer;
+		}
+
+		iterator++;
+	}
+}
+
+void World::dispatchEvent(DirectedEvent *evt) {
+	IHasHandle *obj = this->get(&evt->getReceiver());
+	IEventReceiver *reciever = dynamic_cast<IEventReceiver *>(obj);
+
+	if (reciever != nullptr) {
+		// object responsible for deletion
+		reciever->onEvent(evt);
+	} else  {
+		// this little event is going places; not to an object, but places
+		delete evt;
+	}
 }

@@ -3,20 +3,17 @@
 #include "engine-renderer.h"
 #include "renderer/Model.h"
 #include "engine-renderer/IRenderable.h"
-#include "engine-core/IHasHandle.h"
+#include "engine-core/BaseObject.h"
 
-class RENDERDLL RenderableObject : public IRenderable, public IHasHandle
+class RENDERDLL RenderableObject : public IRenderable, public BaseObject
 {
 private:
 	Transmission::Model *model;
-	Handle handle;
 
 public:
-	RenderableObject(Transmission::Model *model);
+	RenderableObject(int objectType, Transmission::Model *model);
 	~RenderableObject();
 
-	virtual Handle getHandle();
-	virtual void setHandle(Handle handle);
 	virtual void render();
 };
 
