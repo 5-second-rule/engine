@@ -5,6 +5,7 @@
 #include "IHasHandle.h"
 #include "IUpdatable.h"
 #include "ISerializable.h"
+
 #include <vector>
 
 using namespace std;
