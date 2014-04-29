@@ -1,5 +1,4 @@
-#ifndef CRUDETIMER_H
-#define CRUDETIMER_H
+#pragma once
 //------------------------------------------------------------------------
 //
 //  Name:   CrudeTimer.h
@@ -21,7 +20,6 @@ class COREDLL CrudeTimer
 {
 private:
 
-
 	//set to the time (in seconds) when class is instantiated
 	double m_dStartTime;
 
@@ -33,12 +31,9 @@ private:
 	CrudeTimer& operator=(const CrudeTimer&);
 
 public:
-
 	static CrudeTimer* Instance();
-
+	static int integer(){ return 1; }
 	//returns how much time has elapsed since the timer was started
 	double GetCurrentTime(){ return timeGetTime() * 0.001 - m_dStartTime; }
 
 };
-
-#endif
