@@ -22,15 +22,19 @@ RenderingEngineInstance::RenderingEngineInstance(
 RenderingEngineInstance::~RenderingEngineInstance() {
 }
 
-void RenderingEngineInstance::handleInput() {
+void RenderingEngineInstance::translateInput() {
 	Input::KeyStateQueue queue = this->input->getInputQueue();
 	Input::Key key;
 	Input::KeyState state;
+	Event* inputEvent;
 
-	while (!queue.empty() && this->inputHandler != nullptr) {
-		key = queue.front.first();
-		state = queue.front.second();
-		this->sendOutboundEvent(inputHandler(key, state));
+	while (!queue.empty() && this->inputTranslator != nullptr) {
+		key = queue.front().first;
+		state = queue.front().second;
+		inputEvent = inputTranslator(key, state);
+		if (inputEvent != nullptr) {
+			this->sendOutboundEvent(inputEvent);
+		}		
 		queue.pop();
 	}
 }
@@ -100,6 +104,6 @@ Model * RenderingEngineInstance::createModelFromIndex(size_t modelIndex, size_t 
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture);
 }
 
-void RenderingEngineInstance::setInputHandler(RenderingEngineInstance::InputHandler handler) {
-	this->inputHandler = handler;
+void RenderingEngineInstance::setInputTranslator(RenderingEngineInstance::InputTranslatorFn translator) {
+	this->inputTranslator = translator;
 }

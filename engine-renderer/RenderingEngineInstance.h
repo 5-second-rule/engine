@@ -25,10 +25,10 @@ private:
 	std::vector<Transmission::Texture *> textures;
 
 protected:
-	typedef Event* (*InputHandler)(Transmission::Input::Key, Transmission::Input::KeyState); // input handler, typedef for future changes
-	InputHandler inputHandler;
+	typedef Event* (*InputTranslatorFn)(Transmission::Input::Key, Transmission::Input::KeyState); // input handler, typedef for future changes
+	InputTranslatorFn inputTranslator;
 
-	void handleInput();
+	void translateInput();
 
 	virtual bool shouldContinueFrames();
 	virtual void frame(int dt);
@@ -43,6 +43,6 @@ public:
 	int loadModel(char *filename);
 	int loadTexture(char *filename);
 	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
-	void setInputHandler(InputHandler handler);
+	void setInputTranslator(InputTranslatorFn translator);
 };
 
