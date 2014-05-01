@@ -4,5 +4,5 @@
 
 class COREDLL IUpdatable {
 public:
-	virtual void update(int dt) = 0;
+	virtual void update(float dt) = 0;
 };

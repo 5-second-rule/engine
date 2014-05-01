@@ -5,51 +5,26 @@
 using namespace std::chrono;
 using namespace std::this_thread;
 
-static const char *testData = "This is the latest edition of the world from your local neighborhood server\n";
+ServerEngineInstance::ServerEngineInstance(World *world, ObjectCtorTable *objectCtors, float secondsPerTick)
+	: EngineInstance(world, objectCtors, CommsProcessorRole::SERVER)
+	, secondsPerTick(secondsPerTick)
+{}
 
-ServerEngineInstance::ServerEngineInstance(
-	World *world,
-	ObjectCtorTable *objectCtors,
-	int minimumFrameTime)
-		: EngineInstance(world, objectCtors, CommsProcessorRole::SERVER) {
+ServerEngineInstance::~ServerEngineInstance() {}
 
-	this->running = false;
-}
-
-ServerEngineInstance::~ServerEngineInstance() {
-}
-
-bool ServerEngineInstance::shouldContinueFrames() {
-	return this->running;
-}
-
-void ServerEngineInstance::frame(int dt) {
-	// get start time
-	steady_clock::time_point start = steady_clock::now();
-
+void ServerEngineInstance::tick(float dt) {
 	this->processNetworkUpdates();
-	this->world->update(dt);
-
-	// TESTING CODE
-	static int elapsedCount = 0;
-	if (elapsedCount == 30)
-	{
-		elapsedCount = 0;
-		comms->sendAnnouce();
-	}
-
+	EngineInstance::tick(dt);
 	this->world->broadcastUpdates(comms);
+}
 
-	// get end time
-	steady_clock::time_point end = steady_clock::now();
 
+void ServerEngineInstance::frame(float dt) {
 	// sleep for remainder of dt
-	sleep_for(microseconds(this->minimumFrameTime) - duration_cast<microseconds>(end - start));
+	sleep_for(duration_cast<nanoseconds>(float_seconds(this->secondsPerTick - dt)));
 }
 
 void ServerEngineInstance::run(){
-	// TODO no already running checks, not important right now
-	this->running = true;
 
 	// TEST HACK
 	IHasHandle * obj = this->objectCtors->invoke(0);
@@ -58,12 +33,3 @@ void ServerEngineInstance::run(){
 
 	EngineInstance::run();
 }
-
-void ServerEngineInstance::stop() {
-	this->running = false;
-}
-
-
-
-
-
