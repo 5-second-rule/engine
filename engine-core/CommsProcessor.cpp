@@ -43,17 +43,18 @@ CommsProcessor::CommsProcessor( CommsProcessorRole r ) {
 	sendSocket.setMulticastTTL( 255 );
 	running = true;
 	announceSignaled = false;
+	serverAddr = "255.255.255.255";
 	switch( r ) {
-		case SERVER:
+		case CommsProcessorRole::SERVER:
 			listenThread = thread( &CommsProcessor::serverCallback, this );
 			break;
-		case CLIENT:
+		case CommsProcessorRole::CLIENT:
 			listenThread = thread( &CommsProcessor::clientCallback, this );
 			break;
-		case MONITOR:
+		case CommsProcessorRole::MONITOR:
 			listenThread = thread( &CommsProcessor::monitorCallback, this );
 			break;
-		case CUSTOM:
+		case CommsProcessorRole::CUSTOM:
 			throw NotImplementedException( "Custom is not yet implemented" );
 		default:
 			throw ArgumentException( "An invalid mode was specified" );
@@ -95,8 +96,8 @@ void CommsProcessor::serverCallback() {
 			continue;
 
 		Message *buf = (Message*)recvBuf;
-		switch( buf->header.msgType ) {
-			case CLIENT_UPDATE:
+		switch( MessageType(buf->header.msgType) ) {
+			case MessageType::CLIENT_UPDATE:
 			{
 				QueueItem item;
 				item.data = new char[bytesRcvd - sizeof( Message )];
@@ -129,8 +130,8 @@ void CommsProcessor::clientCallback() {
 			continue;
 
 		Message *buf = (Message*)recvBuf;
-		switch( buf->header.msgType ) {
-			case WORLD_UPDATE:
+		switch( MessageType(buf->header.msgType) ) {
+			case MessageType::WORLD_UPDATE:
 			{
 				QueueItem item;
 				item.data = new char[bytesRcvd - sizeof( Message )];
@@ -138,8 +139,11 @@ void CommsProcessor::clientCallback() {
 				item.len = bytesRcvd - sizeof( Message );
 				handoffQ->push( item );
 			}
-			case SERVER_ANNOUNCE:
+			case MessageType::SERVER_ANNOUNCE:
 				announceSignaled = true;
+				if( serverAddr == "255.255.255.255" ) {
+					serverAddr = sourceAddress;
+				}
 				cv.notify_one();
 				break;
 			default:
@@ -167,19 +171,19 @@ void CommsProcessor::sendUpdates( const char *data, size_t len ) {
 	buf->header.reserved2 = 0;
 
 	switch( role ) {
-		case SERVER:
-			buf->header.msgType = WORLD_UPDATE;
+		case CommsProcessorRole::SERVER:
+			buf->header.msgType = static_cast<uint8_t>(MessageType::WORLD_UPDATE);
 			dstAddr = mcastAddr;
 			port = clntPort;
 			break;
-		case CLIENT:
-			buf->header.msgType = CLIENT_UPDATE;
+		case CommsProcessorRole::CLIENT:
+			buf->header.msgType = static_cast<uint8_t>(MessageType::CLIENT_UPDATE);
 			dstAddr = serverAddr;
 			port = svrPort;
 			break;
-		case MONITOR:
+		case CommsProcessorRole::MONITOR:
 			return;
-		case CUSTOM:
+		case CommsProcessorRole::CUSTOM:
 			throw NotImplementedException( "Custom is not yet implemented" );
 		default:
 			throw ArgumentException( "An invalid mode was specified" );
@@ -190,18 +194,18 @@ void CommsProcessor::sendUpdates( const char *data, size_t len ) {
 
 void CommsProcessor::sendAnnouce() {
 	Message buf;
-	buf.header.msgType = SERVER_ANNOUNCE;
+	buf.header.msgType = static_cast<uint8_t>(MessageType::SERVER_ANNOUNCE);
 	buf.header.reserved1 = 0;
 	buf.header.reserved2 = 0;
 
 	switch( role ) {
-		case SERVER:
+		case CommsProcessorRole::SERVER:
 			break;
-		case CLIENT:
+		case CommsProcessorRole::CLIENT:
 			return;
-		case MONITOR:
+		case CommsProcessorRole::MONITOR:
 			return;
-		case CUSTOM:
+		case CommsProcessorRole::CUSTOM:
 			throw NotImplementedException( "Custom is not yet implemented" );
 		default:
 			throw ArgumentException( "An invalid mode was specified" );

@@ -85,7 +85,7 @@ private:
 
 
 /// <summary>Role Type Enumerations</summary>
-enum COREDLL CommsProcessorRole {
+enum class COREDLL CommsProcessorRole {
 	SERVER,
 	CLIENT,
 	MONITOR,
@@ -94,7 +94,7 @@ enum COREDLL CommsProcessorRole {
 
 
 /// <summary>Message Type Enumerations</summary>
-enum COREDLL MessageType {
+enum class COREDLL MessageType {
 	WORLD_UPDATE,
 	CLIENT_UPDATE,
 	SERVER_ANNOUNCE
