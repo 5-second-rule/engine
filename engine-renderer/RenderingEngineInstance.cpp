@@ -14,11 +14,29 @@ RenderingEngineInstance::RenderingEngineInstance(
 		: EngineInstance(world, objectCtors, CommsProcessorRole::CLIENT) {
 	
 	this->window = Window::createWindow(appHandle);
+	this->input = (Input*) this->window->getInput();
 	this->renderer = Renderer::createRenderer(this->window);
 	this->renderableWorld = world;
 }
 
 RenderingEngineInstance::~RenderingEngineInstance() {
+}
+
+void RenderingEngineInstance::translateInput() {
+	Input::KeyStateQueue queue = this->input->getInputQueue();
+	Input::Key key;
+	Input::KeyState state;
+	Event* inputEvent;
+
+	while (!queue.empty() && this->inputTranslator != nullptr) {
+		key = queue.front().first;
+		state = queue.front().second;
+		inputEvent = inputTranslator(key, state);
+		if (inputEvent != nullptr) {
+			this->sendOutboundEvent(inputEvent);
+		}		
+		queue.pop();
+	}
 }
 
 bool RenderingEngineInstance::shouldContinueFrames() {
@@ -86,3 +104,6 @@ Model * RenderingEngineInstance::createModelFromIndex(size_t modelIndex, size_t 
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture);
 }
 
+void RenderingEngineInstance::setInputTranslator(RenderingEngineInstance::InputTranslatorFn translator) {
+	this->inputTranslator = translator;
+}
