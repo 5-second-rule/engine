@@ -9,10 +9,8 @@ private:
 	const float secondsPerTick;
 
 protected:
-	virtual bool checkForTick(float dt) = 0;
-	virtual void tick(float dt) = 0;
-
-	virtual void frame(float dt) = 0;
+	virtual void tick(float dt);
+	virtual void frame(float dt);
 
 public:
 	ServerEngineInstance(World *world, ObjectCtorTable *objectCtors, float minimumFrameTime);

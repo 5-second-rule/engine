@@ -25,6 +25,9 @@ protected:
 	virtual bool shouldContinueFrames();
 	virtual void frame(int dt);
 
+	virtual bool checkForTick(float dt);
+	virtual void tick(float dt);
+
 public:
 	RenderingEngineInstance(
 		RenderableWorld *world,

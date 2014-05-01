@@ -5,8 +5,6 @@
 using namespace std::chrono;
 using namespace std::this_thread;
 
-static const char *testData = "This is the latest edition of the world from your local neighborhood server\n";
-
 ServerEngineInstance::ServerEngineInstance(World *world, ObjectCtorTable *objectCtors, float secondsPerTick)
 	: EngineInstance(world, objectCtors, CommsProcessorRole::SERVER)
 	, secondsPerTick(secondsPerTick)
@@ -14,29 +12,16 @@ ServerEngineInstance::ServerEngineInstance(World *world, ObjectCtorTable *object
 
 ServerEngineInstance::~ServerEngineInstance() {}
 
+void ServerEngineInstance::tick(float dt) {
+	this->processNetworkUpdates();
+	EngineInstance::tick(dt);
+	this->world->broadcastUpdates(comms);
+}
+
 
 void ServerEngineInstance::frame(float dt) {
-	// get start time
-	steady_clock::time_point start = steady_clock::now();
-
-	this->processNetworkUpdates();
-	this->world->update(dt);
-
-	// TESTING CODE
-	static int elapsedCount = 0;
-	if (elapsedCount == 30)
-	{
-		elapsedCount = 0;
-		comms->sendAnnouce();
-	}
-
-	this->world->broadcastUpdates(comms);
-
-	// get end time
-	steady_clock::time_point end = steady_clock::now();
-
 	// sleep for remainder of dt
-	sleep_for(microseconds(this->minimumFrameTime) - duration_cast<microseconds>(end - start));
+	sleep_for(duration<float>(this->secondsPerTick - dt));
 }
 
 void ServerEngineInstance::run(){

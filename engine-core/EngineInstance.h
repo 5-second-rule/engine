@@ -24,8 +24,8 @@ protected:
 
 	const float secondsPerTick;
 
-	virtual bool checkForTick(float dt) = 0;
-	virtual void tick(float dt) = 0;
+	virtual bool checkForTick(float dt);
+	virtual void tick(float dt);
 
 	virtual bool shouldContinueFrames();
 	virtual void frame(float dt) = 0;

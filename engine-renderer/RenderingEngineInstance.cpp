@@ -30,21 +30,22 @@ bool RenderingEngineInstance::shouldContinueFrames() {
 	return true;
 }
 
-void RenderingEngineInstance::frame(int dt) {
-	this->processNetworkUpdates();
-	this->world->update(dt);
+bool RenderingEngineInstance::checkForTick(float dt) {
+	//TODO
+	return true; //for now
+}
 
+void RenderingEngineInstance::tick(float dt) {
+	this->processNetworkUpdates();
+	EngineInstance::tick(dt);
+}
+
+void RenderingEngineInstance::frame(int dt) {
 	renderer->clearFrame();
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 
-	// TEST
-	static int updates = 0;
-	updates++;
-	if (updates >= 200) {
-		comms->sendUpdates(testData, strlen(testData));
-		updates = 0;
-	}
+	//TODO send input to server
 }
 
 int RenderingEngineInstance::loadModel(char *filename) {

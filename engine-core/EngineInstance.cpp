@@ -53,6 +53,14 @@ bool EngineInstance::shouldContinueFrames() {
 	return running;
 }
 
+bool EngineInstance::checkForTick(float dt) {
+	return dt >= secondsPerTick;
+}
+
+void EngineInstance::tick(float dt) {
+	this->world->update(dt);
+}
+
 void EngineInstance::processNetworkUpdates() {
 	// bring new updates forward
 	this->networkUpdates.swap();
