@@ -21,7 +21,7 @@ void ServerEngineInstance::tick(float dt) {
 
 void ServerEngineInstance::frame(float dt) {
 	// sleep for remainder of dt
-	sleep_for(duration<float>(this->secondsPerTick - dt));
+	sleep_for(duration_cast<nanoseconds>(float_seconds(this->secondsPerTick - dt)));
 }
 
 void ServerEngineInstance::run(){
@@ -33,8 +33,3 @@ void ServerEngineInstance::run(){
 
 	EngineInstance::run();
 }
-
-
-
-
-

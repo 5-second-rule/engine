@@ -46,7 +46,7 @@ public:
 	virtual void deserialize(BufferReader& buffer);
 
 	// IUpdateable Methods
-	virtual void update(int dt);
+	virtual void update(float dt);
 
 	virtual void onEvent(DirectedEvent *evt);
 };

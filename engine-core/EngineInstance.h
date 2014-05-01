@@ -8,6 +8,8 @@
 #include "DoubleBufferedQueue.h"
 
 typedef void(*special_event_handler)(BufferReader& buffer);
+typedef std::chrono::duration<float, ratio<1, 1>> float_seconds;
+
 
 class COREDLL EngineInstance
 {

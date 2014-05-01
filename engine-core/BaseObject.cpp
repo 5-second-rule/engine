@@ -40,7 +40,7 @@ void BaseObject::deserialize(BufferReader& buffer) {
 	buffer.finished(sizeof(struct BaseObjectInfo));
 }
 
-void BaseObject::update(int dt) {
+void BaseObject::update(float dt) {
 }
 
 int BaseObject::getType() {

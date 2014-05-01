@@ -48,22 +48,17 @@ bool RenderingEngineInstance::shouldContinueFrames() {
 	return true;
 }
 
-bool RenderingEngineInstance::checkForTick(float dt) {
-	//TODO
-	return true; //for now
-}
-
 void RenderingEngineInstance::tick(float dt) {
 	this->processNetworkUpdates();
 	EngineInstance::tick(dt);
 }
 
-void RenderingEngineInstance::frame(int dt) {
+void RenderingEngineInstance::frame(float dt) {
 	renderer->clearFrame();
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 
-	//TODO send input to server
+	this->translateInput();
 }
 
 int RenderingEngineInstance::loadModel(char *filename) {

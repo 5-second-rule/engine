@@ -39,7 +39,7 @@ public:
 	void broadcastUpdates(CommsProcessor *comms);
 
 	// IUpdateable Methods
-	virtual void update( int dt );
+	virtual void update( float dt );
 
 	void dispatchEvent(DirectedEvent *evt);
 };

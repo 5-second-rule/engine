@@ -32,7 +32,7 @@ void EngineInstance::run() {
 
 	while (this->shouldContinueFrames()) {
 		steady_clock::time_point start = steady_clock::now();
-		float dt = (float)duration_cast<milliseconds>(start - lastTickTime).count() / 1000.0f;
+		float dt = (float)duration_cast<float_seconds>(start - lastTickTime).count();
 
 		if (this->checkForTick(dt)) {
 			this->tick(dt);

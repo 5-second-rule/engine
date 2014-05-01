@@ -31,9 +31,8 @@ protected:
 	void translateInput();
 
 	virtual bool shouldContinueFrames();
-	virtual void frame(int dt);
+	virtual void frame(float dt);
 
-	virtual bool checkForTick(float dt);
 	virtual void tick(float dt);
 
 public:
