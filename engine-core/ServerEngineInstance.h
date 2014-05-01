@@ -6,22 +6,17 @@
 class COREDLL ServerEngineInstance : public EngineInstance
 {
 private:
-	bool running;
-	int minimumFrameTime;
+	const float secondsPerTick;
 
 protected:
-	virtual bool shouldContinueFrames();
-	virtual void frame(int dt);
+	virtual void tick(float dt);
+	virtual void frame(float dt);
 
 public:
-	ServerEngineInstance(
-		World *world,
-		ObjectCtorTable *objectCtors,
-		int minimumFrameTime);
+	ServerEngineInstance(World *world, ObjectCtorTable *objectCtors, float minimumFrameTime);
 
 	~ServerEngineInstance();
 
 	virtual void run();
-	void stop();
 };
 

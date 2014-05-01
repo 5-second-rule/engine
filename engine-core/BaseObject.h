@@ -43,10 +43,10 @@ public:
 	// ISerializable Methods
 	virtual void reserveSize(BufferBuilder *buffer);
 	virtual void fillBuffer(BufferBuilder *buffer);
-	virtual void deserialize(BufferReader *buffer);
+	virtual void deserialize(BufferReader& buffer);
 
 	// IUpdateable Methods
-	virtual void update(int dt);
+	virtual void update(float dt);
 
 	virtual void onEvent(DirectedEvent *evt);
 };

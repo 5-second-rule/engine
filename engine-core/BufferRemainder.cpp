@@ -21,10 +21,10 @@ void BufferRemainder::fillBuffer(BufferBuilder *buffer) {
 	// does nothing lol
 }
 
-void BufferRemainder::deserialize(BufferReader *buffer) {
+void BufferRemainder::deserialize(BufferReader& buffer) {
 
-	this->size = buffer->getRemainingSize();
+	this->size = buffer.getRemainingSize();
 	this->base = new char[this->size];
 
-	memcpy(this->base, buffer->getPointer(), this->size);
+	memcpy(this->base, buffer.getPointer(), this->size);
 }

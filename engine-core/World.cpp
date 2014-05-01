@@ -77,7 +77,7 @@ IHasHandle * World::get(const Handle *handle) {
 	return nullptr;
 }
 
-void World::update(int dt) {
+void World::update(float dt) {
 	auto iterator = this->updatable.begin();
 	while (iterator != this->updatable.end()) {
 		IUpdatable *updatable = dynamic_cast<IUpdatable *>(this->get(&*iterator));

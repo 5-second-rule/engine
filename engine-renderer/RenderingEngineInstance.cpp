@@ -48,21 +48,17 @@ bool RenderingEngineInstance::shouldContinueFrames() {
 	return true;
 }
 
-void RenderingEngineInstance::frame(int dt) {
+void RenderingEngineInstance::tick(float dt) {
 	this->processNetworkUpdates();
-	this->world->update(dt);
+	EngineInstance::tick(dt);
+}
 
+void RenderingEngineInstance::frame(float dt) {
 	renderer->clearFrame();
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 
-	// TEST
-	static int updates = 0;
-	updates++;
-	if (updates >= 200) {
-		comms->sendUpdates(testData, strlen(testData));
-		updates = 0;
-	}
+	this->translateInput();
 }
 
 int RenderingEngineInstance::loadModel(char *filename) {

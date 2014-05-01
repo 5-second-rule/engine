@@ -31,7 +31,9 @@ protected:
 	void translateInput();
 
 	virtual bool shouldContinueFrames();
-	virtual void frame(int dt);
+	virtual void frame(float dt);
+
+	virtual void tick(float dt);
 
 public:
 	RenderingEngineInstance(
