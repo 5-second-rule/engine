@@ -56,3 +56,8 @@ private:
 	string file_name;
 	string template_file_name;
 };
+
+
+namespace Utility{
+	COREDLL ConfigSettings* configInstance();
+}

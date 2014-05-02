@@ -5,7 +5,11 @@ string ConfigSettings::str_screen_height = "ScreenHeight";
 string ConfigSettings::str_full_screen = "FullScreen";
 
 typedef pair <string, string> String_Pair;
-ConfigSettings * ConfigSettings::config = new ConfigSettings();
+ConfigSettings* ConfigSettings::config = new ConfigSettings();
+
+ConfigSettings* Utility::configInstance(){
+	return ConfigSettings::config;
+}
 
 ConfigSettings::ConfigSettings(string fname, string template_fname) {
 	file_name = fname;

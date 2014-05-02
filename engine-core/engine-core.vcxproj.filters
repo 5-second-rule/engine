@@ -7,9 +7,6 @@
     <ClCompile Include="ConfigSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CrudeTimer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="EngineInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -52,9 +49,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConfigSettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CrudeTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine-core.h">
