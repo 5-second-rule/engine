@@ -93,7 +93,7 @@
     <ClInclude Include="DirectedEvent.h" />
     <ClInclude Include="DoubleBufferedQueue.h" />
     <ClInclude Include="engine-core.h" />
-    <ClInclude Include="EngineInstance.h" />
+    <ClInclude Include="Engine.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventType.h" />
     <ClInclude Include="BaseObject.h" />
@@ -103,7 +103,7 @@
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ObjectCtorTable.h" />
-    <ClInclude Include="ServerEngineInstance.h" />
+    <ClInclude Include="ServerEngine.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
@@ -115,12 +115,12 @@
     <ClCompile Include="ConfigSettings.cpp" />
     <ClCompile Include="CrudeTimer.cpp" />
     <ClCompile Include="DirectedEvent.cpp" />
-    <ClCompile Include="EngineInstance.cpp" />
+    <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="Handle.cpp" />
     <ClCompile Include="ObjectCtorTable.cpp" />
-    <ClCompile Include="ServerEngineInstance.cpp" />
+    <ClCompile Include="ServerEngine.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>

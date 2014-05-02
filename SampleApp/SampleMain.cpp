@@ -1,14 +1,14 @@
 #include <windows.h>
 
 #include "engine-renderer/RenderableObject.h"
-#include "engine-renderer/RenderingEngineInstance.h"
+#include "engine-renderer/RenderingEngine.h"
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	RenderableWorld *world = new RenderableWorld();
 	ObjectCtorTable *ctors = new ObjectCtorTable(10);
-	RenderingEngineInstance *engineInstance = new RenderingEngineInstance(world, ctors, hInstance);
+	RenderingEngine *engineInstance = new RenderingEngine(world, ctors, hInstance);
 
 	char* whiteBloodFbxFilePath = "../SampleApp/whitey.fbx";
 	char* ecoliFbxFilePath = "../SampleApp/ecoli6_nomedia.fbx";

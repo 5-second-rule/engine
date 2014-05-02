@@ -1,35 +1,35 @@
-#include "ServerEngineInstance.h"
+#include "ServerEngine.h"
 #include <chrono>
 #include <thread>
 
 using namespace std::chrono;
 using namespace std::this_thread;
 
-ServerEngineInstance::ServerEngineInstance(World *world, ObjectCtorTable *objectCtors, float secondsPerTick)
-	: EngineInstance(world, objectCtors, CommsProcessorRole::SERVER)
+ServerEngine::ServerEngine(World *world, ObjectCtorTable *objectCtors, float secondsPerTick)
+	: Engine(world, objectCtors, CommsProcessorRole::SERVER)
 	, secondsPerTick(secondsPerTick)
 {}
 
-ServerEngineInstance::~ServerEngineInstance() {}
+ServerEngine::~ServerEngine() {}
 
-void ServerEngineInstance::tick(float dt) {
+void ServerEngine::tick(float dt) {
 	this->processNetworkUpdates();
-	EngineInstance::tick(dt);
+	Engine::tick(dt);
 	this->world->broadcastUpdates(comms);
 }
 
 
-void ServerEngineInstance::frame(float dt) {
+void ServerEngine::frame(float dt) {
 	// sleep for remainder of dt
 	sleep_for(duration_cast<nanoseconds>(float_seconds(this->secondsPerTick - dt)));
 }
 
-void ServerEngineInstance::run(){
+void ServerEngine::run(){
 
 	// TEST HACK
 	IHasHandle * obj = this->objectCtors->invoke(0);
 	world->allocateHandle(obj, HandleType::GLOBAL);
 	world->insert(obj);
 
-	EngineInstance::run();
+	Engine::run();
 }

@@ -11,7 +11,7 @@ typedef void(*special_event_handler)(BufferReader& buffer);
 typedef std::chrono::duration<float, ratio<1, 1>> float_seconds;
 
 
-class COREDLL EngineInstance
+class COREDLL Engine
 {
 private:
 	DoubleBufferedQueue<QueueItem> networkUpdates;
@@ -38,12 +38,12 @@ protected:
 	void processNetworkUpdates();
 
 public:
-	EngineInstance(
+	Engine(
 		World *world, 
 		ObjectCtorTable *objectCtors, 
 		CommsProcessorRole role);
 
-	~EngineInstance();
+	~Engine();
 
 	virtual void run();
 	virtual void stop();
