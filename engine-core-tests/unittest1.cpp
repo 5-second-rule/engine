@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "..\engine-core\World.h"
-#include "..\engine-core\WorldObject.h"
 #include "..\engine-core\ConfigSettings.h"
 #include <string>
 

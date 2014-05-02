@@ -1,4 +1,4 @@
-#include "EngineInstance.h"
+#include "Engine.h"
 
 #include <iostream>
 
@@ -6,7 +6,7 @@
 
 using namespace std::chrono;
 
-EngineInstance::EngineInstance(
+Engine::Engine(
 		World *world, 
 		ObjectCtorTable *objectCtors, 
 		CommsProcessorRole role)
@@ -20,11 +20,11 @@ EngineInstance::EngineInstance(
 	this->comms->setHandoffQ(&networkUpdates);
 }
 
-EngineInstance::~EngineInstance() {
+Engine::~Engine() {
 	delete this->comms;
 }
 
-void EngineInstance::run() {
+void Engine::run() {
 
 	steady_clock::time_point lastTickTime = steady_clock::now();
 
@@ -45,23 +45,23 @@ void EngineInstance::run() {
 	}
 }
 
-void EngineInstance::stop() {
+void Engine::stop() {
 	running = false;
 }
 
-bool EngineInstance::shouldContinueFrames() {
+bool Engine::shouldContinueFrames() {
 	return running;
 }
 
-bool EngineInstance::checkForTick(float dt) {
+bool Engine::checkForTick(float dt) {
 	return dt >= secondsPerTick;
 }
 
-void EngineInstance::tick(float dt) {
+void Engine::tick(float dt) {
 	this->world->update(dt);
 }
 
-void EngineInstance::processNetworkUpdates() {
+void Engine::processNetworkUpdates() {
 	// bring new updates forward
 	this->networkUpdates.swap();
 
@@ -75,7 +75,7 @@ void EngineInstance::processNetworkUpdates() {
 	if(_DEBUG) std::cout << "finished updates" << std::endl;
 }
 
-void EngineInstance::dispatchUpdate(QueueItem &item) {
+void Engine::dispatchUpdate(QueueItem &item) {
 	BufferReader readBuffer(item.data, item.len);
 	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer.getPointer());
 	
@@ -99,7 +99,7 @@ void EngineInstance::dispatchUpdate(QueueItem &item) {
 
 }
 
-void EngineInstance::updateObject(BufferReader& buffer) {
+void Engine::updateObject(BufferReader& buffer) {
 	const struct ObjectUpdateHeader *header = reinterpret_cast<const struct ObjectUpdateHeader *>(buffer.getPointer());
 
 	IHasHandle *object = this->world->get(&header->handle);
@@ -122,7 +122,7 @@ void EngineInstance::updateObject(BufferReader& buffer) {
 	}
 }
 
-void EngineInstance::sendOutboundEvent(Event *evt) {
+void Engine::sendOutboundEvent(Event *evt) {
 	BufferBuilder *buffer = new BufferBuilder();
 	evt->serialize(buffer);
 
@@ -131,6 +131,6 @@ void EngineInstance::sendOutboundEvent(Event *evt) {
 	delete buffer;
 }
 
-void EngineInstance::setInboundEventHandler(special_event_handler handler) {
+void Engine::setInboundEventHandler(special_event_handler handler) {
 	this->specialEventHandler = handler;
 }
