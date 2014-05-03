@@ -4,6 +4,10 @@
 
 #define TICKS_PER_SEC 25
 
+// definitely delete this once player id-ing by guid is working
+unsigned int gId;
+size_t gIndex;
+
 using namespace std::chrono;
 
 Engine::Engine(
@@ -79,23 +83,14 @@ void Engine::dispatchUpdate(QueueItem &item) {
 	BufferReader readBuffer(item.data, item.len);
 	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer.getPointer());
 	
-<<<<<<< HEAD:engine-core/EngineInstance.cpp
 	if ( EventType( header->type ) == EventType::OBJECT_UPDATE ) {
-		readBuffer->finished(sizeof(struct EventHeader));
-		this->dispatchObjectUpdate(readBuffer);
+		readBuffer.finished(sizeof(struct EventHeader));
+		this->dispatchUpdate( item );
 	} else if( EventType( header->type ) == EventType::ACTION ) {
-		readBuffer->finished( sizeof( struct EventHeader ) );
-		this->dispatchAction( readBuffer );
+		readBuffer.finished( sizeof( struct EventHeader ) );
+		this->dispatchAction( &readBuffer );
 	} else if( EventType( header->type ) == EventType::SPECIAL ) {
-		readBuffer->finished(sizeof(struct EventHeader));
-=======
-	if (header->type == EventType::OBJECT_UPDATE) {
 		readBuffer.finished(sizeof(struct EventHeader));
-		this->updateObject(readBuffer);
-
-	} else if (header->type == EventType::SPECIAL) {
-		readBuffer.finished(sizeof(struct EventHeader));
->>>>>>> b996896406f70ec0227fa64c769607aed5e8056a:engine-core/Engine.cpp
 		special_event_handler handler = this->specialEventHandler;
 		if (handler != nullptr) {
 			handler(readBuffer);
@@ -133,21 +128,16 @@ void Engine::updateObject(BufferReader& buffer) {
 	}
 }
 
-<<<<<<< HEAD:engine-core/EngineInstance.cpp
-void EngineInstance::dispatchAction( BufferReader *buffer ) {
+void Engine::dispatchAction( BufferReader *buffer ) {
 	const struct ActionHeader *header = reinterpret_cast<const struct ActionHeader *>(buffer->getPointer());
-	
-	//ActionEvent *evt = new ActionEvent( header->actionType, header->playerGuid );
-	// test version, use above call for real thing
-	ActionEvent *evt = new ActionEvent( header->actionType, gId, gIndex );
+	buffer->finished( sizeof( struct ActionHeader ) );
+
+	ActionEvent *evt = this->delegate->MakeActionEvent( header->actionType, header->playerGuid, header->index, buffer->getPointer() );
 	
 	this->delegate->HandleAction( evt );
 }
 
-void EngineInstance::sendOutboundEvent(Event *evt) {
-=======
 void Engine::sendOutboundEvent(Event *evt) {
->>>>>>> b996896406f70ec0227fa64c769607aed5e8056a:engine-core/Engine.cpp
 	BufferBuilder *buffer = new BufferBuilder();
 	evt->serialize(buffer);
 

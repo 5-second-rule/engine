@@ -6,13 +6,13 @@ DirectedEvent::DirectedEvent(
 	Handle &sender,
 	Handle &receiver,
 	ISerializable *child)
-		: Event((EventType)eventType) {
+		: Event() {
 	this->sender = sender;
 	this->receiver = receiver;
 	this->child = child;
 }
 
-DirectedEvent::DirectedEvent() : Event((EventType)0) {
+DirectedEvent::DirectedEvent() : Event() {
 }
 
 DirectedEvent::~DirectedEvent() {

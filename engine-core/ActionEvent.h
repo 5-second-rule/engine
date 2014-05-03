@@ -1,6 +1,6 @@
 #pragma once
 #include "Event.h"
-class ActionEvent : public Event {
+class COREDLL ActionEvent : public Event {
 public:
 	int playerGuid;
 
