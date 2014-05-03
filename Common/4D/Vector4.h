@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <string>
 
 #define VECTOR4_RANGE_ERR "index must be in [0,4)"
 
@@ -75,6 +76,7 @@ namespace Utility {
 		void negate();
 		float length() const;
 		float lengthSquared() const;
+		std::string toString() const;
 		void print() const;
 		static Vector4 lerp(float f, Vector4 u, Vector4 v);
 	};

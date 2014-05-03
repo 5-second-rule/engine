@@ -1,6 +1,10 @@
+#include <string>
+#include <sstream>
+
 #include "Vector4.h"
 
 using namespace Utility;
+using namespace std;
 Vector4::Vector4(float x, float y, float z, float w) {
 	this->vector[0] = x;
 	this->vector[1] = y;
@@ -207,13 +211,18 @@ float Vector4::lengthSquared() const {
 	return this->dot(*this);
 }
 
-
-void Vector4::print() const {
-	std::cout << "<" <<
+string Vector4::toString() const{
+	stringstream buffer;
+	buffer << "<" <<
 		this->vector[0] << ", " <<
 		this->vector[1] << ", " <<
 		this->vector[2] << ", " <<
 		this->vector[3] << ">" << std::endl;
+	return buffer.str();
+}
+
+void Vector4::print() const {
+	std::cout << toString();
 }
 
 static Vector4 lerp(float f, Vector4 u, Vector4 v) {
