@@ -59,11 +59,13 @@ void EngineInstance::dispatchUpdate(QueueItem &item) {
 	BufferReader *readBuffer = new BufferReader(item.data, item.len);
 	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer->getPointer());
 	
-	if (header->type == EventType::OBJECT_UPDATE) {
+	if ( EventType( header->type ) == EventType::OBJECT_UPDATE ) {
 		readBuffer->finished(sizeof(struct EventHeader));
 		this->dispatchObjectUpdate(readBuffer);
-
-	} else if (header->type == EventType::SPECIAL) {
+	} else if( EventType( header->type ) == EventType::ACTION ) {
+		readBuffer->finished( sizeof( struct EventHeader ) );
+		this->dispatchAction( readBuffer );
+	} else if( EventType( header->type ) == EventType::SPECIAL ) {
 		readBuffer->finished(sizeof(struct EventHeader));
 		special_event_handler handler = this->specialEventHandler;
 		if (handler != nullptr) {
@@ -101,6 +103,16 @@ void EngineInstance::dispatchObjectUpdate(BufferReader *buffer) {
 	if (isNew) {
 		world->insert(object);
 	}
+}
+
+void EngineInstance::dispatchAction( BufferReader *buffer ) {
+	const struct ActionHeader *header = reinterpret_cast<const struct ActionHeader *>(buffer->getPointer());
+	
+	//ActionEvent *evt = new ActionEvent( header->actionType, header->playerGuid );
+	// test version, use above call for real thing
+	ActionEvent *evt = new ActionEvent( header->actionType, gId, gIndex );
+	
+	this->delegate->HandleAction( evt );
 }
 
 void EngineInstance::sendOutboundEvent(Event *evt) {

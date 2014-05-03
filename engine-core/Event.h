@@ -9,15 +9,12 @@ struct COREDLL EventHeader {
 	int type;
 };
 
-
-
 class COREDLL Event : public ISerializable
 {
 private:
-	EventType type;
 
 public:
-	Event(EventType type);
+	Event();
 	~Event();
 
 	virtual void reserveSize(BufferBuilder *buffer);

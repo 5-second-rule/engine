@@ -53,6 +53,8 @@ void ServerEngineInstance::run(){
 
 	// TEST HACK
 	IHasHandle * obj = this->objectCtors->invoke(0);
+	gId = obj->getHandle().id;
+	gIndex = obj->getHandle().index;
 	world->allocateHandle(obj, HandleType::GLOBAL);
 	world->insert(obj);
 
