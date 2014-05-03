@@ -16,7 +16,7 @@
     <ClInclude Include="ModelData.h" />
     <ClInclude Include="RenderableObject.h" />
     <ClInclude Include="RenderableWorld.h" />
-    <ClInclude Include="RenderingEngineInstance.h" />
+    <ClInclude Include="RenderingEngine.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\engine-core\engine-core.vcxproj">
@@ -26,7 +26,7 @@
   <ItemGroup>
     <ClCompile Include="RenderableObject.cpp" />
     <ClCompile Include="RenderableWorld.cpp" />
-    <ClCompile Include="RenderingEngineInstance.cpp" />
+    <ClCompile Include="RenderingEngine.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}</ProjectGuid>

@@ -3,7 +3,7 @@
 #include "engine-renderer.h"
 #include "RenderableWorld.h"
 #include "ModelData.h"
-#include "engine-core/EngineInstance.h"
+#include "engine-core/Engine.h"
 #include "engine-core/Event.h"
 #include "engine-core/ObjectCtorTable.h"
 
@@ -14,7 +14,7 @@
 
 #include <vector>
 
-class RENDERDLL RenderingEngineInstance : public EngineInstance
+class RENDERDLL RenderingEngine : public Engine
 {
 private:
 	Transmission::Input *input;
@@ -31,14 +31,16 @@ protected:
 	void translateInput();
 
 	virtual bool shouldContinueFrames();
-	virtual void frame(int dt);
+	virtual void frame(float dt);
+
+	virtual void tick(float dt);
 
 public:
-	RenderingEngineInstance(
+	RenderingEngine(
 		RenderableWorld *world,
 		ObjectCtorTable *objectCtors,
 		void *appHandle);
-	~RenderingEngineInstance();
+	~RenderingEngine();
 
 	int loadModel(char *filename);
 	int loadTexture(char *filename);

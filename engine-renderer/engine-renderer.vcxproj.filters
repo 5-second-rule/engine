@@ -28,13 +28,13 @@
     <ClInclude Include="IRenderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RenderingEngineInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RenderableObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ModelData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -42,10 +42,10 @@
     <ClCompile Include="RenderableWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenderingEngineInstance.cpp">
+    <ClCompile Include="RenderableObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenderableObject.cpp">
+    <ClCompile Include="RenderingEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

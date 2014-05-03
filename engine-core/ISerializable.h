@@ -10,7 +10,7 @@ public:
 	virtual void reserveSize(BufferBuilder *buffer) = 0;
 	virtual void fillBuffer(BufferBuilder *buffer) = 0;
 
-	virtual void deserialize(BufferReader *reader) = 0;
+	virtual void deserialize(BufferReader& reader) = 0;
 
 	void serialize(BufferBuilder *buffer) {
 		this->reserveSize(buffer);

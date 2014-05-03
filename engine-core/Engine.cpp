@@ -1,14 +1,17 @@
-#include "EngineInstance.h"
-#include <chrono>
+#include "Engine.h"
 
 #include <iostream>
 
+#define TICKS_PER_SEC 25
+
 using namespace std::chrono;
 
-EngineInstance::EngineInstance(
+Engine::Engine(
 		World *world, 
 		ObjectCtorTable *objectCtors, 
-		CommsProcessorRole role) {
+		CommsProcessorRole role)
+	: secondsPerTick(1.0f / (float)TICKS_PER_SEC)
+{
 	this->world = world;
 	this->objectCtors = objectCtors;
 
@@ -17,48 +20,66 @@ EngineInstance::EngineInstance(
 	this->comms->setHandoffQ(&networkUpdates);
 }
 
-EngineInstance::~EngineInstance() {
+Engine::~Engine() {
 	delete this->comms;
 }
 
-void EngineInstance::run() {
-	long long lastFrameTime = 0;
+void Engine::run() {
+
+	steady_clock::time_point lastTickTime = steady_clock::now();
+
+	this->running = true;
+
 	while (this->shouldContinueFrames()) {
 		steady_clock::time_point start = steady_clock::now();
+		float dt = (float)duration_cast<float_seconds>(start - lastTickTime).count();
 
-		this->frame((int)lastFrameTime);
-		
-		steady_clock::time_point end = steady_clock::now();
-		lastFrameTime = duration_cast<microseconds>(end - start).count();
+		if (this->checkForTick(dt)) {
+			this->tick(dt);
+
+			lastTickTime = start;
+			dt = 0.0f;
+		}
+
+		this->frame(dt);		
 	}
 }
 
-bool EngineInstance::shouldContinueFrames() {
-	return true;
+void Engine::stop() {
+	running = false;
 }
 
-void EngineInstance::frame(int dt) {
-	// TODO do stuff
+bool Engine::shouldContinueFrames() {
+	return running;
 }
 
-void EngineInstance::processNetworkUpdates() {
+bool Engine::checkForTick(float dt) {
+	return dt >= secondsPerTick;
+}
+
+void Engine::tick(float dt) {
+	this->world->update(dt);
+}
+
+void Engine::processNetworkUpdates() {
 	// bring new updates forward
 	this->networkUpdates.swap();
 
 	while (!this->networkUpdates.readEmpty()) {
-		std::cout << "========= handling update =========" << std::endl;
+		if(_DEBUG) std::cout << "========= handling update =========" << std::endl;
 		QueueItem update = this->networkUpdates.pop();
 		dispatchUpdate(update);
 		delete[] update.data;
 	}
 
-	std::cout << "finished updates" << std::endl;
+	if(_DEBUG) std::cout << "finished updates" << std::endl;
 }
 
-void EngineInstance::dispatchUpdate(QueueItem &item) {
-	BufferReader *readBuffer = new BufferReader(item.data, item.len);
-	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer->getPointer());
+void Engine::dispatchUpdate(QueueItem &item) {
+	BufferReader readBuffer(item.data, item.len);
+	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer.getPointer());
 	
+<<<<<<< HEAD:engine-core/EngineInstance.cpp
 	if ( EventType( header->type ) == EventType::OBJECT_UPDATE ) {
 		readBuffer->finished(sizeof(struct EventHeader));
 		this->dispatchObjectUpdate(readBuffer);
@@ -67,6 +88,14 @@ void EngineInstance::dispatchUpdate(QueueItem &item) {
 		this->dispatchAction( readBuffer );
 	} else if( EventType( header->type ) == EventType::SPECIAL ) {
 		readBuffer->finished(sizeof(struct EventHeader));
+=======
+	if (header->type == EventType::OBJECT_UPDATE) {
+		readBuffer.finished(sizeof(struct EventHeader));
+		this->updateObject(readBuffer);
+
+	} else if (header->type == EventType::SPECIAL) {
+		readBuffer.finished(sizeof(struct EventHeader));
+>>>>>>> b996896406f70ec0227fa64c769607aed5e8056a:engine-core/Engine.cpp
 		special_event_handler handler = this->specialEventHandler;
 		if (handler != nullptr) {
 			handler(readBuffer);
@@ -79,11 +108,10 @@ void EngineInstance::dispatchUpdate(QueueItem &item) {
 		// no delete for event, event queue on objects responsible
 	}
 
-	delete readBuffer;
 }
 
-void EngineInstance::dispatchObjectUpdate(BufferReader *buffer) {
-	const struct ObjectUpdateHeader *header = reinterpret_cast<const struct ObjectUpdateHeader *>(buffer->getPointer());
+void Engine::updateObject(BufferReader& buffer) {
+	const struct ObjectUpdateHeader *header = reinterpret_cast<const struct ObjectUpdateHeader *>(buffer.getPointer());
 
 	IHasHandle *object = this->world->get(&header->handle);
 	bool isNew = false;
@@ -97,7 +125,7 @@ void EngineInstance::dispatchObjectUpdate(BufferReader *buffer) {
 		throw new std::runtime_error("Expected serializable object, but it's not; wat.");
 	}
 
-	buffer->finished(sizeof(struct ObjectUpdateHeader));
+	buffer.finished(sizeof(struct ObjectUpdateHeader));
 	serializable->deserialize(buffer);
 
 	if (isNew) {
@@ -105,6 +133,7 @@ void EngineInstance::dispatchObjectUpdate(BufferReader *buffer) {
 	}
 }
 
+<<<<<<< HEAD:engine-core/EngineInstance.cpp
 void EngineInstance::dispatchAction( BufferReader *buffer ) {
 	const struct ActionHeader *header = reinterpret_cast<const struct ActionHeader *>(buffer->getPointer());
 	
@@ -116,6 +145,9 @@ void EngineInstance::dispatchAction( BufferReader *buffer ) {
 }
 
 void EngineInstance::sendOutboundEvent(Event *evt) {
+=======
+void Engine::sendOutboundEvent(Event *evt) {
+>>>>>>> b996896406f70ec0227fa64c769607aed5e8056a:engine-core/Engine.cpp
 	BufferBuilder *buffer = new BufferBuilder();
 	evt->serialize(buffer);
 
@@ -124,6 +156,6 @@ void EngineInstance::sendOutboundEvent(Event *evt) {
 	delete buffer;
 }
 
-void EngineInstance::setInboundEventHandler(special_event_handler handler) {
+void Engine::setInboundEventHandler(special_event_handler handler) {
 	this->specialEventHandler = handler;
 }

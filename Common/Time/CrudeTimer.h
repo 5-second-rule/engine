@@ -11,12 +11,11 @@
 
 //this library must be included
 #pragma comment(lib, "winmm.lib")
-#include "engine-core.h"
 #include <windows.h>
 
 #define Clock CrudeTimer::Instance()
 
-class COREDLL CrudeTimer
+class CrudeTimer
 {
 private:
 

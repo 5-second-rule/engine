@@ -1,4 +1,4 @@
-#include "RenderingEngineInstance.h"
+#include "RenderingEngine.h"
 
 #include <stdexcept>
 
@@ -7,11 +7,11 @@ using namespace Transmission;
 // constants
 static const char *testData = "This is a client update!!!\n";
 
-RenderingEngineInstance::RenderingEngineInstance(
+RenderingEngine::RenderingEngine(
 	RenderableWorld *world,
 	ObjectCtorTable *objectCtors,
 	void *appHandle) 
-		: EngineInstance(world, objectCtors, CommsProcessorRole::CLIENT) {
+		: Engine(world, objectCtors, CommsProcessorRole::CLIENT) {
 	
 	this->window = Window::createWindow(appHandle);
 	this->input = (Input*) this->window->getInput();
@@ -19,10 +19,10 @@ RenderingEngineInstance::RenderingEngineInstance(
 	this->renderableWorld = world;
 }
 
-RenderingEngineInstance::~RenderingEngineInstance() {
+RenderingEngine::~RenderingEngine() {
 }
 
-void RenderingEngineInstance::translateInput() {
+void RenderingEngine::translateInput() {
 	Input::KeyStateQueue queue = this->input->getInputQueue();
 	Input::Key key;
 	Input::KeyState state;
@@ -39,7 +39,7 @@ void RenderingEngineInstance::translateInput() {
 	}
 }
 
-bool RenderingEngineInstance::shouldContinueFrames() {
+bool RenderingEngine::shouldContinueFrames() {
 	Window::MessageType t;
 	while ((t = this->window->getMessage()) != Window::MessageType::None) {
 		if (t == Window::MessageType::Quit) return false;
@@ -48,24 +48,20 @@ bool RenderingEngineInstance::shouldContinueFrames() {
 	return true;
 }
 
-void RenderingEngineInstance::frame(int dt) {
+void RenderingEngine::tick(float dt) {
 	this->processNetworkUpdates();
-	this->world->update(dt);
+	Engine::tick(dt);
+}
 
+void RenderingEngine::frame(float dt) {
 	renderer->clearFrame();
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 
-	// TEST
-	static int updates = 0;
-	updates++;
-	if (updates >= 200) {
-		comms->sendUpdates(testData, strlen(testData));
-		updates = 0;
-	}
+	this->translateInput();
 }
 
-int RenderingEngineInstance::loadModel(char *filename) {
+int RenderingEngine::loadModel(char *filename) {
 	ModelData data;
 
 	if (this->renderer->loadModelFile(
@@ -80,7 +76,7 @@ int RenderingEngineInstance::loadModel(char *filename) {
 	return -1;
 }
 
-int RenderingEngineInstance::loadTexture(char *filename) {
+int RenderingEngine::loadTexture(char *filename) {
 	Texture *texture = this->renderer->createTextureFromFile(filename);
 
 	// TODO validate this error check
@@ -92,7 +88,7 @@ int RenderingEngineInstance::loadTexture(char *filename) {
 	return -1;
 }
 
-Model * RenderingEngineInstance::createModelFromIndex(size_t modelIndex, size_t textureIndex) {
+Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureIndex) {
 	if (modelIndex < 0 || modelIndex >= this->models.size()) {
 		throw std::runtime_error("Model index out of range.");
 	} else if (textureIndex < 0 || textureIndex >= this->textures.size()) {
@@ -104,6 +100,6 @@ Model * RenderingEngineInstance::createModelFromIndex(size_t modelIndex, size_t 
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture);
 }
 
-void RenderingEngineInstance::setInputTranslator(RenderingEngineInstance::InputTranslatorFn translator) {
+void RenderingEngine::setInputTranslator(RenderingEngine::InputTranslatorFn translator) {
 	this->inputTranslator = translator;
 }

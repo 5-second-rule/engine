@@ -31,16 +31,16 @@ void BaseObject::fillBuffer(BufferBuilder *buffer) {
 	buffer->pop();
 }
 
-void BaseObject::deserialize(BufferReader *buffer) {
-	const struct BaseObjectInfo *hdr = reinterpret_cast<const struct BaseObjectInfo *>(buffer->getPointer());
+void BaseObject::deserialize(BufferReader& buffer) {
+	const struct BaseObjectInfo *hdr = reinterpret_cast<const struct BaseObjectInfo *>(buffer.getPointer());
 
 	memcpy(position, hdr->position, sizeof(float) * 3);
 	memcpy(force, hdr->force, sizeof(float) * 3);
 
-	buffer->finished(sizeof(struct BaseObjectInfo));
+	buffer.finished(sizeof(struct BaseObjectInfo));
 }
 
-void BaseObject::update(int dt) {
+void BaseObject::update(float dt) {
 }
 
 int BaseObject::getType() {
