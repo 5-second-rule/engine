@@ -31,7 +31,7 @@ private:
 	int objectType;
 	float position[3];
 	float force[3];
-	std::queue<DirectedEvent *> waitingEvents;
+	std::queue<Event *> waitingEvents;
 
 public:
 	BaseObject(int objectType);
@@ -48,5 +48,5 @@ public:
 	// IUpdateable Methods
 	virtual void update(float dt);
 
-	virtual void onEvent(DirectedEvent *evt);
+	virtual void enqueue(Event *evt);
 };

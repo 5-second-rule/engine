@@ -8,13 +8,10 @@
 #include "DoubleBufferedQueue.h"
 #include "ActionEvent.h"
 
+#include <map>
+
 typedef void(*special_event_handler)(BufferReader& buffer);
 typedef std::chrono::duration<float, ratio<1, 1>> float_seconds;
-
-// definitely delete this once player id-ing by guid is working
-extern unsigned int gId;
-extern size_t gIndex;
-
 
 class COREDLL IEngineInstanceDelegate {
 public:
@@ -29,10 +26,16 @@ private:
 	special_event_handler specialEventHandler;
 
 	bool running;
+	bool waitingForRegistration;
+	RegistrationRequestHeader waitingRegistration;
 
 protected:
 	CommsProcessor *comms;
 	ObjectCtorTable *objectCtors;
+
+	std::map<unsigned int, Handle> playerMap;
+	std::vector<unsigned int> localPlayers;
+
 	// put world back here and write an accessor
 	const float secondsPerTick;
 
@@ -43,6 +46,8 @@ protected:
 	virtual void dispatchUpdate(QueueItem &item);
 	virtual void dispatchAction( BufferReader *buffer );
 	virtual void updateObject(BufferReader& buffer);
+	virtual void handleRegistrationRequest(BufferReader& buffer);
+	virtual void handleRegistrationResponse(BufferReader& buffer);
 
 	void processNetworkUpdates();
 
@@ -62,4 +67,7 @@ public:
 
 	void sendOutboundEvent(Event *evt);
 	void setInboundEventHandler(special_event_handler handler);
+
+	void registerPlayer(bool wait);
+	unsigned int getLocalPlayerGuid(int playerIndex);
 };

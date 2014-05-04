@@ -122,13 +122,13 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 	}
 }
 
-void World::dispatchEvent(DirectedEvent *evt) {
-	IHasHandle *obj = this->get(&evt->getReceiver());
+void World::dispatchEvent(Event *evt, Handle &handle) {
+	IHasHandle *obj = this->get(&handle);
 	IEventReceiver *reciever = dynamic_cast<IEventReceiver *>(obj);
 
 	if (reciever != nullptr) {
 		// object responsible for deletion
-		reciever->onEvent(evt);
+		reciever->enqueue(evt);
 	} else  {
 		// this little event is going places; not to an object, but places
 		delete evt;

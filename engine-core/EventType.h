@@ -5,7 +5,14 @@
 enum class COREDLL EventType{
 	OBJECT_UPDATE,
 	ACTION,
+	REGISTER_PLAYER,
+	REGISTER_PLAYER_RESPONSE,
 	SPECIAL
+};
+
+enum class COREDLL Response{
+	OK,
+	FAIL
 };
 
 struct COREDLL ObjectUpdateHeader {
@@ -19,4 +26,14 @@ struct COREDLL ActionHeader {
 	
 	// this should go away once we get GUID id-ing working
 	size_t index;
+};
+
+struct COREDLL RegistrationRequestHeader {
+	unsigned int playerGuid;
+	int responseTag;
+};
+
+struct COREDLL RegistrationResponseHeader {
+	int responseTag;
+	int response;
 };

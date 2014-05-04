@@ -47,6 +47,6 @@ int BaseObject::getType() {
 	return this->objectType;
 }
 
-void BaseObject::onEvent(DirectedEvent *evt) {
+void BaseObject::enqueue(Event *evt) {
 	waitingEvents.push(evt);
 }

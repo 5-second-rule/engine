@@ -90,7 +90,6 @@
     <ClInclude Include="BufferRemainder.h" />
     <ClInclude Include="CommsProcessor.h" />
     <ClInclude Include="ConfigSettings.h" />
-    <ClInclude Include="DirectedEvent.h" />
     <ClInclude Include="DoubleBufferedQueue.h" />
     <ClInclude Include="engine-core.h" />
     <ClInclude Include="Engine.h" />
@@ -114,7 +113,6 @@
     <ClCompile Include="BufferRemainder.cpp" />
     <ClCompile Include="CommsProcessor.cpp" />
     <ClCompile Include="ConfigSettings.cpp" />
-    <ClCompile Include="DirectedEvent.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="BaseObject.cpp" />

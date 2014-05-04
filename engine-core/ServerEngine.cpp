@@ -25,11 +25,5 @@ void ServerEngine::frame(float dt) {
 }
 
 void ServerEngine::run(){
-
-	// TEST HACK
-	IHasHandle * obj = this->objectCtors->invoke(0);
-	world->allocateHandle(obj, HandleType::GLOBAL);
-	world->insert(obj);
-
 	Engine::run();
 }
