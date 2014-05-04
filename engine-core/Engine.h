@@ -46,8 +46,6 @@ protected:
 
 	void processNetworkUpdates();
 
-	IEngineInstanceDelegate* delegate;
-
 public:
 	Engine(
 		World *world, 
@@ -56,6 +54,8 @@ public:
 
 	World *world;
 	~Engine();
+
+	IEngineInstanceDelegate* delegate;
 
 	virtual void run();
 	virtual void stop();

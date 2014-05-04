@@ -11,6 +11,9 @@ void Event::reserveSize(BufferBuilder *buffer) {
 }
 
 void Event::fillBuffer(BufferBuilder *buffer) {
+	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer->getPointer());
+
+	hdr->type = this->type;
 	buffer->pop();
 }
 

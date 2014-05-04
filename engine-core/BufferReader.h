@@ -1,5 +1,7 @@
 #pragma once
-class BufferReader
+#include "engine-core.h"
+
+class COREDLL BufferReader
 {
 private:
 	const char * buffer;

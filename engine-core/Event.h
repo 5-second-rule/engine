@@ -11,11 +11,14 @@ struct COREDLL EventHeader {
 
 class COREDLL Event : public ISerializable
 {
-private:
+protected:
+
 
 public:
 	Event();
 	~Event();
+
+	int type;
 
 	virtual void reserveSize(BufferBuilder *buffer);
 	virtual void fillBuffer(BufferBuilder *buffer);
