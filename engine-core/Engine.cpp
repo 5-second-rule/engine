@@ -215,9 +215,14 @@ void Engine::dispatchAction( BufferReader *buffer ) {
 	buffer->finished( sizeof( struct ActionHeader ) );
 
 	ActionEvent *evt = this->delegate->MakeActionEvent( header->actionType, header->playerGuid, header->index, buffer->getPointer() );
-	//ActionEvent *evt = this->delegate->MakeActionEvent( header->actionType, gId, gIndex, buffer->getPointer() );
-	
-	this->delegate->HandleAction( evt );
+
+	auto playerHandle = this->playerMap.find(header->playerGuid);
+
+	if (playerHandle != this->playerMap.end()) {
+		this->world->dispatchEvent(evt, playerHandle->second);
+	} else {
+		std::cout << "WARN: unknown player attempted an action" << std::endl;
+	}
 }
 
 void Engine::sendOutboundEvent(Event *evt) {

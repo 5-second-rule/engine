@@ -4,6 +4,10 @@
 
 BaseObject::BaseObject(int objectType){
 	this->objectType = objectType;
+
+	this->position[0] = 0;
+	this->position[1] = 0;
+	this->position[2] = 0;
 }
 
 BaseObject::~BaseObject(){
@@ -41,6 +45,18 @@ void BaseObject::deserialize(BufferReader& buffer) {
 }
 
 void BaseObject::update(float dt) {
+	while (!this->waitingEvents.empty()){
+		Event * event = this->waitingEvents.front();
+		this->waitingEvents.pop();
+
+		this->handleEvent(event);
+
+		delete event;
+	}
+}
+
+void BaseObject::handleEvent(Event *evt) {
+	// do nothing by default
 }
 
 int BaseObject::getType() {

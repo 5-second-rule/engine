@@ -29,9 +29,13 @@ class COREDLL BaseObject
 private:
 	Handle handle;
 	int objectType;
-	float position[3];
 	float force[3];
+
+protected:
+	float position[3];
 	std::queue<Event *> waitingEvents;
+
+	virtual void handleEvent(Event *evt);
 
 public:
 	BaseObject(int objectType);

@@ -12,5 +12,6 @@ RenderableObject::~RenderableObject() {
 }
 
 void RenderableObject::render() {
+	this->model->setPosition(Vector4(this->position[0], this->position[1], this->position[2]));
 	this->model->draw();
 };
