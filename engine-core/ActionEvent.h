@@ -5,10 +5,7 @@ public:
 	int actionType;
 	int playerGuid;
 
-	// this should go away once we get GUID id-ing working
-	size_t index;
-
-	ActionEvent(unsigned int playerGuid, size_t index);
+	ActionEvent(unsigned int playerGuid );
 	~ActionEvent();
 
 

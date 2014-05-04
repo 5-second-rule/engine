@@ -214,7 +214,7 @@ void Engine::dispatchAction( BufferReader *buffer ) {
 	const struct ActionHeader *header = reinterpret_cast<const struct ActionHeader *>(buffer->getPointer());
 	buffer->finished( sizeof( struct ActionHeader ) );
 
-	ActionEvent *evt = this->delegate->MakeActionEvent( header->actionType, header->playerGuid, header->index, buffer->getPointer() );
+	ActionEvent *evt = this->delegate->MakeActionEvent( header->actionType, header->playerGuid, buffer->getPointer() );
 
 	auto playerHandle = this->playerMap.find(header->playerGuid);
 

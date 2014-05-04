@@ -46,6 +46,7 @@ public:
 	int loadModel(char *filename);
 	int loadTexture(char *filename);
 	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
+	void waitForServer();
 
 	IRenderingEngineDelegate* renderingDelegate;
 };

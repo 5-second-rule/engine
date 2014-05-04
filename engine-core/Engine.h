@@ -15,8 +15,7 @@ typedef std::chrono::duration<float, ratio<1, 1>> float_seconds;
 
 class COREDLL IEngineInstanceDelegate {
 public:
-	virtual void HandleAction( ActionEvent* evt ) = 0;
-	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, size_t index, const char* data ) = 0;
+	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, const char* data ) = 0;
 };
 
 

@@ -99,3 +99,8 @@ Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureI
 	Texture *texture = this->textures.at(textureIndex);
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture);
 }
+
+
+void RenderingEngine::waitForServer() {
+	this->comms->waitAnnouce();
+}

@@ -23,9 +23,6 @@ struct COREDLL ObjectUpdateHeader {
 struct COREDLL ActionHeader {
 	int actionType;
 	unsigned int playerGuid;
-	
-	// this should go away once we get GUID id-ing working
-	size_t index;
 };
 
 struct COREDLL RegistrationRequestHeader {

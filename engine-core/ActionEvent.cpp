@@ -1,7 +1,7 @@
 #include "ActionEvent.h"
 
 
-ActionEvent::ActionEvent(unsigned int playerGuid, size_t index) : playerGuid(playerGuid), index(index) {
+ActionEvent::ActionEvent(unsigned int playerGuid ) : playerGuid(playerGuid) {
 	this->type = static_cast<int>(EventType::ACTION);
 }
 
@@ -19,7 +19,6 @@ void ActionEvent::fillBuffer( BufferBuilder *buffer ) {
 	struct ActionHeader *actionHdr = reinterpret_cast<struct ActionHeader *>(buffer->getPointer());
 
 	actionHdr->actionType = this->actionType;
-	actionHdr->index = this->index;
 	actionHdr->playerGuid = this->playerGuid;
 	buffer->pop();
 }
@@ -29,7 +28,6 @@ void ActionEvent::deserialize( BufferReader& buffer ) {
 	Event::deserialize( buffer );
 	const struct ActionHeader *actionHdr = reinterpret_cast<const struct ActionHeader *>(buffer.getPointer());
 	this->actionType = actionHdr->actionType;
-	this->index = actionHdr->index;
 	this->playerGuid = actionHdr->playerGuid;
 	buffer.finished( sizeof( struct ActionHeader ) );
 }
