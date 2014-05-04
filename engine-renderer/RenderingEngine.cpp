@@ -28,10 +28,10 @@ void RenderingEngine::translateInput() {
 	Input::KeyState state;
 	Event* inputEvent;
 
-	while (!queue.empty() && this->inputTranslator != nullptr) {
+	while (!queue.empty() && this->delegate != nullptr) {
 		key = queue.front().first;
 		state = queue.front().second;
-		inputEvent = inputTranslator(key, state);
+		inputEvent = this->renderingDelegate->inputTranslator(key, state);
 		if (inputEvent != nullptr) {
 			this->sendOutboundEvent(inputEvent);
 		}		
@@ -98,8 +98,4 @@ Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureI
 	ModelData data = this->models.at(modelIndex);
 	Texture *texture = this->textures.at(textureIndex);
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture);
-}
-
-void RenderingEngine::setInputTranslator(RenderingEngine::InputTranslatorFn translator) {
-	this->inputTranslator = translator;
 }

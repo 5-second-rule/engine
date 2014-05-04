@@ -85,7 +85,7 @@ void Engine::dispatchUpdate(QueueItem &item) {
 	
 	if ( EventType( header->type ) == EventType::OBJECT_UPDATE ) {
 		readBuffer.finished(sizeof(struct EventHeader));
-		this->dispatchUpdate( item );
+		this->updateObject( readBuffer );
 	} else if( EventType( header->type ) == EventType::ACTION ) {
 		readBuffer.finished( sizeof( struct EventHeader ) );
 		this->dispatchAction( &readBuffer );
