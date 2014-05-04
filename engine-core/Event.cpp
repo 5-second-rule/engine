@@ -20,5 +20,6 @@ void Event::fillBuffer(BufferBuilder *buffer) {
 
 void Event::deserialize(BufferReader& buffer) {
 	const struct EventHeader *hdr = reinterpret_cast<const struct EventHeader *>(buffer.getPointer());
+	this->type = hdr->type;
 	buffer.finished(sizeof(struct EventHeader));
 }

@@ -26,6 +26,10 @@ void ActionEvent::fillBuffer( BufferBuilder *buffer ) {
 
 
 void ActionEvent::deserialize( BufferReader& buffer ) {
-	const struct EventHeader *hdr = reinterpret_cast<const struct EventHeader *>(buffer.getPointer());
-	buffer.finished( sizeof( struct EventHeader ) );
+	Event::deserialize( buffer );
+	const struct ActionHeader *actionHdr = reinterpret_cast<const struct ActionHeader *>(buffer.getPointer());
+	this->actionType = actionHdr->actionType;
+	this->index = actionHdr->index;
+	this->playerGuid = actionHdr->playerGuid;
+	buffer.finished( sizeof( struct ActionHeader ) );
 }
