@@ -2,8 +2,8 @@
 
 #include "BaseObject.h"
 
-BaseObject::BaseObject(int objectType){
-	this->objectType = objectType;
+BaseObject::BaseObject(){
+	//TODO
 }
 
 BaseObject::~BaseObject(){
@@ -11,24 +11,24 @@ BaseObject::~BaseObject(){
 }
 
 Handle BaseObject::getHandle(){
-	return Handle();
+	return this->handle;
 }
 
 void BaseObject::setHandle(Handle handle){
 	this->handle = handle;
 }
 
-void BaseObject::reserveSize(BufferBuilder *buffer) {
-	buffer->reserve(sizeof(struct BaseObjectInfo));
+void BaseObject::reserveSize(IReserve& buffer) {
+	buffer.reserve(sizeof(struct BaseObjectInfo));
 }
 
-void BaseObject::fillBuffer(BufferBuilder *buffer) {
-	struct BaseObjectInfo *hdr = reinterpret_cast<struct BaseObjectInfo *>(buffer->getPointer());
+void BaseObject::fillBuffer(IFill& buffer) {
+	struct BaseObjectInfo *hdr = reinterpret_cast<struct BaseObjectInfo *>(buffer.getPointer());
 
 	memcpy( hdr->position, position, sizeof( float ) * 3 );
 	memcpy( hdr->force, force, sizeof( float ) * 3 );
 
-	buffer->pop();
+	buffer.filled();
 }
 
 void BaseObject::deserialize(BufferReader& buffer) {

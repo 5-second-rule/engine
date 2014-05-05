@@ -97,25 +97,24 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 		ISerializable *serializable = dynamic_cast<ISerializable *>(object);
 
 		if (serializable != nullptr) {
-			BufferBuilder *buffer = new BufferBuilder();
-			buffer->reserve(sizeof(struct EventHeader));
-			buffer->reserve(sizeof(struct ObjectUpdateHeader));
+			BufferBuilder buffer;
+			buffer.reserve(sizeof(struct EventHeader));
+			buffer.reserve(sizeof(struct ObjectUpdateHeader));
 			serializable->reserveSize(buffer);
 
-			buffer->allocate();
+			buffer.allocate();
 
-			((struct EventHeader*)buffer->getPointer())->type = EventType::OBJECT_UPDATE;
-			buffer->pop();
+			((struct EventHeader*)buffer.getPointer())->type = EventType::OBJECT_UPDATE;
+			buffer.filled();
 
-			struct ObjectUpdateHeader *ouHeader = (struct ObjectUpdateHeader*)buffer->getPointer();
+			struct ObjectUpdateHeader *ouHeader = (struct ObjectUpdateHeader*)buffer.getPointer();
 			ouHeader->handle = object->getHandle();
 			ouHeader->objectType = object->getType();
-			buffer->pop();
+			buffer.filled();
 
 			serializable->fillBuffer(buffer);
 
-			comms->sendUpdates(buffer->getBasePointer(), buffer->getSize());
-			delete buffer;
+			comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
 		}
 
 		iterator++;

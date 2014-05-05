@@ -9,15 +9,15 @@ Event::Event(EventType type)
 	this->type = type;
 }
 
-void Event::reserveSize(BufferBuilder *buffer) {
-	buffer->reserve(sizeof(struct EventHeader));
+void Event::reserveSize(IReserve& buffer) {
+	buffer.reserve(sizeof(struct EventHeader));
 }
 
-void Event::fillBuffer(BufferBuilder *buffer) {
-	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer->getPointer());
+void Event::fillBuffer(IFill& buffer) {
+	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer.getPointer());
 	hdr->type = this->type;
 
-	buffer->pop();
+	buffer.filled();
 }
 
 void Event::deserialize(BufferReader& buffer) {

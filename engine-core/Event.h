@@ -20,8 +20,8 @@ public:
 	Event(EventType type);
 	~Event();
 
-	virtual void reserveSize(BufferBuilder *buffer);
-	virtual void fillBuffer(BufferBuilder *buffer);
+	virtual void reserveSize(IReserve& buffer);
+	virtual void fillBuffer(IFill& buffer);
 	virtual void deserialize(BufferReader& buffer);
 
 	/*bool operator<(Event const&) const;

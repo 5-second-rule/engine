@@ -123,12 +123,11 @@ void Engine::updateObject(BufferReader& buffer) {
 }
 
 void Engine::sendOutboundEvent(Event *evt) {
-	BufferBuilder *buffer = new BufferBuilder();
+	BufferBuilder buffer;
 	evt->serialize(buffer);
 
-	this->comms->sendUpdates(buffer->getBasePointer(), buffer->getSize());
+	this->comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
 
-	delete buffer;
 }
 
 void Engine::setInboundEventHandler(special_event_handler handler) {

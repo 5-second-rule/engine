@@ -17,22 +17,29 @@ BufferBuilder::~BufferBuilder() {
 }
 
 void BufferBuilder::reserve(size_t size) {
+	if (this->allocated) return;
+
 	this->sizes.push(size);
 	this->size += size;
 }
 
-void BufferBuilder::pop() {
+void BufferBuilder::filled() {
+	if (!this->allocated) return;
+
 	this->offset += this->sizes.front();
 	this->sizes.pop();
 }
 
 void BufferBuilder::allocate() {
-	if (this->buffer != nullptr) {
+	if (this->allocated || this->buffer != nullptr) {
 		throw new std::runtime_error("buffer already allocated");
 	}
 
 	this->buffer = new char[this->size];
+	this->allocated = true;
 }
+
+// Accessor Methods
 
 char * BufferBuilder::getPointer() {
 	return this->buffer + this->offset;

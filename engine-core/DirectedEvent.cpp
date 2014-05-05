@@ -21,24 +21,24 @@ DirectedEvent::~DirectedEvent() {
 	}
 }
 
-void DirectedEvent::reserveSize(BufferBuilder *buffer) {
+void DirectedEvent::reserveSize(IReserve& buffer) {
 	Event::reserveSize(buffer);
 
-	buffer->reserve(sizeof(struct EventHeader));
+	buffer.reserve(sizeof(struct EventHeader));
 
 	if (this->child != nullptr) {
 		this->child->reserveSize(buffer);
 	}
 }
 
-void DirectedEvent::fillBuffer(BufferBuilder *buffer) {
+void DirectedEvent::fillBuffer(IFill& buffer) {
 	Event::fillBuffer(buffer);
 
-	struct DirectedEventHeader *hdr = reinterpret_cast<struct DirectedEventHeader *>(buffer->getPointer());
+	struct DirectedEventHeader *hdr = reinterpret_cast<struct DirectedEventHeader *>(buffer.getPointer());
 	hdr->receiver = this->receiver;
 	hdr->sender = this->sender;
 
-	buffer->pop();
+	buffer.filled();
 
 	if (this->child != nullptr) {
 		this->child->fillBuffer(buffer);

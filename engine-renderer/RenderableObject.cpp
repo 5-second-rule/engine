@@ -3,7 +3,7 @@
 using namespace Transmission;
 
 RenderableObject::RenderableObject(int objectType, Model *model) 
-		: BaseObject(objectType) {
+		: BaseObject() {
 	this->model = model;
 }
 
