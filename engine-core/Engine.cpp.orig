@@ -210,6 +210,14 @@ void Engine::updateObject(BufferReader& buffer) {
 	}
 }
 
+<<<<<<< HEAD
+void Engine::sendOutboundEvent(Event *evt) {
+	BufferBuilder buffer;
+	evt->serialize(buffer);
+
+	this->comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
+
+=======
 void Engine::dispatchAction( BufferReader *buffer ) {
 	const struct ActionHeader *header = reinterpret_cast<const struct ActionHeader *>(buffer->getPointer());
 	buffer->finished( sizeof( struct ActionHeader ) );
@@ -226,10 +234,11 @@ void Engine::dispatchAction( BufferReader *buffer ) {
 }
 
 void Engine::sendOutboundEvent(Event *evt) {
-	BufferBuilder buffer;
-	evt->serialize(buffer);
+	BufferBuilder buffer = BufferBuilder();
+	evt->serialize(&buffer);
 
 	this->comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
+>>>>>>> 02c5492c63a1ff0136cd2ca60e85331c3cf35f23
 }
 
 void Engine::setInboundEventHandler(special_event_handler handler) {

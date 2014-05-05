@@ -14,6 +14,11 @@
 
 #include <vector>
 
+class RENDERDLL IRenderingEngineDelegate {
+public:
+	virtual Event* inputTranslator(Transmission::Input::Key, Transmission::Input::KeyState) = 0;
+};
+
 class RENDERDLL RenderingEngine : public Engine
 {
 private:
@@ -25,9 +30,6 @@ private:
 	std::vector<Transmission::Texture *> textures;
 
 protected:
-	typedef Event* (*InputTranslatorFn)(Transmission::Input::Key, Transmission::Input::KeyState); // input handler, typedef for future changes
-	InputTranslatorFn inputTranslator;
-
 	void translateInput();
 
 	virtual bool shouldContinueFrames();
@@ -41,10 +43,11 @@ public:
 		ObjectCtorTable *objectCtors,
 		void *appHandle);
 	~RenderingEngine();
-
 	int loadModel(char *filename);
 	int loadTexture(char *filename);
 	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
-	void setInputTranslator(InputTranslatorFn translator);
+	void waitForServer();
+
+	IRenderingEngineDelegate* renderingDelegate;
 };
 

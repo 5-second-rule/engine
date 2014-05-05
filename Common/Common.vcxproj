@@ -11,19 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{792ABA4B-52B0-4430-8D1A-34C3F8FF0202}</ProjectGuid>
+    <ProjectGuid>{AA00E1FE-B197-4A20-AC31-779FE1501EF5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>enginecore</RootNamespace>
+    <RootNamespace>Common</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -39,31 +39,20 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_IS_ENGINE_CORE;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BrowseInformation>true</BrowseInformation>
-      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Bscmake>
-      <PreserveSbr>true</PreserveSbr>
-    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -73,57 +62,28 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ActionEvent.h" />
-    <ClInclude Include="BufferBuilder.h" />
-    <ClInclude Include="BufferReader.h" />
-    <ClInclude Include="BufferRemainder.h" />
-    <ClInclude Include="CommsProcessor.h" />
-    <ClInclude Include="ConfigSettings.h" />
-    <ClInclude Include="DoubleBufferedQueue.h" />
-    <ClInclude Include="engine-core.h" />
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="EventType.h" />
-    <ClInclude Include="BaseObject.h" />
-    <ClInclude Include="Handle.h" />
-    <ClInclude Include="IHasHandle.h" />
-    <ClInclude Include="IEventReceiver.h" />
-    <ClInclude Include="ISerializable.h" />
-    <ClInclude Include="IUpdatable.h" />
-    <ClInclude Include="ObjectCtorTable.h" />
-    <ClInclude Include="ServerEngine.h" />
-    <ClInclude Include="Socket.h" />
-    <ClInclude Include="World.h" />
+    <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ActionEvent.cpp" />
-    <ClCompile Include="BufferBuilder.cpp" />
-    <ClCompile Include="BufferReader.cpp" />
-    <ClCompile Include="BufferRemainder.cpp" />
-    <ClCompile Include="CommsProcessor.cpp" />
-    <ClCompile Include="ConfigSettings.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Event.cpp" />
-    <ClCompile Include="BaseObject.cpp" />
-    <ClCompile Include="Handle.cpp" />
-    <ClCompile Include="ObjectCtorTable.cpp" />
-    <ClCompile Include="ServerEngine.cpp" />
-    <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="World.cpp" />
+    <ClInclude Include="4D\Matrix4.h" />
+    <ClInclude Include="4D\Vector4.h" />
+    <ClInclude Include="misc\utils.h" />
+    <ClInclude Include="Time\CrudeTimer.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md" />
+    <ClCompile Include="4D\Vector4.cpp" />
+    <ClCompile Include="Time\CrudeTimer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,9 +13,19 @@ ServerEngine::ServerEngine(World *world, ObjectCtorTable *objectCtors, float sec
 ServerEngine::~ServerEngine() {}
 
 void ServerEngine::tick(float dt) {
+	static int annouceCount = 0;
+
 	this->processNetworkUpdates();
 	Engine::tick(dt);
 	this->world->broadcastUpdates(comms);
+
+	if( annouceCount == 25 ) {
+		comms->sendAnnouce();
+		annouceCount = 0;
+	}
+	else
+		++annouceCount;
+
 }
 
 
@@ -25,11 +35,5 @@ void ServerEngine::frame(float dt) {
 }
 
 void ServerEngine::run(){
-
-	// TEST HACK
-	IHasHandle * obj = this->objectCtors->invoke(0);
-	world->allocateHandle(obj, HandleType::GLOBAL);
-	world->insert(obj);
-
 	Engine::run();
 }
