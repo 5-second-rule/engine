@@ -132,12 +132,12 @@ void Engine::handleRegistrationRequest(BufferReader& buffer) {
 	responseBuffer.allocate();
 
 	((struct EventHeader*)responseBuffer.getPointer())->type = static_cast<int>(EventType::REGISTER_PLAYER_RESPONSE);
-	responseBuffer.pop();
+	responseBuffer.filled();
 
 	struct RegistrationResponseHeader *responseHeader = (struct RegistrationResponseHeader*)responseBuffer.getPointer();
 	responseHeader->response = (int)response;
 	responseHeader->responseTag = header->responseTag;
-	responseBuffer.pop();
+	responseBuffer.filled();
 
 	comms->sendUpdates(responseBuffer.getBasePointer(), responseBuffer.getSize());
 }
@@ -169,16 +169,16 @@ void Engine::registerPlayer(bool wait) {
 	responseBuffer.allocate();
 
 	((struct EventHeader*)responseBuffer.getPointer())->type = static_cast<int>(EventType::REGISTER_PLAYER);
-	responseBuffer.pop();
+	responseBuffer.filled();
 
 	struct RegistrationRequestHeader *responseHeader = (struct RegistrationRequestHeader*)responseBuffer.getPointer();
 	*responseHeader = this->waitingRegistration;
-	responseBuffer.pop();
+	responseBuffer.filled();
 
 	comms->sendUpdates(responseBuffer.getBasePointer(), responseBuffer.getSize());
 }
 
-unsigned int Engine::getLocalPlayerGuid(int playerIndex) {
+unsigned int Engine::getLocalPlayerGuid(unsigned int playerIndex) {
 	if (playerIndex < 0 || playerIndex >= this->localPlayers.size()) {
 		// TODO do something
 		return 0;

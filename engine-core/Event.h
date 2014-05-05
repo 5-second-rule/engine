@@ -12,7 +12,7 @@ struct COREDLL EventHeader {
 class COREDLL Event : public ISerializable
 {
 protected:
-
+	int type;
 
 public:
 	Event();
