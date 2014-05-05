@@ -1,7 +1,9 @@
 #pragma once
+#include <string>
+#include <sstream>
 
 #include "Vector4.h"
-
+using namespace std;
 namespace Utility {
 	class Matrix4
 	{
@@ -211,13 +213,19 @@ namespace Utility {
 			return Matrix4(a);
 		}
 
-		void print() {
+		string toString(){
+			stringstream buffer;
 			for (int i = 0; i < 4; i++) {
-				std::cout << "[ ";
+				buffer << "[ ";
 				for (int j = 0; j < 4; j++)
-					std::cout << this->m[j][i] << ", ";
-				std::cout << "]" << std::endl;
+					buffer << this->m[j][i] << ", ";
+				buffer << "]" << std::endl;
 			}
+			return buffer.str();
+		}
+
+		void print() {
+			cout << toString();
 		}
 
 		Matrix4 transpose() {

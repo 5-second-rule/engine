@@ -9,7 +9,7 @@ World::World() {
 		this->objectIds[type] = 0;
 		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
 	}
-	
+	frameCounter = 0;
 	this->updatable.reserve(DEFAULT_OBJECT_ALLOC);
 	this->serializable.reserve(DEFAULT_OBJECT_ALLOC);
 }
@@ -22,7 +22,6 @@ World::~World() {
 
 void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 	int nextIndex = this->lastAllocatedIndex[handleType];
-
 	// TODO implement better allocator, with wrap around
 	//while (objects[handleType].at(nextIndex) != nullptr){
 		//nextIndex = (nextIndex + 1);
@@ -34,6 +33,7 @@ void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 
 void World::insert(IHasHandle *object) {
 	Handle handle = object->getHandle();
+	object->setWorld(this);
 	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
 
 	while ((int)storage->size() <= handle.index) {
@@ -78,6 +78,7 @@ IHasHandle * World::get(const Handle *handle) {
 }
 
 void World::update(float dt) {
+	frameCounter = (frameCounter + 1)%1000000000;
 	auto iterator = this->updatable.begin();
 	while (iterator != this->updatable.end()) {
 		IUpdatable *updatable = dynamic_cast<IUpdatable *>(this->get(&*iterator));
@@ -133,4 +134,8 @@ void World::dispatchEvent(Event *evt, Handle &handle) {
 		// this little event is going places; not to an object, but places
 		delete evt;
 	}
+}
+
+bool World::isTick(long int n){
+	return frameCounter % n == 0;
 }

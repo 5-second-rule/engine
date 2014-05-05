@@ -12,8 +12,8 @@
 
 using namespace std;
 
-const string str_settings_file = "..\\engine-core\\Config.ini";
-const string str_template_settings_file = "..\\engine-core\\ConfigTemplate.ini";
+const string str_settings_file = "resources/Config.ini";
+const string str_template_settings_file = "/resources/ConfigTemplate.ini";
 
 class COREDLL ConfigSettings {
 

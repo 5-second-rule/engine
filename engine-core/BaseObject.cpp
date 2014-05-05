@@ -55,8 +55,9 @@ void BaseObject::update(float dt) {
 	}
 }
 
-void BaseObject::handleEvent(Event *evt) {
+bool BaseObject::handleEvent(Event *evt) {
 	// do nothing by default
+	return true;
 }
 
 int BaseObject::getType() {
@@ -65,4 +66,12 @@ int BaseObject::getType() {
 
 void BaseObject::enqueue(Event *evt) {
 	waitingEvents.push(evt);
+}
+
+void BaseObject::setWorld(World* world){
+	m_world = world;
+}
+
+World* BaseObject::getWorld(){
+	return m_world;
 }

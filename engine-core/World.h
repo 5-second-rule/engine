@@ -10,6 +10,8 @@
 #include "CommsProcessor.h"
 #include "Event.h"
 
+class IHasHandle;
+
 using namespace std;
 template class COREDLL vector< Handle >;
 template class COREDLL vector< IHasHandle* >;
@@ -24,7 +26,7 @@ private:
 	std::vector<IHasHandle *> objects[2];
 	std::vector<Handle> updatable;
 	std::vector<Handle> serializable;
-	
+	long int frameCounter;
 public:
 	World();
 	~World();
@@ -41,4 +43,5 @@ public:
 	virtual void update( float dt );
 
 	void dispatchEvent(Event *evt, Handle &handle);
+	bool isTick(long int n); // Return true if the number of frames already updated is multiple of n
 };

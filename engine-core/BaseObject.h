@@ -1,5 +1,6 @@
 #pragma once
 
+#include "World.h"
 #include "IHasHandle.h"
 #include "Handle.h"
 #include "ISerializable.h"
@@ -32,16 +33,19 @@ private:
 	float force[3];
 
 protected:
+	World* m_world;
 	float position[3];
 	std::queue<Event *> waitingEvents;
 
-	virtual void handleEvent(Event *evt);
+	virtual bool handleEvent(Event *evt);
 
 public:
 	BaseObject(int objectType);
 	virtual ~BaseObject();
 	Handle getHandle();
 	void setHandle(Handle handle);
+	void setWorld(World *world);
+	World* getWorld();
 	virtual int getType();
 
 	// ISerializable Methods

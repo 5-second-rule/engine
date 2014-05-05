@@ -217,7 +217,7 @@ string Vector4::toString() const{
 		this->vector[0] << ", " <<
 		this->vector[1] << ", " <<
 		this->vector[2] << ", " <<
-		this->vector[3] << ">" << std::endl;
+		this->vector[3] << ">";
 	return buffer.str();
 }
 
