@@ -5,15 +5,18 @@
 #include "engine-renderer/IRenderable.h"
 #include "engine-core/BaseObject.h"
 
-class RENDERDLL RenderableObject : public IRenderable, public BaseObject
+class RENDERDLL RenderableObject : public IRenderable
 {
 private:
 	Transmission::Model *model;
 
 public:
-	RenderableObject(int objectType, Transmission::Model *model);
-	~RenderableObject();
+	RenderableObject(Transmission::Model *model);
+	virtual ~RenderableObject();
 
 	virtual void render();
-};
 
+protected:
+	void setPosition(float pos[3]);
+	//TODO: void setRotation(const Vector4& rot);
+};

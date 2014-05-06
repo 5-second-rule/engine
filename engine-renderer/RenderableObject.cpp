@@ -2,16 +2,16 @@
 
 using namespace Transmission;
 
-RenderableObject::RenderableObject(int objectType, Model *model) 
-		: BaseObject(objectType) {
-	this->model = model;
-}
+RenderableObject::RenderableObject(Model* model) : model(model) {}
 
 RenderableObject::~RenderableObject() {
 	delete this->model;
 }
 
 void RenderableObject::render() {
-	//TODO: set position
 	this->model->draw();
 };
+
+void RenderableObject::setPosition(float pos[3]) {
+	this->model->setPosition(Transmission::Point(pos[0],pos[1],pos[2]));
+}

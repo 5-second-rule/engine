@@ -6,6 +6,10 @@
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+
+	MessageBoxA(0, "You compiled fine :D", "", MB_OK);
+	return 0;
+
 	RenderableWorld *world = new RenderableWorld();
 	ObjectCtorTable *ctors = new ObjectCtorTable(10);
 	RenderingEngine *engineInstance = new RenderingEngine(world, ctors, hInstance);
@@ -24,11 +28,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int textureIndex = engineInstance->loadTexture(textureLocationW);
 
 	RenderableObject *object = new RenderableObject(
-		0,
-		engineInstance->createModelFromIndex(ecoliIndex, textureIndex));
-
-	world->allocateHandle(object, HandleType::LOCAL);
-	world->insert(object);
+		engineInstance->createModelFromIndex(ecoliIndex, textureIndex)
+	);
 
 	engineInstance->run();
 

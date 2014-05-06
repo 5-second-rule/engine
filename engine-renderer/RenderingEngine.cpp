@@ -19,8 +19,7 @@ RenderingEngine::RenderingEngine(
 	this->renderableWorld = world;
 }
 
-RenderingEngine::~RenderingEngine() {
-}
+RenderingEngine::~RenderingEngine() {}
 
 void RenderingEngine::translateInput() {
 	Input::KeyStateQueue queue = this->input->getInputQueue();
@@ -50,7 +49,7 @@ bool RenderingEngine::shouldContinueFrames() {
 
 void RenderingEngine::tick(float dt) {
 	this->processNetworkUpdates();
-	Engine::tick(dt);
+	//Engine::tick(dt);
 }
 
 void RenderingEngine::frame(float dt) {
