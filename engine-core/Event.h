@@ -11,16 +11,18 @@ struct COREDLL EventHeader {
 
 class COREDLL Event : public ISerializable
 {
-protected:
-	int type;
-
+private:
+	/* TODO: const */EventType type;
+	Event(); // intentionally private
 public:
-	Event();
-	~Event();
+	Event(EventType type);
+	virtual ~Event();
 
 	virtual void reserveSize(IReserve& buffer);
 	virtual void fillBuffer(IFill& buffer);
 	virtual void deserialize(BufferReader& buffer);
+
+	EventType getType();
 
 	/*bool operator<(Event const&) const;
 	bool operator==(Event const&) const;*/

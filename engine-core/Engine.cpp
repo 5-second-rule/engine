@@ -84,24 +84,33 @@ void Engine::dispatchUpdate(QueueItem &item) {
 	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer.getPointer());
 	readBuffer.finished(sizeof(struct EventHeader));
 
-	if (EventType(header->type) == EventType::REGISTER_PLAYER) {
+	switch (EventType(header->type)) {
+	case EventType::REGISTER_PLAYER:
 		if (_DEBUG) std::cout << "player registration inbound" << std::endl;
 		this->handleRegistrationRequest(readBuffer);
-	} else if (EventType(header->type) == EventType::REGISTER_PLAYER_RESPONSE) {
+		break;
+	case EventType::REGISTER_PLAYER_RESPONSE:
 		this->handleRegistrationResponse(readBuffer);
-	} else if (!waitingForRegistration) {
-		if (EventType(header->type) == EventType::OBJECT_UPDATE) {
+		break;
+	}
+
+	if (!waitingForRegistration) {
+		switch (EventType(header->type)) {
+		case EventType::OBJECT_UPDATE:
 			this->updateObject(readBuffer);
-		} else if (EventType(header->type) == EventType::ACTION) {
+			break;
+		case EventType::ACTION:
 			if (_DEBUG) std::cout << "action!" << std::endl;
 			this->dispatchAction(&readBuffer);
-		} else if (EventType(header->type) == EventType::SPECIAL) {
-			special_event_handler handler = this->specialEventHandler;
-			if (handler != nullptr) {
-				handler(readBuffer);
+			break;
+		case EventType::SPECIAL:
+			if (this->specialEventHandler != nullptr) {
+				this->specialEventHandler(readBuffer);
 			}
-		} else {
-			// TODO log bad event
+			break;
+		default:
+			//TODO log bad event
+			break;
 		}
 	}
 }

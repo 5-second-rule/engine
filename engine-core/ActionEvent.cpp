@@ -1,9 +1,11 @@
 #include "ActionEvent.h"
 
 
-ActionEvent::ActionEvent(unsigned int playerGuid ) : playerGuid(playerGuid) {
-	this->type = static_cast<int>(EventType::ACTION);
-}
+ActionEvent::ActionEvent(unsigned int playerGuid, int actionType)
+	: Event(EventType::ACTION)
+	, actionType(actionType)
+	, playerGuid(playerGuid)
+{}
 
 
 ActionEvent::~ActionEvent() {}
@@ -30,4 +32,14 @@ void ActionEvent::deserialize( BufferReader& buffer ) {
 	this->actionType = actionHdr->actionType;
 	this->playerGuid = actionHdr->playerGuid;
 	buffer.finished( sizeof( struct ActionHeader ) );
+}
+
+int ActionEvent::getActionType() {
+	return this->actionType;
+}
+
+template<class T>
+T* ActionEvent::cast(ActionEvent* e) {
+	if (T::ACTIONTYPE == e->getActionType()) return static_cast<T*>(e);
+	else return nullptr;
 }

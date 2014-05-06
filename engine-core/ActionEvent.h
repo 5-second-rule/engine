@@ -1,16 +1,24 @@
 #pragma once
 #include "Event.h"
 class COREDLL ActionEvent : public Event {
-public:
+private:
 	int actionType;
 	int playerGuid;
 
-	ActionEvent(unsigned int playerGuid );
-	~ActionEvent();
+	ActionEvent(); //intentionally private
+
+public:
+	ActionEvent(unsigned int playerGuid,  int actionType);
+	virtual ~ActionEvent();
 
 
 	virtual void reserveSize( IReserve& buffer );
 	virtual void fillBuffer( IFill& buffer );
 	virtual void deserialize( BufferReader& buffer );
+
+	int getActionType();
+	template<class T> static T* cast(ActionEvent* e);
 };
+
+
 
