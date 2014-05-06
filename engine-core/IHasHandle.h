@@ -2,17 +2,20 @@
 
 #include "engine-core.h"
 #include "Handle.h"
-#include "World.h"
-
-class World;
 
 class COREDLL IHasHandle {
+private:
+	int type;
+	IHasHandle();
 public:
+	IHasHandle(int type) : type(type) {}
+
 	virtual Handle getHandle() = 0;
 	virtual void setHandle(Handle handle) = 0;
 	// TODO evaluate
 	virtual int getType() 
 	{ 
-		return -1; 
+		return this->type; 
 	}
+
 };

@@ -3,7 +3,7 @@
 using namespace Transmission;
 
 RenderableObject::RenderableObject(int objectType, Model *model) 
-		: BaseObject() {
+		: BaseObject(objectType) {
 	this->model = model;
 }
 
@@ -12,6 +12,6 @@ RenderableObject::~RenderableObject() {
 }
 
 void RenderableObject::render() {
-	this->model->setPosition(Vector4(this->position[0], this->position[1], this->position[2]));
+	//TODO: set position
 	this->model->draw();
 };
