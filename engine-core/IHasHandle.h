@@ -18,4 +18,10 @@ public:
 		return this->type; 
 	}
 
+	template<class T>
+	static T* cast(IHasHandle* h) {
+		if (T::TYPE == h->getType()) return static_cast<T*>(h);
+		else return nullptr;
+	}
+
 };
