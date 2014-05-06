@@ -20,6 +20,8 @@ Engine::Engine(
 	this->comms->setHandoffQ(&networkUpdates);
 
 	waitingForRegistration = false;
+
+	srand(time(NULL));
 }
 
 Engine::~Engine() {
@@ -194,6 +196,7 @@ void Engine::updateObject(BufferReader& buffer) {
 	bool isNew = false;
 	if (object == nullptr) {
 		object = this->objectCtors->invoke(header->objectType);
+		object->setHandle(header->handle);
 		isNew = true;
 	}
 
