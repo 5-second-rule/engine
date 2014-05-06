@@ -33,7 +33,7 @@ void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 
 void World::insert(IHasHandle *object) {
 	Handle handle = object->getHandle();
-	object->setWorld(this);
+
 	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
 
 	while ((int)storage->size() <= handle.index) {

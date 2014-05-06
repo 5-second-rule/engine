@@ -34,7 +34,6 @@ private:
 	float force[3];
 
 protected:
-	World* m_world;
 	float position[3];
 	std::queue<Event *> waitingEvents;
 
@@ -47,8 +46,7 @@ public:
 	// IHasHandle Methods
 	Handle getHandle();
 	void setHandle(Handle handle);
-	void setWorld(World *world);
-	World* getWorld();
+
 	virtual int getType();
 
 	// ISerializable Methods

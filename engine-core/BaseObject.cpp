@@ -67,11 +67,3 @@ int BaseObject::getType() {
 void BaseObject::enqueue(Event *evt) {
 	waitingEvents.push(evt);
 }
-
-void BaseObject::setWorld(World* world){
-	m_world = world;
-}
-
-World* BaseObject::getWorld(){
-	return m_world;
-}
