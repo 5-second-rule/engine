@@ -23,10 +23,11 @@ struct BaseObjectInfo {
 };
 
 class COREDLL BaseObject
-	: public IHasHandle, 
-		public ISerializable, 
-		public IUpdatable,
-		public IEventReceiver {
+	: public IHasHandle
+	, public ISerializable
+	, public IUpdatable
+	, public IEventReceiver
+{
 private:
 	Handle handle;
 	int objectType;
@@ -40,8 +41,10 @@ protected:
 	virtual bool handleEvent(Event *evt);
 
 public:
-	BaseObject(int objectType);
+	BaseObject();
 	virtual ~BaseObject();
+
+	// IHasHandle Methods
 	Handle getHandle();
 	void setHandle(Handle handle);
 	void setWorld(World *world);
@@ -49,8 +52,8 @@ public:
 	virtual int getType();
 
 	// ISerializable Methods
-	virtual void reserveSize(BufferBuilder *buffer);
-	virtual void fillBuffer(BufferBuilder *buffer);
+	virtual void reserveSize(IReserve& buffer);
+	virtual void fillBuffer(IFill& buffer);
 	virtual void deserialize(BufferReader& buffer);
 
 	// IUpdateable Methods

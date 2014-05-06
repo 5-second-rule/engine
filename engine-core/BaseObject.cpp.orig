@@ -2,12 +2,17 @@
 
 #include "BaseObject.h"
 
+<<<<<<< HEAD
 BaseObject::BaseObject(){
+	//TODO
+=======
+BaseObject::BaseObject(int objectType){
 	this->objectType = objectType;
 
 	this->position[0] = 0;
 	this->position[1] = 0;
 	this->position[2] = 0;
+>>>>>>> 02c5492c63a1ff0136cd2ca60e85331c3cf35f23
 }
 
 BaseObject::~BaseObject(){
@@ -55,9 +60,8 @@ void BaseObject::update(float dt) {
 	}
 }
 
-bool BaseObject::handleEvent(Event *evt) {
+void BaseObject::handleEvent(Event *evt) {
 	// do nothing by default
-	return true;
 }
 
 int BaseObject::getType() {
@@ -66,12 +70,4 @@ int BaseObject::getType() {
 
 void BaseObject::enqueue(Event *evt) {
 	waitingEvents.push(evt);
-}
-
-void BaseObject::setWorld(World* world){
-	m_world = world;
-}
-
-World* BaseObject::getWorld(){
-	return m_world;
 }

@@ -13,11 +13,11 @@ BufferRemainder::~BufferRemainder() {
 	}
 }
 
-void BufferRemainder::reserveSize(BufferBuilder *buffer) {
+void BufferRemainder::reserveSize(IReserve& buffer) {
 	// does nothing lol
 }
 
-void BufferRemainder::fillBuffer(BufferBuilder *buffer) {
+void BufferRemainder::fillBuffer(IFill& buffer) {
 	// does nothing lol
 }
 

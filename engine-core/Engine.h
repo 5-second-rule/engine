@@ -68,5 +68,5 @@ public:
 	void setInboundEventHandler(special_event_handler handler);
 
 	void registerPlayer(bool wait);
-	unsigned int getLocalPlayerGuid(int playerIndex);
+	unsigned int getLocalPlayerGuid(unsigned int playerIndex);
 };

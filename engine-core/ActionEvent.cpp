@@ -9,18 +9,18 @@ ActionEvent::ActionEvent(unsigned int playerGuid ) : playerGuid(playerGuid) {
 ActionEvent::~ActionEvent() {}
 
 
-void ActionEvent::reserveSize( BufferBuilder *buffer ) {
+void ActionEvent::reserveSize( IReserve& buffer ) {
 	Event::reserveSize( buffer );
-	buffer->reserve( sizeof( struct ActionHeader ) );
+	buffer.reserve( sizeof( struct ActionHeader ) );
 }
 
-void ActionEvent::fillBuffer( BufferBuilder *buffer ) {
+void ActionEvent::fillBuffer( IFill& buffer ) {
 	Event::fillBuffer( buffer );
-	struct ActionHeader *actionHdr = reinterpret_cast<struct ActionHeader *>(buffer->getPointer());
+	struct ActionHeader *actionHdr = reinterpret_cast<struct ActionHeader *>(buffer.getPointer());
 
 	actionHdr->actionType = this->actionType;
 	actionHdr->playerGuid = this->playerGuid;
-	buffer->pop();
+	buffer.filled();
 }
 
 

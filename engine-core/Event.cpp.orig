@@ -10,13 +10,21 @@ void Event::reserveSize(IReserve& buffer) {
 	buffer.reserve(sizeof(struct EventHeader));
 }
 
+<<<<<<< HEAD
 void Event::fillBuffer(IFill& buffer) {
 	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer.getPointer());
-
 	hdr->type = this->type;
 
 	buffer.filled();
+=======
+void Event::fillBuffer(BufferBuilder *buffer) {
+	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer->getPointer());
+
+	hdr->type = this->type;
+	buffer->pop();
+>>>>>>> 02c5492c63a1ff0136cd2ca60e85331c3cf35f23
 }
+
 
 void Event::deserialize(BufferReader& buffer) {
 	const struct EventHeader *hdr = reinterpret_cast<const struct EventHeader *>(buffer.getPointer());

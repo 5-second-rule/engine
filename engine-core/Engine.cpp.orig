@@ -132,12 +132,12 @@ void Engine::handleRegistrationRequest(BufferReader& buffer) {
 	responseBuffer.allocate();
 
 	((struct EventHeader*)responseBuffer.getPointer())->type = static_cast<int>(EventType::REGISTER_PLAYER_RESPONSE);
-	responseBuffer.filled();
+	responseBuffer.pop();
 
 	struct RegistrationResponseHeader *responseHeader = (struct RegistrationResponseHeader*)responseBuffer.getPointer();
 	responseHeader->response = (int)response;
 	responseHeader->responseTag = header->responseTag;
-	responseBuffer.filled();
+	responseBuffer.pop();
 
 	comms->sendUpdates(responseBuffer.getBasePointer(), responseBuffer.getSize());
 }
@@ -169,16 +169,16 @@ void Engine::registerPlayer(bool wait) {
 	responseBuffer.allocate();
 
 	((struct EventHeader*)responseBuffer.getPointer())->type = static_cast<int>(EventType::REGISTER_PLAYER);
-	responseBuffer.filled();
+	responseBuffer.pop();
 
 	struct RegistrationRequestHeader *responseHeader = (struct RegistrationRequestHeader*)responseBuffer.getPointer();
 	*responseHeader = this->waitingRegistration;
-	responseBuffer.filled();
+	responseBuffer.pop();
 
 	comms->sendUpdates(responseBuffer.getBasePointer(), responseBuffer.getSize());
 }
 
-unsigned int Engine::getLocalPlayerGuid(unsigned int playerIndex) {
+unsigned int Engine::getLocalPlayerGuid(int playerIndex) {
 	if (playerIndex < 0 || playerIndex >= this->localPlayers.size()) {
 		// TODO do something
 		return 0;
@@ -210,6 +210,14 @@ void Engine::updateObject(BufferReader& buffer) {
 	}
 }
 
+<<<<<<< HEAD
+void Engine::sendOutboundEvent(Event *evt) {
+	BufferBuilder buffer;
+	evt->serialize(buffer);
+
+	this->comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
+
+=======
 void Engine::dispatchAction( BufferReader *buffer ) {
 	const struct ActionHeader *header = reinterpret_cast<const struct ActionHeader *>(buffer->getPointer());
 	buffer->finished( sizeof( struct ActionHeader ) );
@@ -226,10 +234,11 @@ void Engine::dispatchAction( BufferReader *buffer ) {
 }
 
 void Engine::sendOutboundEvent(Event *evt) {
-	BufferBuilder buffer;
-	evt->serialize(buffer);
+	BufferBuilder buffer = BufferBuilder();
+	evt->serialize(&buffer);
 
 	this->comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
+>>>>>>> 02c5492c63a1ff0136cd2ca60e85331c3cf35f23
 }
 
 void Engine::setInboundEventHandler(special_event_handler handler) {

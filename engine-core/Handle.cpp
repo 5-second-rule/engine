@@ -1,12 +1,9 @@
 #include "Handle.h"
 
-Handle::Handle() : Handle(0, 0, HandleType::LOCAL)
-{
-}
+Handle::Handle() : Handle(0, 0, HandleType::LOCAL) {}
 
 
-Handle::Handle(int index, unsigned int id, HandleType type)
-{
+Handle::Handle(int index, unsigned int id, HandleType type) {
 	this->index = index;
 	this->id = id;
 
@@ -15,19 +12,36 @@ Handle::Handle(int index, unsigned int id, HandleType type)
 	}
 }
 
-
-Handle::~Handle()
-{
-}
+Handle::~Handle() {}
 
 HandleType Handle::getType() const {
 	return (HandleType)((this->id & LOCAL_MASK) != LOCAL_MASK);
 }
 
-bool Handle::operator==(Handle const& handle) const{
+bool Handle::operator==(Handle const& handle) const {
 	if (this->id == handle.id){
 		assert(this->index == handle.index);
 		return true;
 	}
 	return false;
+}
+
+void Handle::reserveSize(IReserve& buffer) {
+	buffer.reserve(sizeof(size_t) + sizeof(unsigned int));
+}
+
+void Handle::fillBuffer(IFill& buffer) {
+	char *buf = buffer.getPointer();
+	memcpy(buf, &this->index, sizeof(size_t));
+	memcpy(buf + sizeof(size_t), &this->id, sizeof(unsigned int));
+	buffer.filled();
+}
+
+void Handle::deserialize(BufferReader& reader) {
+	const char* buf = reader.getPointer();
+
+	memcpy(&this->index, buf, sizeof(size_t));
+	memcpy(&this->id, buf + sizeof(size_t), sizeof(unsigned int));
+
+	reader.finished(sizeof(size_t) + sizeof(unsigned int));
 }
