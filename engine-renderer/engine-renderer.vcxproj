@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine-renderer.h" />
+    <ClInclude Include="InputAdapter.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="ModelData.h" />
     <ClInclude Include="RenderableObject.h" />
@@ -24,6 +25,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="InputAdapter.cpp" />
     <ClCompile Include="RenderableObject.cpp" />
     <ClCompile Include="RenderableWorld.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
