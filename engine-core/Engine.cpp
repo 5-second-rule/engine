@@ -21,7 +21,7 @@ Engine::Engine(
 
 	waitingForRegistration = false;
 
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 }
 
 Engine::~Engine() {

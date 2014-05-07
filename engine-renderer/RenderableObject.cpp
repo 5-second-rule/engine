@@ -13,5 +13,5 @@ void RenderableObject::render() {
 };
 
 void RenderableObject::setPosition(float pos[3]) {
-	this->model->setPosition(Transmission::Point(pos[0],pos[1],pos[2]));
+	this->model->setPosition(Common::Point(pos[0],pos[1],pos[2]));
 }
