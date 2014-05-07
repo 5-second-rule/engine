@@ -1,12 +1,16 @@
 #pragma once
 
 #include "ConstructorTable.h"
-#include "Event.h"
+#include "ActionEvent.h"
 
 class EventFactory : public ConstructorTable<Event>
 {
+private:
+	ConstructorTable<ActionEvent>* actionEventCtors;
 public:
-	EventFactory(size_t size);
+	EventFactory(ConstructorTable<ActionEvent>* ctorTable);
 	~EventFactory();
+
+	virtual Event* invoke(BufferReader& reader);
 };
 

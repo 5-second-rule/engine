@@ -39,7 +39,7 @@ public:
 	Engine(
 		World *world,
 		ConstructorTable<IHasHandle> *objectCtors,
-		EventFactory* eventCtors,
+		ConstructorTable<ActionEvent>* eventCtors,
 		CommsProcessorRole role
 	);
 
@@ -64,9 +64,9 @@ protected:
 	virtual void frame(float dt) = 0;
 
 	virtual void dispatchUpdate(QueueItem &item);
-	virtual void dispatchAction(BufferReader *buffer);
+	virtual void dispatchAction(ActionEvent *buffer);
 
-	virtual void updateObject(BufferReader& buffer);
+	virtual void updateObject(UpdateEvent* evt, BufferReader& reader);
 
 	virtual void handleRegistrationRequest(BufferReader& buffer);
 	virtual void handleRegistrationResponse(BufferReader& buffer);

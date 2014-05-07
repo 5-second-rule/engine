@@ -18,9 +18,13 @@ void Event::fillBuffer(IFill& buffer) {
 }
 
 void Event::deserialize(BufferReader& buffer) {
-	const struct EventHeader *hdr = reinterpret_cast<const struct EventHeader *>(buffer.getPointer());
-	this->type = static_cast<EventType>(hdr->type);
+	this->type = Event::getType(buffer);
 	buffer.finished(sizeof(struct EventHeader));
+}
+
+EventType Event::getType(BufferReader& reader) {
+	const struct EventHeader *hdr = reinterpret_cast<const struct EventHeader *>(reader.getPointer());
+	return static_cast<EventType>(hdr->type);
 }
 
 EventType Event::getType() {

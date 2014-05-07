@@ -105,7 +105,7 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 
 			buffer.allocate();
 
-			((struct EventHeader*)buffer.getPointer())->type = static_cast<int>(EventType::OBJECT_UPDATE);
+			((struct EventHeader*)buffer.getPointer())->type = static_cast<int>(EventType::UPDATE);
 			buffer.filled();
 
 			struct ObjectUpdateHeader *ouHeader = (struct ObjectUpdateHeader*)buffer.getPointer();

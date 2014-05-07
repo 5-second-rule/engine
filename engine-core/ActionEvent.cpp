@@ -13,7 +13,7 @@ ActionEvent::~ActionEvent() {}
 
 void ActionEvent::reserveSize( IReserve& buffer ) {
 	Event::reserveSize( buffer );
-	buffer.reserve( sizeof( struct ActionHeader ) );
+	buffer.reserve( sizeof( ActionHeader ) );
 }
 
 void ActionEvent::fillBuffer( IFill& buffer ) {
@@ -36,5 +36,13 @@ void ActionEvent::deserialize( BufferReader& buffer ) {
 
 int ActionEvent::getActionType() {
 	return this->actionType;
+}
+
+int ActionEvent::getActionType(BufferReader& reader) {
+	//TODO
+}
+
+int ActionEvent::getPlayerGuid() {
+	return this->playerGuid;
 }
 

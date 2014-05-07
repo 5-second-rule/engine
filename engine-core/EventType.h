@@ -3,7 +3,7 @@
 #include "Handle.h"
 
 enum class COREDLL EventType{
-	OBJECT_UPDATE,
+	UPDATE,
 	ACTION,
 	REGISTER_PLAYER,
 	REGISTER_PLAYER_RESPONSE,
@@ -18,11 +18,6 @@ enum class COREDLL Response{
 struct COREDLL ObjectUpdateHeader {
 	Handle handle;
 	int objectType;
-};
-
-struct COREDLL ActionHeader {
-	int actionType;
-	unsigned int playerGuid;
 };
 
 struct COREDLL RegistrationRequestHeader {

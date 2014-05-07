@@ -28,4 +28,6 @@ public:
 		if (T::TYPE == e->getType()) return static_cast<T*>(e);
 		else return nullptr;
 	}
+
+	static EventType getType(BufferReader&);
 };

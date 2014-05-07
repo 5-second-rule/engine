@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "UpdateEvent.h"
+
 #define TICKS_PER_SEC 25
 
 using namespace std::chrono;
@@ -9,13 +11,13 @@ using namespace std::chrono;
 Engine::Engine(
 	World *world,
 	ConstructorTable<IHasHandle> *objectCtors,
-	EventFactory *eventCtors,
+	ConstructorTable<ActionEvent> *eventCtors,
 	CommsProcessorRole role
 )
 	: secondsPerTick(1.0f / (float)TICKS_PER_SEC)
 	, world(world)
 	, objectCtors(objectCtors)
-	, eventCtors(eventCtors)
+	, eventCtors(new EventFactory(eventCtors))
 {
 	// Set up network
 	this->comms = new CommsProcessor(role);
@@ -76,19 +78,15 @@ void Engine::processNetworkUpdates() {
 	this->networkUpdates.swap();
 
 	while (!this->networkUpdates.readEmpty()) {
-		//if(_DEBUG) std::cout << "========= handling update =========" << std::endl;
 		QueueItem update = this->networkUpdates.pop();
 		dispatchUpdate(update);
 		delete[] update.data;
 	}
-
-	//if(_DEBUG) std::cout << "finished updates" << std::endl;
 }
 
 void Engine::dispatchUpdate(QueueItem &item) {
 	BufferReader readBuffer(item.data, item.len);
-	Event* event = this->eventCtors->invoke(*reinterpret_cast<const int*>(readBuffer.getPointer()));
-	event->deserialize(readBuffer);
+	Event* event = this->eventCtors->invoke(readBuffer);
 
 	//TODO: this will get moved up to the comms processor
 	switch (event->getType()) {
@@ -103,12 +101,12 @@ void Engine::dispatchUpdate(QueueItem &item) {
 
 	if (!waitingForRegistration) {
 		switch (event->getType()) {
-		case EventType::OBJECT_UPDATE:
-			this->updateObject(BufferReader);
+		case EventType::UPDATE:
+			this->updateObject(Event::cast<UpdateEvent>(event), readBuffer);
 			break;
 		case EventType::ACTION:
 			if (_DEBUG) std::cout << "action!" << std::endl;
-			this->dispatchAction(&readBuffer);
+			this->dispatchAction(Event::cast<ActionEvent>(event));
 			break;
 		case EventType::SPECIAL:
 			if (this->specialEventHandler != nullptr) {
@@ -205,14 +203,13 @@ unsigned int Engine::getLocalPlayerGuid(unsigned int playerIndex) {
 	return this->localPlayers[playerIndex];
 }
 
-void Engine::updateObject(BufferReader& buffer) {
-	const struct ObjectUpdateHeader *header = reinterpret_cast<const struct ObjectUpdateHeader *>(buffer.getPointer());
+void Engine::updateObject(UpdateEvent* evt, BufferReader& reader) {
 
-	IHasHandle *object = this->world->get(&header->handle);
+	// get or create the object
+	IHasHandle *object = this->world->get(evt->getHandle());
 	bool isNew = false;
 	if (object == nullptr) {
-		object = this->objectCtors->invoke(header->objectType);
-		object->setHandle(header->handle);
+		object = this->objectCtors->invoke(reader);
 		isNew = true;
 	}
 
@@ -221,21 +218,16 @@ void Engine::updateObject(BufferReader& buffer) {
 		throw new std::runtime_error("Expected serializable object, but it's not; wat.");
 	}
 
-	buffer.finished(sizeof(struct ObjectUpdateHeader));
-	serializable->deserialize(buffer);
+	serializable->deserialize(reader);
 
 	if (isNew) {
 		world->insert(object);
 	}
 }
 
-void Engine::dispatchAction( BufferReader *buffer ) {
-	const struct ActionHeader *header = reinterpret_cast<const struct ActionHeader *>(buffer->getPointer());
-	buffer->finished( sizeof( struct ActionHeader ) );
+void Engine::dispatchAction( ActionEvent *evt ) {
 
-	ActionEvent *evt = this->delegate->MakeActionEvent( header->actionType, header->playerGuid, buffer->getPointer() );
-
-	auto playerHandle = this->playerMap.find(header->playerGuid);
+	auto playerHandle = this->playerMap.find(evt->getPlayerGuid());
 
 	if (playerHandle != this->playerMap.end()) {
 		this->world->dispatchEvent(evt, playerHandle->second);
