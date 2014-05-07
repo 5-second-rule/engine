@@ -37,11 +37,6 @@ void BaseObject::update(float dt) {
 	}
 }
 
-bool BaseObject::handleEvent(Event *evt) {
-	// do nothing by default
-	return true;
-}
-
 void BaseObject::enqueue(Event *evt) {
 	waitingEvents.push(evt);
 }

@@ -23,7 +23,7 @@ private:
 protected:
 	std::queue<Event *> waitingEvents;
 
-	virtual bool handleEvent(Event *evt);
+	virtual bool handleEvent(Event *evt) = 0;
 
 public:
 	BaseObject(int type);
