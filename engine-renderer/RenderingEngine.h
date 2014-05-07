@@ -5,7 +5,7 @@
 #include "ModelData.h"
 #include "engine-core/Engine.h"
 #include "engine-core/Event.h"
-#include "engine-core/ObjectCtorTable.h"
+#include "engine-core/ConstructorTable.h"
 
 #include "renderer/Window.h"
 #include "renderer/Input.h"
@@ -41,10 +41,7 @@ protected:
 	virtual void tick(float dt);
 
 public:
-	RenderingEngine(
-		RenderableWorld *world,
-		ObjectCtorTable *objectCtors,
-		void *appHandle);
+	RenderingEngine(RenderableWorld *world, ConstructorTable<IHasHandle> *objectCtors, void *appHandle);
 	~RenderingEngine();
 	int loadModel(char *filename);
 	int loadTexture(char *filename);

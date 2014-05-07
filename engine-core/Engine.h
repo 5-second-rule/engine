@@ -1,23 +1,18 @@
 #pragma once
 #include <chrono>
 
-#include "ObjectCtorTable.h"
+#include "ConstructorTable.h"
 #include "World.h"
 #include "engine-core.h"
 #include "CommsProcessor.h"
 #include "DoubleBufferedQueue.h"
 #include "ActionEvent.h"
+#include "EventFactory.h"
 
 #include <map>
 
 typedef void(*special_event_handler)(BufferReader& buffer);
 typedef std::chrono::duration<float, ratio<1, 1>> float_seconds;
-
-class COREDLL IEngineInstanceDelegate {
-public:
-	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, const char* data ) = 0;
-};
-
 
 class COREDLL Engine {
 private:
@@ -30,43 +25,51 @@ private:
 
 protected:
 	CommsProcessor *comms;
-	ObjectCtorTable *objectCtors;
+	ConstructorTable<IHasHandle> *objectCtors;
+	EventFactory *eventCtors;
 
 	std::map<unsigned int, Handle> playerMap;
 	std::vector<unsigned int> localPlayers;
 
-	// put world back here and write an accessor
+	World *world;
+
 	const float secondsPerTick;
-
-	virtual bool checkForTick(float dt);
-	virtual void tick(float dt);
-	virtual bool shouldContinueFrames();
-	virtual void frame(float dt) = 0;
-	virtual void dispatchUpdate(QueueItem &item);
-	virtual void dispatchAction( BufferReader *buffer );
-	virtual void updateObject(BufferReader& buffer);
-	virtual void handleRegistrationRequest(BufferReader& buffer);
-	virtual void handleRegistrationResponse(BufferReader& buffer);
-
-	void processNetworkUpdates();
 
 public:
 	Engine(
-		World *world, 
-		ObjectCtorTable *objectCtors, 
-		CommsProcessorRole role);
+		World *world,
+		ConstructorTable<IHasHandle> *objectCtors,
+		EventFactory* eventCtors,
+		CommsProcessorRole role
+	);
 
-	World *world;
-	~Engine();
-
-	IEngineInstanceDelegate* delegate;
+	virtual ~Engine();
 
 	virtual void run();
 	virtual void stop();
+
+	World* getWorld();
 
 	void sendOutboundEvent(Event *evt);
 	void setInboundEventHandler(special_event_handler handler);
 
 	void registerPlayer(bool wait);
 	unsigned int getLocalPlayerGuid(unsigned int playerIndex);
+
+protected:
+	virtual bool checkForTick(float dt);
+	virtual void tick(float dt);
+
+	virtual bool shouldContinueFrames();
+	virtual void frame(float dt) = 0;
+
+	virtual void dispatchUpdate(QueueItem &item);
+	virtual void dispatchAction(BufferReader *buffer);
+
+	virtual void updateObject(BufferReader& buffer);
+
+	virtual void handleRegistrationRequest(BufferReader& buffer);
+	virtual void handleRegistrationResponse(BufferReader& buffer);
+
+	void processNetworkUpdates();
 };

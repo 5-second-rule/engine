@@ -11,7 +11,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return 0;
 
 	RenderableWorld *world = new RenderableWorld();
-	ObjectCtorTable *ctors = new ObjectCtorTable(10);
+	ConstructorTable<IHasHandle> *ctors = new ConstructorTable<IHasHandle>(10);
 	RenderingEngine *engineInstance = new RenderingEngine(world, ctors, hInstance);
 
 	char* whiteBloodFbxFilePath = "../SampleApp/whitey.fbx";

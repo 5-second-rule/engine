@@ -9,7 +9,7 @@ static const char *testData = "This is a client update!!!\n";
 
 RenderingEngine::RenderingEngine(
 	RenderableWorld *world,
-	ObjectCtorTable *objectCtors,
+	ConstructorTable<IHasHandle> *objectCtors,
 	void *appHandle) 
 		: Engine(world, objectCtors, CommsProcessorRole::CLIENT) {
 	
@@ -42,12 +42,8 @@ bool RenderingEngine::shouldContinueFrames() {
 
 void RenderingEngine::tick(float dt) {
 	this->processNetworkUpdates();
-<<<<<<< HEAD
 	//Engine::tick(dt);
-=======
-	Engine::tick(dt);
 	this->translateInput();
->>>>>>> origin/master
 }
 
 void RenderingEngine::frame(float dt) {

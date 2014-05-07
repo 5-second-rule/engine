@@ -5,7 +5,7 @@
 using namespace std::chrono;
 using namespace std::this_thread;
 
-ServerEngine::ServerEngine(World *world, ObjectCtorTable *objectCtors, float secondsPerTick)
+ServerEngine::ServerEngine(World *world, ConstructorTable<IHasHandle> *objectCtors, float secondsPerTick)
 	: Engine(world, objectCtors, CommsProcessorRole::SERVER)
 	, secondsPerTick(secondsPerTick)
 {}

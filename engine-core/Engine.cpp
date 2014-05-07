@@ -7,14 +7,16 @@
 using namespace std::chrono;
 
 Engine::Engine(
-		World *world, 
-		ObjectCtorTable *objectCtors, 
-		CommsProcessorRole role)
+	World *world,
+	ConstructorTable<IHasHandle> *objectCtors,
+	EventFactory *eventCtors,
+	CommsProcessorRole role
+)
 	: secondsPerTick(1.0f / (float)TICKS_PER_SEC)
+	, world(world)
+	, objectCtors(objectCtors)
+	, eventCtors(eventCtors)
 {
-	this->world = world;
-	this->objectCtors = objectCtors;
-
 	// Set up network
 	this->comms = new CommsProcessor(role);
 	this->comms->setHandoffQ(&networkUpdates);
@@ -53,6 +55,10 @@ void Engine::stop() {
 	running = false;
 }
 
+World* Engine::getWorld() {
+	return this->world;
+}
+
 bool Engine::shouldContinueFrames() {
 	return running;
 }
@@ -81,10 +87,11 @@ void Engine::processNetworkUpdates() {
 
 void Engine::dispatchUpdate(QueueItem &item) {
 	BufferReader readBuffer(item.data, item.len);
-	const struct EventHeader *header = reinterpret_cast<const struct EventHeader *>(readBuffer.getPointer());
-	readBuffer.finished(sizeof(struct EventHeader));
+	Event* event = this->eventCtors->invoke(*reinterpret_cast<const int*>(readBuffer.getPointer()));
+	event->deserialize(readBuffer);
 
-	switch (EventType(header->type)) {
+	//TODO: this will get moved up to the comms processor
+	switch (event->getType()) {
 	case EventType::REGISTER_PLAYER:
 		if (_DEBUG) std::cout << "player registration inbound" << std::endl;
 		this->handleRegistrationRequest(readBuffer);
@@ -95,9 +102,9 @@ void Engine::dispatchUpdate(QueueItem &item) {
 	}
 
 	if (!waitingForRegistration) {
-		switch (EventType(header->type)) {
+		switch (event->getType()) {
 		case EventType::OBJECT_UPDATE:
-			this->updateObject(readBuffer);
+			this->updateObject(BufferReader);
 			break;
 		case EventType::ACTION:
 			if (_DEBUG) std::cout << "action!" << std::endl;

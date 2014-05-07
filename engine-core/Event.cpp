@@ -26,3 +26,4 @@ void Event::deserialize(BufferReader& buffer) {
 EventType Event::getType() {
 	return this->type;
 }
+

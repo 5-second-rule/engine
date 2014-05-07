@@ -31,9 +31,6 @@
     <ClCompile Include="Handle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectCtorTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ServerEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -41,6 +38,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstructorTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -96,9 +99,6 @@
     <ClInclude Include="IUpdatable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectCtorTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ServerEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -106,6 +106,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstructorTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -38,8 +38,3 @@ int ActionEvent::getActionType() {
 	return this->actionType;
 }
 
-template<class T>
-T* ActionEvent::cast(ActionEvent* e) {
-	if (T::ACTIONTYPE == e->getActionType()) return static_cast<T*>(e);
-	else return nullptr;
-}

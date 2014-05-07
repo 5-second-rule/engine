@@ -24,6 +24,8 @@ public:
 
 	EventType getType();
 
-	/*bool operator<(Event const&) const;
-	bool operator==(Event const&) const;*/
+	template<class T> static T* cast(Event* e) {
+		if (T::TYPE == e->getType()) return static_cast<T*>(e);
+		else return nullptr;
+	}
 };
