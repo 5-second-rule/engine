@@ -17,25 +17,18 @@ RenderingEngine::RenderingEngine(
 	this->input = (Input*) this->window->getInput();
 	this->renderer = Renderer::createRenderer(this->window);
 	this->renderableWorld = world;
+	this->inputAdapter = InputAdapter();
+	this->inputAdapter.setInput(this->input);
 }
 
 RenderingEngine::~RenderingEngine() {
 }
 
 void RenderingEngine::translateInput() {
-	Input::KeyStateQueue queue = this->input->getInputQueue();
-	Input::Key key;
-	Input::KeyState state;
-	Event* inputEvent;
-
-	while (!queue.empty() && this->delegate != nullptr) {
-		key = queue.front().first;
-		state = queue.front().second;
-		inputEvent = this->renderingDelegate->inputTranslator(key, state);
-		if (inputEvent != nullptr) {
-			this->sendOutboundEvent(inputEvent);
-		}		
-		queue.pop();
+	std::vector<Event *> inputEventVector = this->renderingDelegate->inputTranslator(&this->inputAdapter);
+	std::vector<Event *>::iterator it;
+	for (it = inputEventVector.begin(); it != inputEventVector.end(); ++it) {
+		this->sendOutboundEvent(*it);
 	}
 }
 
@@ -51,6 +44,7 @@ bool RenderingEngine::shouldContinueFrames() {
 void RenderingEngine::tick(float dt) {
 	this->processNetworkUpdates();
 	Engine::tick(dt);
+	this->translateInput();
 }
 
 void RenderingEngine::frame(float dt) {
@@ -58,7 +52,6 @@ void RenderingEngine::frame(float dt) {
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 
-	this->translateInput();
 }
 
 int RenderingEngine::loadModel(char *filename) {

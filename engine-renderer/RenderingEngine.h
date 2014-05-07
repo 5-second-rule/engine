@@ -12,11 +12,13 @@
 #include "renderer/Renderer.h"
 #include "renderer/Texture.h"
 
+#include "InputAdapter.h"
+
 #include <vector>
 
 class RENDERDLL IRenderingEngineDelegate {
 public:
-	virtual Event* inputTranslator(Transmission::Input::Key, Transmission::Input::KeyState) = 0;
+	virtual std::vector<Event *> inputTranslator(InputAdapter *inputAdapter) = 0;
 };
 
 class RENDERDLL RenderingEngine : public Engine
@@ -28,7 +30,8 @@ private:
 	RenderableWorld *renderableWorld;
 	std::vector<ModelData> models;
 	std::vector<Transmission::Texture *> textures;
-
+	InputAdapter inputAdapter;
+	
 protected:
 	void translateInput();
 
