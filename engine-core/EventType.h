@@ -15,11 +15,6 @@ enum class COREDLL Response{
 	FAIL
 };
 
-struct COREDLL ObjectUpdateHeader {
-	Handle handle;
-	int objectType;
-};
-
 struct COREDLL RegistrationRequestHeader {
 	unsigned int playerGuid;
 	int responseTag;

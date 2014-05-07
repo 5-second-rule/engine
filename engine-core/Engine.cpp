@@ -207,10 +207,10 @@ void Engine::updateObject(UpdateEvent* evt, BufferReader& reader) {
 
 	// get or create the object
 	IHasHandle *object = this->world->get(evt->getHandle());
-	bool isNew = false;
+
 	if (object == nullptr) {
-		object = this->objectCtors->invoke(reader);
-		isNew = true;
+		object = this->objectCtors->invoke(object->getType());
+		world->insert(object);
 	}
 
 	ISerializable *serializable = dynamic_cast<ISerializable *>(object);
@@ -219,10 +219,6 @@ void Engine::updateObject(UpdateEvent* evt, BufferReader& reader) {
 	}
 
 	serializable->deserialize(reader);
-
-	if (isNew) {
-		world->insert(object);
-	}
 }
 
 void Engine::dispatchAction( ActionEvent *evt ) {

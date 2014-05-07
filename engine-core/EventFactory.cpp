@@ -12,7 +12,7 @@ EventFactory::EventFactory(ConstructorTable<ActionEvent>* ctorTable)
 	this->setConstructor(
 		static_cast<int>(EventType::UPDATE),
 		[](ConstructorTable<Event>* t) -> Event* {
-			return new UpdateEvent();
+			return new UpdateEvent(Handle(), nullptr);
 		}
 	);
 }
@@ -22,11 +22,14 @@ EventFactory::~EventFactory() {}
 Event* EventFactory::invoke(BufferReader& reader) {
 	EventType type = Event::getType(reader);
 
+	Event* e;
 	if (type == EventType::ACTION) {
-		return this->actionEventCtors->invoke(reader);
+		e = this->actionEventCtors->invoke(ActionEvent::getActionType(reader));
 	}
-	
-	Event* e = ConstructorTable<Event>::invoke(static_cast<int>(type));
+	else {
+		e = ConstructorTable<Event>::invoke(static_cast<int>(type));
+	}
+
 	e->deserialize(reader);
 	return e;
 }

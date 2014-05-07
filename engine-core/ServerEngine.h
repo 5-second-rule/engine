@@ -13,7 +13,11 @@ protected:
 	virtual void frame(float dt);
 
 public:
-	ServerEngine(World *world, ConstructorTable<IHasHandle> *objectCtors, float minimumFrameTime);
+	ServerEngine(
+		World *world,
+		ConstructorTable<IHasHandle> *objectCtors,
+		ConstructorTable<ActionEvent>*,
+		float minimumFrameTime);
 
 	~ServerEngine();
 

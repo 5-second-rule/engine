@@ -39,7 +39,8 @@ int ActionEvent::getActionType() {
 }
 
 int ActionEvent::getActionType(BufferReader& reader) {
-	//TODO
+	//OH GOD THE HACKS
+	return *reinterpret_cast<int*>(reader.getPointer()[sizeof(EventHeader)]);
 }
 
 int ActionEvent::getPlayerGuid() {

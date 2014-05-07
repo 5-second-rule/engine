@@ -105,6 +105,7 @@
     <ClInclude Include="ConstructorTable.h" />
     <ClInclude Include="ServerEngine.h" />
     <ClInclude Include="Socket.h" />
+    <ClInclude Include="UpdateEvent.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +120,9 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="EventFactory.cpp" />
     <ClCompile Include="Handle.cpp" />
-    <ClCompile Include="ConstructorTable.cpp" />
     <ClCompile Include="ServerEngine.cpp" />
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="UpdateEvent.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,8 @@
 #include "CommsProcessor.h"
 #include "Event.h"
 
+#include "ConstructorTable.h"
+
 class IHasHandle;
 
 using namespace std;
@@ -35,7 +37,7 @@ public:
 	void allocateHandle(IHasHandle *object, HandleType type);
 	virtual void insert(IHasHandle *object);
 	void remove(Handle *handle);
-	IHasHandle * get(const Handle *handle);
+	IHasHandle * get(const Handle& handle);
 
 	void broadcastUpdates(CommsProcessor *comms);
 

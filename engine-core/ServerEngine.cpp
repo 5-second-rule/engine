@@ -5,8 +5,13 @@
 using namespace std::chrono;
 using namespace std::this_thread;
 
-ServerEngine::ServerEngine(World *world, ConstructorTable<IHasHandle> *objectCtors, float secondsPerTick)
-	: Engine(world, objectCtors, CommsProcessorRole::SERVER)
+ServerEngine::ServerEngine(
+	World *world,
+	ConstructorTable<IHasHandle> *objectCtors,
+	ConstructorTable<ActionEvent>* actionCtors,
+	float secondsPerTick
+)
+	: Engine(world, objectCtors, actionCtors, CommsProcessorRole::SERVER)
 	, secondsPerTick(secondsPerTick)
 {}
 

@@ -17,7 +17,7 @@ public:
 	UpdateEvent(Handle handle, ISerializable* child);
 	~UpdateEvent();
 
-	const Handle* getHandle();
+	const Handle& getHandle();
 	ISerializable* getChild();
 
 	//ISerializable methods

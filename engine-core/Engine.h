@@ -8,6 +8,7 @@
 #include "DoubleBufferedQueue.h"
 #include "ActionEvent.h"
 #include "EventFactory.h"
+#include "UpdateEvent.h"
 
 #include <map>
 

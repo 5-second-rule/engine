@@ -10,6 +10,11 @@ enum HandleType {
 	GLOBAL = 1
 };
 
+struct HandleStruct {
+	size_t index;
+	unsigned int id;
+};
+
 class COREDLL Handle : public ISerializable
 {
 private:

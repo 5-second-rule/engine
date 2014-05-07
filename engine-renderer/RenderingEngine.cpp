@@ -10,9 +10,11 @@ static const char *testData = "This is a client update!!!\n";
 RenderingEngine::RenderingEngine(
 	RenderableWorld *world,
 	ConstructorTable<IHasHandle> *objectCtors,
-	void *appHandle) 
-		: Engine(world, objectCtors, CommsProcessorRole::CLIENT) {
-	
+	ConstructorTable<ActionEvent,BufferReader&> *actionCtors,
+	void *appHandle
+) 
+		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT)
+{
 	this->window = Window::createWindow(appHandle);
 	this->input = (Input*) this->window->getInput();
 	this->renderer = Renderer::createRenderer(this->window);
