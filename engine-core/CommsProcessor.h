@@ -88,6 +88,7 @@ private:
 enum class COREDLL CommsProcessorRole {
 	SERVER,
 	CLIENT,
+	LOOPBACK,
 	MONITOR,
 	CUSTOM
 };
@@ -139,6 +140,7 @@ private:
 	bool running;
 	void serverCallback();
 	void clientCallback();
+	void loopbackCallback();
 	void monitorCallback();
 
 	// comms role

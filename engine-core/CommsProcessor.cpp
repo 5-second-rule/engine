@@ -40,7 +40,7 @@ const char *NotImplementedException::what() const _NOEXCEPT
 CommsProcessor::CommsProcessor( CommsProcessorRole r ) {
 	//TODO Make TTL variable and accessors instead of hardcoded
 	role = r;
-	sendSocket.setMulticastTTL( 255 );
+	sendSocket.setMulticastTTL( 1 );
 	running = true;
 	announceSignaled = false;
 	serverAddr = "255.255.255.255";
@@ -50,6 +50,9 @@ CommsProcessor::CommsProcessor( CommsProcessorRole r ) {
 			break;
 		case CommsProcessorRole::CLIENT:
 			listenThread = thread( &CommsProcessor::clientCallback, this );
+			break;
+		case CommsProcessorRole::LOOPBACK:
+			announceSignaled = true;
 			break;
 		case CommsProcessorRole::MONITOR:
 			listenThread = thread( &CommsProcessor::monitorCallback, this );
@@ -67,10 +70,10 @@ CommsProcessor::~CommsProcessor() {
 }
 
 void CommsProcessor::setHandoffQ( DoubleBufferedQueue<QueueItem> *q ) {
-	if( q ) {
+	if( q != nullptr ) {
 		handoffQ = q;
 	} else {
-		throw ArgumentException( "MessageCallback was attempted to be set to NULL" );
+		throw ArgumentException( "MessageCallback was attempted to be set to nullptr" );
 	}
 }
 
@@ -181,6 +184,14 @@ void CommsProcessor::sendUpdates( const char *data, size_t len ) {
 			dstAddr = serverAddr;
 			port = svrPort;
 			break;
+		case CommsProcessorRole::LOOPBACK: {
+			QueueItem item;
+			item.data = new char[len];
+			memcpy( item.data, buf->payload, len );
+			item.len = len;
+			handoffQ->push( item );
+			return;
+		}
 		case CommsProcessorRole::MONITOR:
 			return;
 		case CommsProcessorRole::CUSTOM:
@@ -202,6 +213,8 @@ void CommsProcessor::sendAnnouce() {
 		case CommsProcessorRole::SERVER:
 			break;
 		case CommsProcessorRole::CLIENT:
+			return;
+		case CommsProcessorRole::LOOPBACK:
 			return;
 		case CommsProcessorRole::MONITOR:
 			return;
