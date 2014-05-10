@@ -35,6 +35,7 @@ void Engine::run() {
 	this->running = true;
 
 	while (this->shouldContinueFrames()) {
+		//delegate->handleTerminal();
 		steady_clock::time_point start = steady_clock::now();
 		float dt = (float)duration_cast<float_seconds>(start - lastTickTime).count();
 

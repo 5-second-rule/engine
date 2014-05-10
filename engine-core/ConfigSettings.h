@@ -25,6 +25,8 @@ public:
 public:
 	static ConfigSettings * config; // Use this static reference instead of your own call to the constructor
 
+	static ConfigSettings *configInstance();
+
 	bool checkIfLoaded();
 	void saveSettingsFile();
 	bool loadSettingsFile();
@@ -49,7 +51,6 @@ private:
 	//default parameters for a default constructor option
 	ConfigSettings(string file_name=str_settings_file, string template_file_name=str_template_settings_file);
 
-
 	hash_map<string,string> *settings;
 	bool settings_loaded;
 
@@ -57,7 +58,4 @@ private:
 	string template_file_name;
 };
 
-
-namespace Utility{
-	COREDLL ConfigSettings* configInstance();
-}
+//COREDLL ConfigSettings* configInstance();

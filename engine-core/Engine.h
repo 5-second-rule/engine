@@ -16,6 +16,7 @@ typedef std::chrono::duration<float, ratio<1, 1>> float_seconds;
 class COREDLL IEngineInstanceDelegate {
 public:
 	virtual ActionEvent* MakeActionEvent( int actionType, unsigned int playerGuid, const char* data ) = 0;
+	virtual void handleTerminal() = 0;
 };
 
 
@@ -30,7 +31,6 @@ private:
 
 protected:
 	CommsProcessor *comms;
-	ObjectCtorTable *objectCtors;
 
 	std::map<unsigned int, Handle> playerMap;
 	std::vector<unsigned int> localPlayers;
@@ -57,6 +57,7 @@ public:
 		CommsProcessorRole role);
 
 	World *world;
+	ObjectCtorTable *objectCtors;
 	~Engine();
 
 	IEngineInstanceDelegate* delegate;

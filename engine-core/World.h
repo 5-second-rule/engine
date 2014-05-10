@@ -10,8 +10,6 @@
 #include "CommsProcessor.h"
 #include "Event.h"
 
-class IHasHandle;
-
 using namespace std;
 template class COREDLL vector< Handle >;
 template class COREDLL vector< IHasHandle* >;
@@ -32,7 +30,7 @@ public:
 	~World();
 
 	
-	void allocateHandle(IHasHandle *object, HandleType type);
+	void allocateHandle(IHasHandle *object, HandleType type = HandleType::GLOBAL);
 	virtual void insert(IHasHandle *object);
 	void remove(Handle *handle);
 	IHasHandle * get(const Handle *handle);

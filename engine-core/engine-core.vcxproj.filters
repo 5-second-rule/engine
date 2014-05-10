@@ -121,5 +121,8 @@
       <UniqueIdentifier>{431931a8-1292-4fc1-88a2-4e98d4ecbed4}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{3fad200d-0c55-4d5e-a99f-09055132e6e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
