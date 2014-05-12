@@ -44,6 +44,9 @@ CommsProcessor::CommsProcessor( CommsProcessorRole r, Engine* owner ) {
 		case CommsProcessorRole::CLIENT:
 			this->listenThread = thread( &CommsProcessor::clientCallback, this );
 			break;
+		case CommsProcessorRole::LOOPBACK:
+			announceSignaled = true;
+			break;
 		case CommsProcessorRole::MONITOR:
 			this->listenThread = thread( &CommsProcessor::monitorCallback, this );
 			break;
@@ -63,7 +66,7 @@ void CommsProcessor::setHandoffQ( DoubleBufferedQueue<Event*> *q ) {
 	if( q ) {
 		this->handoffQ = q;
 	} else {
-		throw ArgumentException( "Message queue was attempted to be set to nullptr" );
+		throw ArgumentException( "MessageCallback was attempted to be set to nullptr" );
 	}
 }
 
@@ -209,6 +212,14 @@ void CommsProcessor::sendEvent( const Event* evt ) {
 			dstAddr = serverAddr;
 			port = svrPort;
 			break;
+		case CommsProcessorRole::LOOPBACK: {
+			QueueItem item;
+			item.data = new char[len];
+			memcpy( item.data, buf->payload, len );
+			item.len = len;
+			handoffQ->push( item );
+			return;
+		}
 		case CommsProcessorRole::MONITOR:
 			return;
 		case CommsProcessorRole::CUSTOM:
@@ -230,6 +241,8 @@ void CommsProcessor::sendAnnouce() {
 		case CommsProcessorRole::SERVER:
 			break;
 		case CommsProcessorRole::CLIENT:
+			return;
+		case CommsProcessorRole::LOOPBACK:
 			return;
 		case CommsProcessorRole::MONITOR:
 			return;

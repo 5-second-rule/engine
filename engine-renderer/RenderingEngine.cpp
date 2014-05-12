@@ -15,7 +15,7 @@ RenderingEngine::RenderingEngine(
 		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT)
 {
 	this->window = Window::createWindow(appHandle);
-	this->input = (Input*) this->window->getInput();
+	this->input = this->window->getInput();
 	this->renderer = Renderer::createRenderer(this->window);
 	this->renderer->getTimer()->StartTimer();
 	this->renderableWorld = world;

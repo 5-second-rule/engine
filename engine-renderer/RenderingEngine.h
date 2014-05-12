@@ -27,7 +27,7 @@ public:
 class RENDERDLL RenderingEngine : public Engine
 {
 private:
-	Transmission::Input *input;
+	const Transmission::Input *input;
 	Transmission::Window *window;
 	Transmission::Renderer *renderer;
 	RenderableWorld *renderableWorld;
