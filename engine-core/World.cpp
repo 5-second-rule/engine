@@ -5,7 +5,7 @@
 #include "IEventReceiver.h"
 #include "UpdateEvent.h"
 
-World::World() {
+World::World() : updatable(this), serializable(this) {
 	for (int type = 0; type < 2; type++) {
 		this->lastAllocatedIndex[type] = 0;
 		this->objectIds[type] = 0;
@@ -91,30 +91,24 @@ void World::replace( Handle& handle,  IHasHandle* object) {
 
 void World::update(float dt) {
 	frameCounter = (frameCounter + 1)%1000000000;
-	auto iterator = this->updatable.begin();
-	while (iterator != this->updatable.end()) {
-		IUpdatable *updatable = dynamic_cast<IUpdatable *>(this->get(*iterator));
+	for (int i = 0; i < this->updatable.size(); i++) {
+		IUpdatable *updatable = this->updatable.getIndirect(i, false);
 
 		if (updatable != nullptr) {
 			updatable->update(dt);
 		}
-
-		iterator++;
 	}
 }
 
 void World::broadcastUpdates(CommsProcessor *comms) {
-	auto iterator = this->serializable.begin();
-	while (iterator != this->serializable.end()) {
-		IHasHandle *object = this->get(*iterator);
-		ISerializable *serializable = dynamic_cast<ISerializable *>(object);
+	for (int i = 0; i < this->serializable.size(); i++) {
+		IHasHandle *object;
+		ISerializable *serializable = this->serializable.getIndirect(i, false, &object);
 
 		if (serializable != nullptr) {
 			UpdateEvent* event = new UpdateEvent(object->getHandle(), serializable);
 			comms->sendEvent(event);
 		}
-
-		iterator++;
 	}
 }
 

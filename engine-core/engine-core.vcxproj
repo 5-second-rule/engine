@@ -97,6 +97,7 @@
     <ClInclude Include="EventFactory.h" />
     <ClInclude Include="EventType.h" />
     <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="GCHandleVector.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="IHasHandle.h" />
     <ClInclude Include="IEventReceiver.h" />
