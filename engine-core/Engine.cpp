@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "UpdateEvent.h"
 
 #define TICKS_PER_SEC 25
 
@@ -20,7 +19,7 @@ Engine::Engine(
 	, eventCtors(new EventFactory(eventCtors))
 {
 	// Set up network
-	this->comms = new CommsProcessor(role);
+	this->comms = new CommsProcessor(role, this);
 	this->comms->setHandoffQ(&networkUpdates);
 
 	waitingForRegistration = false;
@@ -78,40 +77,33 @@ void Engine::processNetworkUpdates() {
 	this->networkUpdates.swap();
 
 	while (!this->networkUpdates.readEmpty()) {
-		QueueItem update = this->networkUpdates.pop();
-		dispatchUpdate(update);
-		delete[] update.data;
+		Event* evt = this->networkUpdates.pop();
+		dispatchUpdate(evt);
 	}
 }
 
-void Engine::dispatchUpdate(QueueItem &item) {
-	BufferReader readBuffer(item.data, item.len);
-	Event* event = this->eventCtors->invoke(readBuffer);
-
-	//TODO: this will get moved up to the comms processor
-	switch (event->getType()) {
-	case EventType::REGISTER_PLAYER:
-		if (_DEBUG) std::cout << "player registration inbound" << std::endl;
-		this->handleRegistrationRequest(readBuffer);
-		break;
-	case EventType::REGISTER_PLAYER_RESPONSE:
-		this->handleRegistrationResponse(readBuffer);
-		break;
+void Engine::dispatchUpdate(Event* event) {
+	if( event->getType() == EventType::REGISTRATION ) {
+		RegistionEvent* regEvent = static_cast<RegistionEvent*>(event);
+		switch( regEvent->regType ) {
+			case RegistrationType::REQUEST:
+				if( _DEBUG ) std::cout << "player registration inbound" << std::endl;
+				this->handleRegistrationRequest( regEvent );
+				break;
+			case RegistrationType::RESPONSE:
+				this->handleRegistrationResponse( regEvent );
+				break;
+		}
 	}
 
 	if (!waitingForRegistration) {
 		switch (event->getType()) {
 		case EventType::UPDATE:
-			this->updateObject(Event::cast<UpdateEvent>(event), readBuffer);
+			this->updateObject(Event::cast<UpdateEvent>(event));
 			break;
 		case EventType::ACTION:
 			if (_DEBUG) std::cout << "action!" << std::endl;
 			this->dispatchAction(Event::cast<ActionEvent>(event));
-			break;
-		case EventType::SPECIAL:
-			if (this->specialEventHandler != nullptr) {
-				this->specialEventHandler(readBuffer);
-			}
 			break;
 		default:
 			//TODO log bad event
@@ -120,52 +112,41 @@ void Engine::dispatchUpdate(QueueItem &item) {
 	}
 }
 
-void Engine::handleRegistrationRequest(BufferReader& buffer) {
-	const struct RegistrationRequestHeader *header = reinterpret_cast<const struct RegistrationRequestHeader *>(buffer.getPointer());
+void Engine::handleRegistrationRequest(RegistionEvent* event) {
 
-	auto place = this->playerMap.find(header->playerGuid);
+	auto place = this->playerMap.find(event->playerGuid);
 	Response response = Response::FAIL;
 	if (place == this->playerMap.end()) {
 		response = Response::OK;
 		// spot is available, yay!
 
 		// HACK make first model for now
-		IHasHandle * obj = this->objectCtors->invoke(0);
+		IHasHandle * obj = this->objectCtors->invoke(0,nullptr);
 		world->allocateHandle(obj, HandleType::GLOBAL);
 		world->insert(obj);
 
-		this->playerMap[header->playerGuid] = obj->getHandle();
+		this->playerMap[event->playerGuid] = obj->getHandle();
 
 		if (_DEBUG) std::cout << "=> player registered" << std::endl;
 	} else {
 		if (_DEBUG) std::cout << "=> player NOT registered #fail" << std::endl;
 	}
 
-	BufferBuilder responseBuffer = BufferBuilder();
-	responseBuffer.reserve(sizeof(struct EventHeader));
-	responseBuffer.reserve(sizeof(struct RegistrationResponseHeader));
+	RegistionEvent respEvent;
+	respEvent.regType = RegistrationType::RESPONSE;
+	respEvent.playerGuid = event->playerGuid;
+	respEvent.response = response;
+	respEvent.responseTag = event->responseTag;
 
-	responseBuffer.allocate();
-
-	((struct EventHeader*)responseBuffer.getPointer())->type = static_cast<int>(EventType::REGISTER_PLAYER_RESPONSE);
-	responseBuffer.filled();
-
-	struct RegistrationResponseHeader *responseHeader = (struct RegistrationResponseHeader*)responseBuffer.getPointer();
-	responseHeader->response = (int)response;
-	responseHeader->responseTag = header->responseTag;
-	responseBuffer.filled();
-
-	comms->sendUpdates(responseBuffer.getBasePointer(), responseBuffer.getSize());
+	comms->sendEvent(&respEvent);
 }
 
 // HACK not really safe but good enough for now
 // what if server response lost? Object created on server but client doesn't know
-void Engine::handleRegistrationResponse(BufferReader& buffer) {
-	const struct RegistrationResponseHeader *header = reinterpret_cast<const struct RegistrationResponseHeader *>(buffer.getPointer());
+void Engine::handleRegistrationResponse( RegistionEvent* event ) {
 
-	if (header->responseTag == this->waitingRegistration.responseTag
-		&& header->response == (int)Response::OK) {
-		// matches;
+	if (event->responseTag == this->waitingRegistration.responseTag
+		&& event->response == Response::OK) { 		// matches
 		this->waitingForRegistration = false;
 		this->localPlayers.push_back(this->waitingRegistration.playerGuid);
 	}
@@ -177,21 +158,10 @@ void Engine::registerPlayer(bool wait) {
 
 	this->waitingRegistration.playerGuid = rand();
 	this->waitingRegistration.responseTag = rand();
+	this->waitingRegistration.regType = RegistrationType::REQUEST;
+	this->waitingRegistration.playerGuid = this->waitingRegistration.playerGuid;
 
-	BufferBuilder responseBuffer = BufferBuilder();
-	responseBuffer.reserve(sizeof(struct EventHeader));
-	responseBuffer.reserve(sizeof(struct RegistrationRequestHeader));
-
-	responseBuffer.allocate();
-
-	((struct EventHeader*)responseBuffer.getPointer())->type = static_cast<int>(EventType::REGISTER_PLAYER);
-	responseBuffer.filled();
-
-	struct RegistrationRequestHeader *responseHeader = (struct RegistrationRequestHeader*)responseBuffer.getPointer();
-	*responseHeader = this->waitingRegistration;
-	responseBuffer.filled();
-
-	comms->sendUpdates(responseBuffer.getBasePointer(), responseBuffer.getSize());
+	comms->sendEvent( &this->waitingRegistration );
 }
 
 unsigned int Engine::getLocalPlayerGuid(unsigned int playerIndex) {
@@ -203,22 +173,27 @@ unsigned int Engine::getLocalPlayerGuid(unsigned int playerIndex) {
 	return this->localPlayers[playerIndex];
 }
 
-void Engine::updateObject(UpdateEvent* evt, BufferReader& reader) {
+void Engine::updateObject(UpdateEvent* evt) {
 
 	// get or create the object
 	IHasHandle *object = this->world->get(evt->getHandle());
+	IHasHandle *newObj = dynamic_cast<IHasHandle*>(evt->getChild());
+
+	if( newObj == nullptr ) {
+		throw runtime_error( "Something went wrong, your cast has failed you" );
+	}
 
 	if (object == nullptr) {
-		object = this->objectCtors->invoke(object->getType());
-		world->insert(object);
+		UpdateArgs args;
+		args.handle = Handle();
+		args.child = nullptr;
+		object = this->objectCtors->invoke(newObj->getType(), &args);
+		world->insert(newObj);
+	} else {
+		world->replace( object->getHandle(), newObj );
 	}
 
-	ISerializable *serializable = dynamic_cast<ISerializable *>(object);
-	if (serializable == nullptr) {
-		throw new std::runtime_error("Expected serializable object, but it's not; wat.");
-	}
 
-	serializable->deserialize(reader);
 }
 
 void Engine::dispatchAction( ActionEvent *evt ) {
@@ -230,13 +205,6 @@ void Engine::dispatchAction( ActionEvent *evt ) {
 	} else {
 		std::cout << "WARN: unknown player attempted an action" << std::endl;
 	}
-}
-
-void Engine::sendOutboundEvent(Event *evt) {
-	BufferBuilder buffer;
-	evt->serialize(buffer);
-
-	this->comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
 }
 
 void Engine::setInboundEventHandler(special_event_handler handler) {

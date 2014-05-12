@@ -9,20 +9,25 @@
 #include "ActionEvent.h"
 #include "EventFactory.h"
 #include "UpdateEvent.h"
+#include "RegistionEvent.h"
 
 #include <map>
 
 typedef void(*special_event_handler)(BufferReader& buffer);
-typedef std::chrono::duration<float, ratio<1, 1>> float_seconds;
+typedef std::chrono::duration<float, std::ratio<1, 1>> float_seconds;
+
+class World;
+enum class CommsProcessorRole;
 
 class COREDLL Engine {
+	friend class CommsProcessor;
 private:
-	DoubleBufferedQueue<QueueItem> networkUpdates;
+	DoubleBufferedQueue<Event*> networkUpdates;
 	special_event_handler specialEventHandler;
 
 	bool running;
 	bool waitingForRegistration;
-	RegistrationRequestHeader waitingRegistration;
+	RegistionEvent waitingRegistration;
 
 protected:
 	CommsProcessor *comms;
@@ -51,7 +56,6 @@ public:
 
 	World* getWorld();
 
-	void sendOutboundEvent(Event *evt);
 	void setInboundEventHandler(special_event_handler handler);
 
 	void registerPlayer(bool wait);
@@ -64,13 +68,13 @@ protected:
 	virtual bool shouldContinueFrames();
 	virtual void frame(float dt) = 0;
 
-	virtual void dispatchUpdate(QueueItem &item);
+	virtual void dispatchUpdate( Event* event );
 	virtual void dispatchAction(ActionEvent *buffer);
 
-	virtual void updateObject(UpdateEvent* evt, BufferReader& reader);
+	virtual void updateObject(UpdateEvent* evt);
 
-	virtual void handleRegistrationRequest(BufferReader& buffer);
-	virtual void handleRegistrationResponse(BufferReader& buffer);
+	virtual void handleRegistrationRequest( RegistionEvent* event );
+	virtual void handleRegistrationResponse( RegistionEvent* event );
 
 	void processNetworkUpdates();
 };

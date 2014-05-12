@@ -1,7 +1,5 @@
 #include "CommsProcessor.h"
 
-
-
 // Argument Exception
 ArgumentException::ArgumentException( const string &message, bool inclSysMsg ) : userMessage( message ) {
 	if( inclSysMsg ) {
@@ -10,12 +8,9 @@ ArgumentException::ArgumentException( const string &message, bool inclSysMsg ) :
 	}
 }
 
-ArgumentException::~ArgumentException() _NOEXCEPT
-{
-}
+ArgumentException::~ArgumentException() _NOEXCEPT {}
 
-const char *ArgumentException::what() const _NOEXCEPT
-{
+const char *ArgumentException::what() const _NOEXCEPT {
 	return userMessage.c_str();
 }
 
@@ -27,32 +22,30 @@ NotImplementedException::NotImplementedException( const string &message, bool in
 	}
 }
 
-NotImplementedException::~NotImplementedException() _NOEXCEPT
-{
-}
+NotImplementedException::~NotImplementedException() _NOEXCEPT {}
 
-const char *NotImplementedException::what() const _NOEXCEPT
-{
+const char *NotImplementedException::what() const _NOEXCEPT {
 	return userMessage.c_str();
 }
 
 // CommsProcessor class
-CommsProcessor::CommsProcessor( CommsProcessorRole r ) {
+CommsProcessor::CommsProcessor( CommsProcessorRole r, Engine* owner ) {
 	//TODO Make TTL variable and accessors instead of hardcoded
-	role = r;
-	sendSocket.setMulticastTTL( 255 );
-	running = true;
-	announceSignaled = false;
-	serverAddr = "255.255.255.255";
+	this->owner = owner;
+	this->role = r;
+	this->sendSocket.setMulticastTTL( 1 );
+	this->running = true;
+	this->announceSignaled = false;
+	this->serverAddr = "255.255.255.255";
 	switch( r ) {
 		case CommsProcessorRole::SERVER:
-			listenThread = thread( &CommsProcessor::serverCallback, this );
+			this->listenThread = thread( &CommsProcessor::serverCallback, this );
 			break;
 		case CommsProcessorRole::CLIENT:
-			listenThread = thread( &CommsProcessor::clientCallback, this );
+			this->listenThread = thread( &CommsProcessor::clientCallback, this );
 			break;
 		case CommsProcessorRole::MONITOR:
-			listenThread = thread( &CommsProcessor::monitorCallback, this );
+			this->listenThread = thread( &CommsProcessor::monitorCallback, this );
 			break;
 		case CommsProcessorRole::CUSTOM:
 			throw NotImplementedException( "Custom is not yet implemented" );
@@ -62,20 +55,20 @@ CommsProcessor::CommsProcessor( CommsProcessorRole r ) {
 }
 
 CommsProcessor::~CommsProcessor() {
-	running = false;
-	listenThread.join();
+	this->running = false;
+	this->listenThread.join();
 }
 
-void CommsProcessor::setHandoffQ( DoubleBufferedQueue<QueueItem> *q ) {
+void CommsProcessor::setHandoffQ( DoubleBufferedQueue<Event*> *q ) {
 	if( q ) {
-		handoffQ = q;
+		this->handoffQ = q;
 	} else {
-		throw ArgumentException( "MessageCallback was attempted to be set to NULL" );
+		throw ArgumentException( "Message queue was attempted to be set to nullptr" );
 	}
 }
 
-DoubleBufferedQueue<QueueItem> *CommsProcessor::getHandoffQ() const {
-	return handoffQ;
+DoubleBufferedQueue<Event*> *CommsProcessor::getHandoffQ() const {
+	return this->handoffQ;
 }
 
 void CommsProcessor::serverCallback() {
@@ -84,12 +77,12 @@ void CommsProcessor::serverCallback() {
 	listenSocket.setLocalPort( svrPort );
 
 	// set up the listening socket
-	listenSocket.setRecvTimeout( 500 ); // 500 ms
+	this->listenSocket.setRecvTimeout( 500 ); // 500 ms
 
 	while( running ) {
 		int bytesRcvd;
 
-		bytesRcvd = listenSocket.recvFrom( recvBuf, maxMsgSize, sourceAddress, sourcePort );
+		bytesRcvd = this->listenSocket.recvFrom( recvBuf, maxMsgSize, sourceAddress, sourcePort );
 
 		// if recieve call timedout then just start loop over
 		if( bytesRcvd == 0 )
@@ -97,13 +90,27 @@ void CommsProcessor::serverCallback() {
 
 		Message *buf = (Message*)recvBuf;
 		switch( MessageType(buf->header.msgType) ) {
-			case MessageType::CLIENT_UPDATE:
+			case MessageType::CLIENT_EVENT:
 			{
-				QueueItem item;
-				item.data = new char[bytesRcvd - sizeof( Message )];
-				memcpy( item.data, buf->payload, bytesRcvd - sizeof( Message ) );
-				item.len = bytesRcvd - sizeof( Message );
-				handoffQ->push( item );
+				BufferReader readBuffer( buf->payload, buf->header.len);
+				EventType type = Event::getType( readBuffer );
+				Event* event;
+				switch( type ) {
+					case EventType::ACTION:
+						ActionArgs args;
+						args.actionType = ActionEvent::getActionType( readBuffer );
+						event = owner->eventCtors->invoke( EventType::ACTION, &args );
+						break;
+					case EventType::REGISTRATION:
+						event = new RegistionEvent();
+						break;
+					default:
+						throw runtime_error( "Something went wrong, this is an unkown event type being deserialized" );
+						break;
+				}
+				event->deserialize( readBuffer );
+				handoffQ->push( event );
+				break;
 			}
 			default:
 				break;
@@ -131,13 +138,32 @@ void CommsProcessor::clientCallback() {
 
 		Message *buf = (Message*)recvBuf;
 		switch( MessageType(buf->header.msgType) ) {
-			case MessageType::WORLD_UPDATE:
+			case MessageType::SERVER_EVENT:
 			{
-				QueueItem item;
-				item.data = new char[bytesRcvd - sizeof( Message )];
-				memcpy( item.data, buf->payload, bytesRcvd - sizeof( Message ) );
-				item.len = bytesRcvd - sizeof( Message );
-				handoffQ->push( item );
+				BufferReader readBuffer( buf->payload, buf->header.len );
+				EventType type = Event::getType( readBuffer );
+				Event* event;
+				switch( type ) {
+					case EventType::UPDATE:
+					{
+						event = new UpdateEvent( Handle(), nullptr );
+						event->deserialize( readBuffer );
+						UpdateEvent* actionEvt = static_cast<UpdateEvent*>(event);
+						IHasHandle* obj = owner->objectCtors->invoke( actionEvt->childType, nullptr );
+						actionEvt->setChild( dynamic_cast<ISerializable*>(obj));
+						actionEvt->getChild()->deserialize( readBuffer );
+						break;
+					}
+					case EventType::REGISTRATION:
+						event = new RegistionEvent();
+						event->deserialize( readBuffer );
+						break;
+					default:
+						throw runtime_error( "Something went wrong, this is an unkown event type that was recieved" );
+						break;
+				}
+				handoffQ->push( event );
+				break;
 			}
 			case MessageType::SERVER_ANNOUNCE:
 				announceSignaled = true;
@@ -154,30 +180,32 @@ void CommsProcessor::clientCallback() {
 	listenSocket.leaveGroup( mcastAddr );
 }
 
-void CommsProcessor::monitorCallback() {
+void CommsProcessor::monitorCallback() {}
 
-}
-
-void CommsProcessor::sendUpdates( const char *data, size_t len ) {
-	if( len > (maxMsgSize - sizeof( Message )) ) {
+void CommsProcessor::sendEvent( const Event* evt ) {
+	
+	BufferBuilder buffer;
+	evt->serialize( buffer );
+	
+	if( buffer.getSize() > (maxMsgSize - sizeof( Message )) ) {
 		throw ArgumentException( "Message len is too big" );
 	}
 
 	int port;
 	string dstAddr;
 	Message *buf = (Message*)sendBuf;
-	memcpy( buf->payload, data, len );
+	memcpy( buf->payload, buffer.getBasePointer(), buffer.getSize() );
 	buf->header.reserved1 = 0;
-	buf->header.reserved2 = 0;
+	buf->header.len = buffer.getSize();
 
 	switch( role ) {
 		case CommsProcessorRole::SERVER:
-			buf->header.msgType = static_cast<uint8_t>(MessageType::WORLD_UPDATE);
+			buf->header.msgType = static_cast<uint8_t>(MessageType::SERVER_EVENT);
 			dstAddr = mcastAddr;
 			port = clntPort;
 			break;
 		case CommsProcessorRole::CLIENT:
-			buf->header.msgType = static_cast<uint8_t>(MessageType::CLIENT_UPDATE);
+			buf->header.msgType = static_cast<uint8_t>(MessageType::CLIENT_EVENT);
 			dstAddr = serverAddr;
 			port = svrPort;
 			break;
@@ -189,14 +217,14 @@ void CommsProcessor::sendUpdates( const char *data, size_t len ) {
 			throw ArgumentException( "An invalid mode was specified" );
 	}
 
-	sendSocket.sendTo( buf, sizeof( Message ) + len, dstAddr, port );
+	sendSocket.sendTo( buf, sizeof( Message ) + buffer.getSize(), dstAddr, port );
 }
 
 void CommsProcessor::sendAnnouce() {
 	Message buf;
 	buf.header.msgType = static_cast<uint8_t>(MessageType::SERVER_ANNOUNCE);
 	buf.header.reserved1 = 0;
-	buf.header.reserved2 = 0;
+	buf.header.len = 0;
 
 	switch( role ) {
 		case CommsProcessorRole::SERVER:

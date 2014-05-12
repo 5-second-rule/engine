@@ -79,6 +79,16 @@ IHasHandle * World::get(const Handle& handle) {
 	return nullptr;
 }
 
+void World::replace( Handle& handle,  IHasHandle* object) {
+	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
+
+	if( handle.index >= storage->size() ) {
+		throw runtime_error( "Something bad has happened, you are trying to replace an object but it no exist." );
+	}
+
+	storage->at( handle.index ) = object;
+}
+
 void World::update(float dt) {
 	frameCounter = (frameCounter + 1)%1000000000;
 	auto iterator = this->updatable.begin();
@@ -100,10 +110,8 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 		ISerializable *serializable = dynamic_cast<ISerializable *>(object);
 
 		if (serializable != nullptr) {
-			BufferBuilder buffer;
 			UpdateEvent* event = new UpdateEvent(object->getHandle(), serializable);
-			event->serialize(buffer);
-			comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
+			comms->sendEvent(event);
 		}
 
 		iterator++;

@@ -5,11 +5,11 @@ Event::~Event() {
 
 Event::Event(EventType type) : type(type) {}
 
-void Event::reserveSize(IReserve& buffer) {
+void Event::reserveSize(IReserve& buffer) const {
 	buffer.reserve(sizeof(struct EventHeader));
 }
 
-void Event::fillBuffer(IFill& buffer) {
+void Event::fillBuffer(IFill& buffer) const {
 	struct EventHeader *hdr = reinterpret_cast<struct EventHeader *>(buffer.getPointer());
 
 	hdr->type = static_cast<int>(this->type);

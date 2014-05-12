@@ -26,11 +26,11 @@ bool Handle::operator==(Handle const& handle) const {
 	return false;
 }
 
-void Handle::reserveSize(IReserve& buffer) {
+void Handle::reserveSize(IReserve& buffer) const {
 	buffer.reserve(sizeof(size_t) + sizeof(unsigned int));
 }
 
-void Handle::fillBuffer(IFill& buffer) {
+void Handle::fillBuffer(IFill& buffer) const {
 	char *buf = buffer.getPointer();
 	memcpy(buf, &this->index, sizeof(size_t));
 	memcpy(buf + sizeof(size_t), &this->id, sizeof(unsigned int));

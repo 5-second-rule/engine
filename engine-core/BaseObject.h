@@ -34,8 +34,8 @@ public:
 	void setHandle(Handle handle);
 
 	// ISerializable Methods
-	virtual void reserveSize(IReserve& buffer);
-	virtual void fillBuffer(IFill& buffer);
+	virtual void reserveSize(IReserve& buffer) const;
+	virtual void fillBuffer(IFill& buffer) const;
 	virtual void deserialize(BufferReader& buffer);
 
 	// IUpdateable Methods

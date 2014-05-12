@@ -13,6 +13,7 @@
 #include "ConstructorTable.h"
 
 class IHasHandle;
+class CommsProcessor;
 
 using namespace std;
 template class COREDLL vector< Handle >;
@@ -38,6 +39,7 @@ public:
 	virtual void insert(IHasHandle *object);
 	void remove(Handle *handle);
 	IHasHandle * get(const Handle& handle);
+	void replace( Handle& handle, IHasHandle* object );
 
 	void broadcastUpdates(CommsProcessor *comms);
 

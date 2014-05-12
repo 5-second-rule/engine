@@ -7,18 +7,6 @@
     <ClCompile Include="BaseObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BufferBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BufferReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BufferRemainder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommsProcessor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ConfigSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -34,9 +22,6 @@
     <ClCompile Include="ServerEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -46,12 +31,27 @@
     <ClCompile Include="UpdateEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CommsProcessor.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferBuilder.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferReader.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferRemainder.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="RegistionEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CommsProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConfigSettings.h">
@@ -70,9 +70,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ServerEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Socket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
@@ -117,6 +114,15 @@
     <ClInclude Include="EventFactory.h">
       <Filter>Header Files\Events</Filter>
     </ClInclude>
+    <ClInclude Include="CommsProcessor.h">
+      <Filter>Comms</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket.h">
+      <Filter>Comms</Filter>
+    </ClInclude>
+    <ClInclude Include="RegistionEvent.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -138,6 +144,9 @@
     </Filter>
     <Filter Include="Header Files\Buffers">
       <UniqueIdentifier>{280fbe0c-b77a-4ab5-9dd6-6ab3715d3bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Comms">
+      <UniqueIdentifier>{f411e96b-f363-4bb7-9857-e206b3af3e7b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

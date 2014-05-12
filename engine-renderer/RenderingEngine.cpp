@@ -29,7 +29,7 @@ void RenderingEngine::translateInput() {
 	std::vector<Event *> inputEventVector = this->renderingDelegate->inputTranslator(&this->inputAdapter);
 	std::vector<Event *>::iterator it;
 	for (it = inputEventVector.begin(); it != inputEventVector.end(); ++it) {
-		this->sendOutboundEvent(*it);
+		this->comms->sendEvent(*it);
 	}
 }
 

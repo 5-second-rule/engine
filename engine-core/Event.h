@@ -9,6 +9,8 @@ struct COREDLL EventHeader {
 	int type;
 };
 
+struct COREDLL Args {};
+
 class COREDLL Event : public ISerializable
 {
 private:
@@ -18,8 +20,8 @@ public:
 	Event(EventType type);
 	virtual ~Event();
 
-	virtual void reserveSize(IReserve& buffer);
-	virtual void fillBuffer(IFill& buffer);
+	virtual void reserveSize(IReserve& buffer) const;
+	virtual void fillBuffer(IFill& buffer) const;
 	virtual void deserialize(BufferReader& buffer);
 
 	EventType getType();

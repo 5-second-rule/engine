@@ -11,6 +11,6 @@ public:
 	EventFactory(ConstructorTable<ActionEvent>* ctorTable);
 	~EventFactory();
 
-	Event* invoke(BufferReader& reader);
+	Event* invoke( EventType type, Args* args );
 };
 

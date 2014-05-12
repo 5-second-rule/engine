@@ -14,11 +14,11 @@ void BaseObject::setHandle(Handle handle){
 	this->handle = handle;
 }
 
-void BaseObject::reserveSize(IReserve& buffer) {
+void BaseObject::reserveSize(IReserve& buffer) const {
 	handle.reserveSize(buffer);
 }
 
-void BaseObject::fillBuffer(IFill& buffer) {
+void BaseObject::fillBuffer(IFill& buffer) const {
 	handle.fillBuffer(buffer);
 }
 

@@ -2,7 +2,7 @@
 
 
 ActionEvent::ActionEvent(unsigned int playerGuid, int actionType)
-	: Event(EventType::ACTION)
+	: Event(ActionEvent::TYPE)
 	, actionType(actionType)
 	, playerGuid(playerGuid)
 {}
@@ -11,12 +11,12 @@ ActionEvent::ActionEvent(unsigned int playerGuid, int actionType)
 ActionEvent::~ActionEvent() {}
 
 
-void ActionEvent::reserveSize( IReserve& buffer ) {
+void ActionEvent::reserveSize( IReserve& buffer ) const {
 	Event::reserveSize( buffer );
 	buffer.reserve( sizeof( ActionHeader ) );
 }
 
-void ActionEvent::fillBuffer( IFill& buffer ) {
+void ActionEvent::fillBuffer( IFill& buffer ) const {
 	Event::fillBuffer( buffer );
 	struct ActionHeader *actionHdr = reinterpret_cast<struct ActionHeader *>(buffer.getPointer());
 
@@ -40,7 +40,7 @@ int ActionEvent::getActionType() {
 
 int ActionEvent::getActionType(BufferReader& reader) {
 	//OH GOD THE HACKS
-	return *reinterpret_cast<int*>(reader.getPointer()[sizeof(EventHeader)]);
+	return *reinterpret_cast<const int*>(reader.getPointer()+sizeof(EventHeader));
 }
 
 int ActionEvent::getPlayerGuid() {

@@ -32,10 +32,8 @@ public:
 	HandleType getType() const;
 	bool operator==(Handle const&) const;
 
-	void reserveSize(IReserve& buffer);
-	void fillBuffer(IFill& buffer);
+	void reserveSize(IReserve& buffer) const;
+	void fillBuffer(IFill& buffer) const;
 	void deserialize(BufferReader& buffer);
-
-
 };
 
