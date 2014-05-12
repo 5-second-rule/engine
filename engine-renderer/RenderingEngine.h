@@ -11,10 +11,13 @@
 #include "renderer/Input.h"
 #include "renderer/Renderer.h"
 #include "renderer/Texture.h"
+#include "renderer/Shader.h"
 
 #include "InputAdapter.h"
 
 #include <vector>
+
+using namespace Transmission;
 
 class RENDERDLL IRenderingEngineDelegate {
 public:
@@ -30,6 +33,8 @@ private:
 	RenderableWorld *renderableWorld;
 	std::vector<ModelData> models;
 	std::vector<Transmission::Texture *> textures;
+	std::vector<Shader *> pixelShaders;
+	std::vector<Shader *> vertexShaders;
 	InputAdapter inputAdapter;
 	
 protected:
@@ -45,7 +50,10 @@ public:
 	~RenderingEngine();
 	int loadModel(char *filename);
 	int loadTexture(char *filename);
+	int loadPixelShader( char *filename );
+	int loadVertexShader( char *filename );
 	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
+	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
 	void waitForServer();
 
 	IRenderingEngineDelegate* renderingDelegate;

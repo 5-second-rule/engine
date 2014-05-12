@@ -113,6 +113,7 @@ void Engine::dispatchUpdate(Event* event) {
 }
 
 void Engine::handleRegistrationRequest(RegistionEvent* event) {
+	static int modNum = 1;
 
 	auto place = this->playerMap.find(event->playerGuid);
 	Response response = Response::FAIL;
@@ -121,9 +122,11 @@ void Engine::handleRegistrationRequest(RegistionEvent* event) {
 		// spot is available, yay!
 
 		// HACK make first model for now
-		IHasHandle * obj = this->objectCtors->invoke(0,nullptr);
+		IHasHandle * obj = this->objectCtors->invoke( modNum, nullptr );
 		world->allocateHandle(obj, HandleType::GLOBAL);
 		world->insert(obj);
+
+		modNum++;
 
 		this->playerMap[event->playerGuid] = obj->getHandle();
 
