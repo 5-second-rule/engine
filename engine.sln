@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine-core", "engine-core\engine-core.vcxproj", "{792ABA4B-52B0-4430-8D1A-34C3F8FF0202}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine-renderer", "engine-renderer\engine-renderer.vcxproj", "{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine-core-tests", "engine-core-tests\engine-core-tests.vcxproj", "{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SampleApp", "SampleApp\SampleApp.vcxproj", "{CA43C38F-52D5-4417-ADF5-80BA42C15CB1}"
 EndProject
@@ -53,20 +51,6 @@ Global
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Release|Win32.ActiveCfg = Release|Win32
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Release|Win32.Build.0 = Release|Win32
 		{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}.Release|x64.ActiveCfg = Release|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|ARM.ActiveCfg = Debug|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|Win32.Build.0 = Debug|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Debug|x64.ActiveCfg = Debug|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Release|Any CPU.ActiveCfg = Release|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Release|ARM.ActiveCfg = Release|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Release|Win32.ActiveCfg = Release|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Release|Win32.Build.0 = Release|Win32
-		{E5EF51B4-D374-48D5-853E-E1BAEE9897F9}.Release|x64.ActiveCfg = Release|Win32
 		{CA43C38F-52D5-4417-ADF5-80BA42C15CB1}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{CA43C38F-52D5-4417-ADF5-80BA42C15CB1}.Debug|ARM.ActiveCfg = Debug|Win32
 		{CA43C38F-52D5-4417-ADF5-80BA42C15CB1}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
