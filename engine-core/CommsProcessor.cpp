@@ -45,7 +45,8 @@ CommsProcessor::CommsProcessor( CommsProcessorRole r, Engine* owner ) {
 			this->listenThread = thread( &CommsProcessor::clientCallback, this );
 			break;
 		case CommsProcessorRole::LOOPBACK:
-			announceSignaled = true;
+			throw NotImplementedException("This needs to be checked for accuracy post-merge");
+			//announceSignaled = true; 
 			break;
 		case CommsProcessorRole::MONITOR:
 			this->listenThread = thread( &CommsProcessor::monitorCallback, this );
@@ -213,11 +214,12 @@ void CommsProcessor::sendEvent( const Event* evt ) {
 			port = svrPort;
 			break;
 		case CommsProcessorRole::LOOPBACK: {
-			QueueItem item;
-			item.data = new char[len];
-			memcpy( item.data, buf->payload, len );
-			item.len = len;
-			handoffQ->push( item );
+			throw NotImplementedException("New event stuff broke loopback");
+			/*
+			buf->header.msgType = static_cast<uint8_t>(MessageType::LOOPBACK_EVENT);
+			dstAddr = selfAddr ? ;
+			port = ? ;
+			*/
 			return;
 		}
 		case CommsProcessorRole::MONITOR:
