@@ -4,11 +4,16 @@
 
 #include "common/Vector4.h"
 
+struct BoundingSphere {
+	Common::Vector4 position;
+	float radius;
+};
+
 class COREDLL ICollidable {
 public:
-	Common::Vector4* getGroupingParameter();
-	bool collidesWith(ICollidable* target);
-	void handleCollision(ICollidable* target);
-	void* getBounds();
-	unsigned int getPriority();
+	virtual Common::Vector4* getGroupingParameter() = 0;
+	virtual bool collidesWith(ICollidable* target) = 0;
+	virtual void handleCollision(ICollidable* target) = 0;
+	virtual BoundingSphere getBounds() = 0;
+	virtual unsigned int getPriority() = 0;
 };
