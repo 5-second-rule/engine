@@ -1,5 +1,4 @@
 #include "UpdateEvent.h"
-#include "IHasHandle.h"
 
 
 UpdateEvent::UpdateEvent(Handle handle, BaseObject* child)

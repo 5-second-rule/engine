@@ -9,8 +9,6 @@ struct COREDLL EventHeader {
 	int type;
 };
 
-struct COREDLL Args {};
-
 class COREDLL Event : public ISerializable
 {
 private:

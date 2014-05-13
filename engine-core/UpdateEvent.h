@@ -5,12 +5,6 @@
 #include "BaseObject.h"
 #include "EventType.h"
 
-
-struct UpdateArgs : Args {
-	Handle handle;
-	BaseObject* child;
-};
-
 class UpdateEvent : public Event
 {
 private:

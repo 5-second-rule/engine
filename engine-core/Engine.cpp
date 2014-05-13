@@ -1,9 +1,7 @@
 #include "Engine.h"
-
 #include <iostream>
 
-
-#define TICKS_PER_SEC 25
+const static int TICKS_PER_SEC = 25;
 
 using namespace std::chrono;
 

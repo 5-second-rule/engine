@@ -1,7 +1,4 @@
 #include "World.h"
-
-#include <iostream>
-
 #include "IEventReceiver.h"
 #include "UpdateEvent.h"
 
@@ -105,7 +102,7 @@ void World::update(float dt) {
 void World::broadcastUpdates(CommsProcessor *comms) {
 	for (int i = 0; i < this->serializable.size(); i++) {
 		IHasHandle *object;
-		Serializable *serializable = this->serializable.getIndirect(i, false, &object);
+		ISerializable *serializable = this->serializable.getIndirect(i, false, &object);
 		BaseObject *bo = dynamic_cast<BaseObject*>(serializable);
 
 		if (bo != nullptr) {

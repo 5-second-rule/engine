@@ -9,8 +9,6 @@
 #include "Socket.h"
 #include "DoubleBufferedQueue.h"
 #include "Event.h"
-#include "UpdateEvent.h"
-#include "RegistrationEvent.h"
 
 #ifdef WIN32
 // disable warning about zero-length arrays in MSVC

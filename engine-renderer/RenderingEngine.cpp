@@ -1,8 +1,5 @@
 #include "RenderingEngine.h"
 
-
-#include <stdexcept>
-
 // constants
 static const char *testData = "This is a client update!!!\n";
 
@@ -59,10 +56,12 @@ int RenderingEngine::loadModel(char *filename) {
 	ModelData data;
 
 	if (this->renderer->loadModelFile(
-		filename, 
-		&data.vertexBuffer, 
-		&data.indexBuffer)) {
-
+			filename, 
+			&data.vertexBuffer, 
+			&data.indexBuffer,
+			true
+			)
+		) {
 		this->models.push_back(data);
 		return this->models.size() - 1;
 	}
