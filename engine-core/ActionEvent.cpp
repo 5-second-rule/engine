@@ -1,20 +1,22 @@
 #include "ActionEvent.h"
 
 
-ActionEvent::ActionEvent(unsigned int playerGuid ) : playerGuid(playerGuid) {
-	this->type = static_cast<int>(EventType::ACTION);
-}
+ActionEvent::ActionEvent(unsigned int playerGuid, int actionType)
+	: Event(ActionEvent::TYPE)
+	, actionType(actionType)
+	, playerGuid(playerGuid)
+{}
 
 
 ActionEvent::~ActionEvent() {}
 
 
-void ActionEvent::reserveSize( IReserve& buffer ) {
+void ActionEvent::reserveSize( IReserve& buffer ) const {
 	Event::reserveSize( buffer );
-	buffer.reserve( sizeof( struct ActionHeader ) );
+	buffer.reserve( sizeof( ActionHeader ) );
 }
 
-void ActionEvent::fillBuffer( IFill& buffer ) {
+void ActionEvent::fillBuffer( IFill& buffer ) const {
 	Event::fillBuffer( buffer );
 	struct ActionHeader *actionHdr = reinterpret_cast<struct ActionHeader *>(buffer.getPointer());
 
@@ -31,3 +33,17 @@ void ActionEvent::deserialize( BufferReader& buffer ) {
 	this->playerGuid = actionHdr->playerGuid;
 	buffer.finished( sizeof( struct ActionHeader ) );
 }
+
+int ActionEvent::getActionType() {
+	return this->actionType;
+}
+
+int ActionEvent::getActionType(BufferReader& reader) {
+	//OH GOD THE HACKS
+	return *reinterpret_cast<const int*>(reader.getPointer() + sizeof(EventHeader));
+}
+
+int ActionEvent::getPlayerGuid() {
+	return this->playerGuid;
+}
+

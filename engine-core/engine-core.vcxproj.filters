@@ -7,18 +7,6 @@
     <ClCompile Include="BaseObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BufferBuilder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BufferReader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BufferRemainder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CommsProcessor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ConfigSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -31,36 +19,39 @@
     <ClCompile Include="Handle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectCtorTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ServerEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EventFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommsProcessor.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferBuilder.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferReader.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferRemainder.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="Socket.cpp">
+      <Filter>Comms</Filter>
+    </ClCompile>
+    <ClCompile Include="RegistrationEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActionEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BaseObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BufferBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BufferReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BufferRemainder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CommsProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConfigSettings.h">
@@ -75,37 +66,64 @@
     <ClInclude Include="engine-core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Handle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IEventReceiver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IHasHandle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ISerializable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IUpdatable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectCtorTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ServerEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Socket.h">
+    <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
+    <ClInclude Include="ConstructorTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionEvent.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferBuilder.h">
+      <Filter>Header Files\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferReader.h">
+      <Filter>Header Files\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferRemainder.h">
+      <Filter>Header Files\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="IEventReceiver.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IHasHandle.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ISerializable.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IUpdatable.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateEvent.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventType.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventFactory.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="CommsProcessor.h">
+      <Filter>Comms</Filter>
+    </ClInclude>
+    <ClInclude Include="Socket.h">
+      <Filter>Comms</Filter>
+    </ClInclude>
+    <ClInclude Include="RegistrationEvent.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="GCHandleVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -120,6 +138,18 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{431931a8-1292-4fc1-88a2-4e98d4ecbed4}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Events">
+      <UniqueIdentifier>{fe90a053-a3ff-49b5-aaea-54631ae24827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Interfaces">
+      <UniqueIdentifier>{a21c65a6-7fa0-47a6-b832-37be245286cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Buffers">
+      <UniqueIdentifier>{280fbe0c-b77a-4ab5-9dd6-6ab3715d3bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Comms">
+      <UniqueIdentifier>{f411e96b-f363-4bb7-9857-e206b3af3e7b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

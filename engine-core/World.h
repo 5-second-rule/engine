@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "engine-core.h"
+#include "GCHandleVector.h"
 #include "Handle.h"
 #include "IHasHandle.h"
 #include "IUpdatable.h"
@@ -10,7 +11,12 @@
 #include "CommsProcessor.h"
 #include "Event.h"
 
+#include "ConstructorTable.h"
+
 class IHasHandle;
+class CommsProcessor;
+template <typename IUpdatable> class GCHandleVector;
+template <typename ISerializable> class GCHandleVector;
 
 using namespace std;
 template class COREDLL vector< Handle >;
@@ -24,8 +30,8 @@ private:
 	int objectIds[2];
 
 	std::vector<IHasHandle *> objects[2];
-	std::vector<Handle> updatable;
-	std::vector<Handle> serializable;
+	GCHandleVector<IUpdatable> updatable;
+	GCHandleVector<ISerializable> serializable;
 	long int frameCounter;
 public:
 	World();
@@ -35,7 +41,8 @@ public:
 	void allocateHandle(IHasHandle *object, HandleType type);
 	virtual void insert(IHasHandle *object);
 	void remove(Handle *handle);
-	IHasHandle * get(const Handle *handle);
+	IHasHandle * get(const Handle& handle);
+	void replace( const Handle& handle, IHasHandle* object );
 
 	void broadcastUpdates(CommsProcessor *comms);
 
