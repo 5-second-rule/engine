@@ -14,7 +14,7 @@ enum class COREDLL Response {
 	FAIL
 };
 
-class RegistionEvent : public Event {
+class RegistrationEvent : public Event {
 public:
 	static const EventType TYPE = EventType::REGISTRATION;
 	RegistrationType regType;
@@ -22,8 +22,8 @@ public:
 	int responseTag;
 	Response response;
 	
-	RegistionEvent();
-	~RegistionEvent();
+	RegistrationEvent();
+	~RegistrationEvent();
 
 	//ISerializable methods
 	void reserveSize( IReserve& buffer ) const;

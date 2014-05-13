@@ -8,7 +8,7 @@ static const char *testData = "This is a client update!!!\n";
 
 RenderingEngine::RenderingEngine(
 	RenderableWorld *world,
-	ConstructorTable<IHasHandle> *objectCtors,
+	ConstructorTable<BaseObject> *objectCtors,
 	ConstructorTable<ActionEvent> *actionCtors,
 	void *appHandle
 ) 

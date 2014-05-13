@@ -2,6 +2,7 @@
 
 #include "EventType.h"
 #include "UpdateEvent.h"
+#include "RegistrationEvent.h"
 
 #define SIZE 10
 
@@ -11,25 +12,31 @@ EventFactory::EventFactory(ConstructorTable<ActionEvent>* ctorTable)
 {
 	this->setConstructor(
 		static_cast<int>(EventType::UPDATE),
-		[](ConstructorTable<Event>* t, Args* args) -> Event* {
-			UpdateArgs* updateArgs = static_cast<UpdateArgs*>(args);
-			if( updateArgs != nullptr )
-				return new UpdateEvent(updateArgs->handle, updateArgs->child);
-			else
-				return new UpdateEvent( updateArgs->handle, nullptr );
+		[](ConstructorTable<Event>* t) -> Event* {
+			return new UpdateEvent(Handle(), nullptr);
+		}
+	);
+
+	this->setConstructor(
+		static_cast<int>(EventType::REGISTRATION),
+		[](ConstructorTable<Event>* t) -> Event* {
+			return new RegistrationEvent();
 		}
 	);
 }
 
 EventFactory::~EventFactory() {}
 
-Event* EventFactory::invoke( EventType type, Args* args ) {
+Event* EventFactory::invoke( BufferReader& reader ) {
 	Event* e;
+	EventType type = Event::getType(reader);
 	if (type == EventType::ACTION) {
-		ActionArgs* actionArgs = static_cast<ActionArgs*>(args);
-		e = this->actionEventCtors->invoke(actionArgs->actionType, args);
+		e = this->actionEventCtors->invoke(ActionEvent::getActionType(reader));
 	} else {
-		e = ConstructorTable<Event>::invoke(static_cast<int>(type), args);
+		e = ConstructorTable<Event>::invoke(static_cast<int>(type));
 	}
+
+	e->deserialize(reader);
+
 	return e;
 }

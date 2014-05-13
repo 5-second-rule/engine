@@ -9,7 +9,8 @@
 #include "ActionEvent.h"
 #include "EventFactory.h"
 #include "UpdateEvent.h"
-#include "RegistionEvent.h"
+#include "RegistrationEvent.h"
+#include "BaseObject.h"
 
 #include <map>
 
@@ -27,11 +28,11 @@ private:
 
 	bool running;
 	bool waitingForRegistration;
-	RegistionEvent waitingRegistration;
+	RegistrationEvent waitingRegistration;
 
 protected:
 	CommsProcessor *comms;
-	ConstructorTable<IHasHandle> *objectCtors;
+	ConstructorTable<BaseObject> *objectCtors;
 	EventFactory *eventCtors;
 
 	std::map<unsigned int, Handle> playerMap;
@@ -44,7 +45,7 @@ protected:
 public:
 	Engine(
 		World *world,
-		ConstructorTable<IHasHandle> *objectCtors,
+		ConstructorTable<BaseObject> *objectCtors,
 		ConstructorTable<ActionEvent>* eventCtors,
 		CommsProcessorRole role
 	);
@@ -73,8 +74,8 @@ protected:
 
 	virtual void updateObject(UpdateEvent* evt);
 
-	virtual void handleRegistrationRequest( RegistionEvent* event );
-	virtual void handleRegistrationResponse( RegistionEvent* event );
+	virtual void handleRegistrationRequest( RegistrationEvent* event );
+	virtual void handleRegistrationResponse( RegistrationEvent* event );
 
 	void processNetworkUpdates();
 };

@@ -4,12 +4,11 @@
 #include <stdexcept> 
 
 #include "BufferReader.h"
-#include "Event.h"
 
 template<typename T>
 class ConstructorTable
 {
-	typedef T* (*Constructor)(ConstructorTable<T> *table, Args* args);
+	typedef T* (*Constructor)(ConstructorTable<T> *table);
 
 private:
 	int size;
@@ -19,7 +18,8 @@ public:
 	ConstructorTable(int size);
 	virtual ~ConstructorTable();
 
-	T* invoke(int index, Args* args);
+	T* invoke(int index);
+	virtual T* invoke(BufferReader&);
 
 protected:
 	void setConstructor(int index, Constructor ctor);
@@ -52,7 +52,7 @@ void ConstructorTable<T>::setConstructor(int index, Constructor ctor) {
 }
 
 template<typename T>
-T* ConstructorTable<T>::invoke(int index, Args* args) {
+T* ConstructorTable<T>::invoke(int index) {
 	if (index < 0 || index >= size) {
 		throw std::runtime_error("Attempt to invoke ctor outside of bounds.");
 	}
@@ -63,6 +63,13 @@ T* ConstructorTable<T>::invoke(int index, Args* args) {
 		throw std::runtime_error("Attempt to invoke unset ctor.");
 	}
 
-	return ctor(this, args);
+	return ctor(this);
+}
+
+template<typename T>
+T* ConstructorTable<T>::invoke(BufferReader& reader) {
+	T* t = this->invoke(static_cast<int>(T::getType(reader)));
+	t->deserialize(reader);
+	return t;
 }
 

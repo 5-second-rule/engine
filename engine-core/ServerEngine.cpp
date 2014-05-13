@@ -7,7 +7,7 @@ using namespace std::this_thread;
 
 ServerEngine::ServerEngine(
 	World *world,
-	ConstructorTable<IHasHandle> *objectCtors,
+	ConstructorTable<BaseObject> *objectCtors,
 	ConstructorTable<ActionEvent>* actionCtors,
 	float secondsPerTick
 )

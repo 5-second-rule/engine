@@ -9,7 +9,7 @@ using namespace std::chrono;
 
 Engine::Engine(
 	World *world,
-	ConstructorTable<IHasHandle> *objectCtors,
+	ConstructorTable<BaseObject> *objectCtors,
 	ConstructorTable<ActionEvent> *eventCtors,
 	CommsProcessorRole role
 )
@@ -84,7 +84,7 @@ void Engine::processNetworkUpdates() {
 
 void Engine::dispatchUpdate(Event* event) {
 	if( event->getType() == EventType::REGISTRATION ) {
-		RegistionEvent* regEvent = static_cast<RegistionEvent*>(event);
+		RegistrationEvent* regEvent = static_cast<RegistrationEvent*>(event);
 		switch( regEvent->regType ) {
 			case RegistrationType::REQUEST:
 				if( _DEBUG ) std::cout << "player registration inbound" << std::endl;
@@ -112,7 +112,7 @@ void Engine::dispatchUpdate(Event* event) {
 	}
 }
 
-void Engine::handleRegistrationRequest(RegistionEvent* event) {
+void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 	static int modNum = 1;
 
 	auto place = this->playerMap.find(event->playerGuid);
@@ -122,7 +122,7 @@ void Engine::handleRegistrationRequest(RegistionEvent* event) {
 		// spot is available, yay!
 
 		// HACK make first model for now
-		IHasHandle * obj = this->objectCtors->invoke( modNum, nullptr );
+		BaseObject * obj = this->objectCtors->invoke( modNum );
 		world->allocateHandle(obj, HandleType::GLOBAL);
 		world->insert(obj);
 
@@ -135,7 +135,7 @@ void Engine::handleRegistrationRequest(RegistionEvent* event) {
 		if (_DEBUG) std::cout << "=> player NOT registered #fail" << std::endl;
 	}
 
-	RegistionEvent respEvent;
+	RegistrationEvent respEvent;
 	respEvent.regType = RegistrationType::RESPONSE;
 	respEvent.playerGuid = event->playerGuid;
 	respEvent.response = response;
@@ -146,7 +146,7 @@ void Engine::handleRegistrationRequest(RegistionEvent* event) {
 
 // HACK not really safe but good enough for now
 // what if server response lost? Object created on server but client doesn't know
-void Engine::handleRegistrationResponse( RegistionEvent* event ) {
+void Engine::handleRegistrationResponse( RegistrationEvent* event ) {
 
 	if (event->responseTag == this->waitingRegistration.responseTag
 		&& event->response == Response::OK) { 		// matches
@@ -178,22 +178,10 @@ unsigned int Engine::getLocalPlayerGuid(unsigned int playerIndex) {
 
 void Engine::updateObject(UpdateEvent* evt) {
 
-	// get or create the object
-	IHasHandle *object = this->world->get(evt->getHandle());
-	IHasHandle *newObj = dynamic_cast<IHasHandle*>(evt->getChild());
-
-	if( newObj == nullptr ) {
-		throw runtime_error( "Something went wrong, your cast has failed you" );
-	}
-
-	if (object == nullptr) {
-		UpdateArgs args;
-		args.handle = Handle();
-		args.child = nullptr;
-		object = this->objectCtors->invoke(newObj->getType(), &args);
-		world->insert(newObj);
+	if (this->world->get(evt->getHandle()) == nullptr) {
+		world->insert(evt->getChild());
 	} else {
-		world->replace( object->getHandle(), newObj );
+		world->replace( evt->getHandle(), evt->getChild() );
 	}
 
 

@@ -46,7 +46,7 @@
     <ClCompile Include="Socket.cpp">
       <Filter>Comms</Filter>
     </ClCompile>
-    <ClCompile Include="RegistionEvent.cpp">
+    <ClCompile Include="RegistrationEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -120,7 +120,7 @@
     <ClInclude Include="Socket.h">
       <Filter>Comms</Filter>
     </ClInclude>
-    <ClInclude Include="RegistionEvent.h">
+    <ClInclude Include="RegistrationEvent.h">
       <Filter>Header Files\Events</Filter>
     </ClInclude>
   </ItemGroup>

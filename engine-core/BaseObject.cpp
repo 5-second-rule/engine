@@ -15,15 +15,25 @@ void BaseObject::setHandle(Handle handle){
 }
 
 void BaseObject::reserveSize(IReserve& buffer) const {
+	buffer.reserve(sizeof(int));
 	handle.reserveSize(buffer);
 }
 
 void BaseObject::fillBuffer(IFill& buffer) const {
+	*reinterpret_cast<int*>(buffer.getPointer()) = IHasHandle::getType();
+	buffer.filled();
+
 	handle.fillBuffer(buffer);
 }
 
 void BaseObject::deserialize(BufferReader& buffer) {
+	this->setType(*reinterpret_cast<const int*>(buffer.getPointer()));
+	buffer.finished(sizeof(int));
 	handle.deserialize(buffer);
+}
+
+int BaseObject::getType(BufferReader& buffer) {
+	return *reinterpret_cast<const int*>(buffer.getPointer());
 }
 
 void BaseObject::update(float dt) {

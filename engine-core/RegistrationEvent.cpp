@@ -1,14 +1,14 @@
-#include "RegistionEvent.h"
+#include "RegistrationEvent.h"
 
 
-RegistionEvent::RegistionEvent() : Event( RegistionEvent::TYPE ) {}
+RegistrationEvent::RegistrationEvent() : Event( RegistrationEvent::TYPE ) {}
 
 
-RegistionEvent::~RegistionEvent() {}
+RegistrationEvent::~RegistrationEvent() {}
 
 
 // ISerializable Methods
-void RegistionEvent::reserveSize( IReserve& buffer ) const {
+void RegistrationEvent::reserveSize( IReserve& buffer ) const {
 	Event::reserveSize( buffer );
 	buffer.reserve( sizeof( this->regType ) );
 	buffer.reserve( sizeof( this->playerGuid ) );
@@ -16,7 +16,7 @@ void RegistionEvent::reserveSize( IReserve& buffer ) const {
 	buffer.reserve( sizeof( this->responseTag ) );
 }
 
-void RegistionEvent::fillBuffer( IFill& buffer ) const {
+void RegistrationEvent::fillBuffer( IFill& buffer ) const {
 	Event::fillBuffer( buffer );
 	RegistrationType* type = reinterpret_cast<RegistrationType*>(buffer.getPointer());
 	*type = this->regType;
@@ -32,7 +32,7 @@ void RegistionEvent::fillBuffer( IFill& buffer ) const {
 	buffer.filled();
 }
 
-void RegistionEvent::deserialize( BufferReader& reader ) {
+void RegistrationEvent::deserialize( BufferReader& reader ) {
 	Event::deserialize( reader );
 	const RegistrationType* type = reinterpret_cast<const RegistrationType*>(reader.getPointer());
 	this->regType = *type;

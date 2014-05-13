@@ -46,7 +46,7 @@ protected:
 	virtual void tick(float dt);
 
 public:
-	RenderingEngine(RenderableWorld *world, ConstructorTable<IHasHandle> *objectCtors, ConstructorTable<ActionEvent>* a, void *appHandle);
+	RenderingEngine(RenderableWorld *world, ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* a, void *appHandle);
 	~RenderingEngine();
 	int loadModel(char *filename);
 	int loadTexture(char *filename);

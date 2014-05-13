@@ -39,7 +39,7 @@ public:
 	virtual void insert(IHasHandle *object);
 	void remove(Handle *handle);
 	IHasHandle * get(const Handle& handle);
-	void replace( Handle& handle, IHasHandle* object );
+	void replace( const Handle& handle, IHasHandle* object );
 
 	void broadcastUpdates(CommsProcessor *comms);
 

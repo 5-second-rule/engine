@@ -2,19 +2,25 @@
 
 #include "engine-core.h"
 #include "Handle.h"
+#include "ISerializable.h"
 
 class COREDLL IHasHandle {
 private:
 	int type;
 	IHasHandle();
+
+protected:
+	void setType(int type) {
+		this->type = type;
+	}
+
 public:
 	IHasHandle(int type) : type(type) {}
 
 	virtual Handle getHandle() = 0;
 	virtual void setHandle(Handle handle) = 0;
-	// TODO evaluate
-	virtual int getType() 
-	{ 
+
+	virtual int getType() const { 
 		return this->type; 
 	}
 

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "World.h"
 #include "IHasHandle.h"
 #include "Handle.h"
 #include "ISerializable.h"
@@ -42,4 +41,10 @@ public:
 	virtual void update(float dt);
 
 	virtual void enqueue(Event *evt);
+
+	int getType() const {
+		return IHasHandle::getType();
+	}
+
+	static int getType(BufferReader&);
 };

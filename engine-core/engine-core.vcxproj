@@ -103,7 +103,7 @@
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ConstructorTable.h" />
-    <ClInclude Include="RegistionEvent.h" />
+    <ClInclude Include="RegistrationEvent.h" />
     <ClInclude Include="ServerEngine.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="UpdateEvent.h" />
@@ -121,7 +121,7 @@
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="EventFactory.cpp" />
     <ClCompile Include="Handle.cpp" />
-    <ClCompile Include="RegistionEvent.cpp" />
+    <ClCompile Include="RegistrationEvent.cpp" />
     <ClCompile Include="ServerEngine.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="UpdateEvent.cpp" />

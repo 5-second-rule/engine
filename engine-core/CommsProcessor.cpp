@@ -98,22 +98,9 @@ void CommsProcessor::serverCallback() {
 			{
 				BufferReader readBuffer( buf->payload, buf->header.len);
 				EventType type = Event::getType( readBuffer );
-				Event* event;
-				switch( type ) {
-					case EventType::ACTION:
-						ActionArgs args;
-						args.actionType = ActionEvent::getActionType( readBuffer );
-						event = owner->eventCtors->invoke( EventType::ACTION, &args );
-						break;
-					case EventType::REGISTRATION:
-						event = new RegistionEvent();
-						break;
-					default:
-						throw runtime_error( "Something went wrong, this is an unkown event type being deserialized" );
-						break;
-				}
-				event->deserialize( readBuffer );
+				Event* event = owner->eventCtors->invoke(readBuffer);
 				handoffQ->push( event );
+
 				break;
 			}
 			default:
@@ -145,26 +132,10 @@ void CommsProcessor::clientCallback() {
 			case MessageType::SERVER_EVENT:
 			{
 				BufferReader readBuffer( buf->payload, buf->header.len );
-				EventType type = Event::getType( readBuffer );
-				Event* event;
-				switch( type ) {
-					case EventType::UPDATE:
-					{
-						event = new UpdateEvent( Handle(), nullptr );
-						event->deserialize( readBuffer );
-						UpdateEvent* actionEvt = static_cast<UpdateEvent*>(event);
-						IHasHandle* obj = owner->objectCtors->invoke( actionEvt->childType, nullptr );
-						actionEvt->setChild( dynamic_cast<ISerializable*>(obj));
-						actionEvt->getChild()->deserialize( readBuffer );
-						break;
-					}
-					case EventType::REGISTRATION:
-						event = new RegistionEvent();
-						event->deserialize( readBuffer );
-						break;
-					default:
-						throw runtime_error( "Something went wrong, this is an unkown event type that was recieved" );
-						break;
+				Event* event = owner->eventCtors->invoke(readBuffer);
+				if (event->getType() == EventType::UPDATE) {
+					UpdateEvent* updateEvent = Event::cast<UpdateEvent>(event);
+					updateEvent->setChild(owner->objectCtors->invoke(readBuffer));
 				}
 				handoffQ->push( event );
 				break;

@@ -15,7 +15,7 @@ protected:
 public:
 	ServerEngine(
 		World *world,
-		ConstructorTable<IHasHandle> *objectCtors,
+		ConstructorTable<BaseObject> *objectCtors,
 		ConstructorTable<ActionEvent>*,
 		float minimumFrameTime);
 
