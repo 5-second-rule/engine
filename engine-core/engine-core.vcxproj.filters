@@ -126,6 +126,9 @@
     <ClInclude Include="GCHandleVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ICollidable.h">
+      <Filter>Header Files\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
