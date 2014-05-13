@@ -5,16 +5,19 @@
 #include "ModelData.h"
 #include "engine-core/Engine.h"
 #include "engine-core/Event.h"
-#include "engine-core/ObjectCtorTable.h"
+#include "engine-core/ConstructorTable.h"
 
 #include "renderer/Window.h"
 #include "renderer/Input.h"
 #include "renderer/Renderer.h"
 #include "renderer/Texture.h"
+#include "renderer/Shader.h"
 
 #include "InputAdapter.h"
 
 #include <vector>
+
+using namespace Transmission;
 
 class RENDERDLL IRenderingEngineDelegate {
 public:
@@ -24,12 +27,14 @@ public:
 class RENDERDLL RenderingEngine : public Engine
 {
 private:
-	Transmission::Input *input;
+	const Transmission::Input *input;
 	Transmission::Window *window;
 	Transmission::Renderer *renderer;
 	RenderableWorld *renderableWorld;
 	std::vector<ModelData> models;
 	std::vector<Transmission::Texture *> textures;
+	std::vector<Shader *> pixelShaders;
+	std::vector<Shader *> vertexShaders;
 	InputAdapter inputAdapter;
 	
 protected:
@@ -41,14 +46,14 @@ protected:
 	virtual void tick(float dt);
 
 public:
-	RenderingEngine(
-		RenderableWorld *world,
-		ObjectCtorTable *objectCtors,
-		void *appHandle);
+	RenderingEngine(RenderableWorld *world, ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* a, void *appHandle);
 	~RenderingEngine();
 	int loadModel(char *filename);
 	int loadTexture(char *filename);
+	int loadPixelShader( char *filename );
+	int loadVertexShader( char *filename );
 	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
+	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
 	void waitForServer();
 
 	IRenderingEngineDelegate* renderingDelegate;

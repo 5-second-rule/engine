@@ -7,12 +7,12 @@
 class COREDLL ISerializable {
 public:
 	// TODO decide on real signatures, etc
-	virtual void reserveSize(IReserve& buffer) = 0;
-	virtual void fillBuffer(IFill& buffer) = 0;
+	virtual void reserveSize(IReserve& buffer) const = 0;
+	virtual void fillBuffer(IFill& buffer) const = 0;
 
 	virtual void deserialize(BufferReader& reader) = 0;
 
-	void serialize(BufferBuilder& buffer) {
+	void serialize(BufferBuilder& buffer) const {
 		this->reserveSize(buffer);
 		buffer.allocate();
 		this->fillBuffer(buffer);

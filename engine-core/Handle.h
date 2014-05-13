@@ -13,6 +13,11 @@ enum HandleType {
 	GLOBAL = 1
 };
 
+struct HandleStruct {
+	size_t index;
+	unsigned int id;
+};
+
 class COREDLL Handle : public ISerializable
 {
 private:
@@ -31,10 +36,8 @@ public:
 	bool operator==(Handle const&) const;
 	string toString();
 
-	void reserveSize(IReserve& buffer);
-	void fillBuffer(IFill& buffer);
+	void reserveSize(IReserve& buffer) const;
+	void fillBuffer(IFill& buffer) const;
 	void deserialize(BufferReader& buffer);
-
-
 };
 

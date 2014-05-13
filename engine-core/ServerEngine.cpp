@@ -5,8 +5,13 @@
 using namespace std::chrono;
 using namespace std::this_thread;
 
-ServerEngine::ServerEngine(World *world, ObjectCtorTable *objectCtors, float secondsPerTick)
-	: Engine(world, objectCtors, CommsProcessorRole::SERVER)
+ServerEngine::ServerEngine(
+	World *world,
+	ConstructorTable<BaseObject> *objectCtors,
+	ConstructorTable<ActionEvent>* actionCtors,
+	float secondsPerTick
+)
+	: Engine(world, objectCtors, actionCtors, CommsProcessorRole::SERVER)
 	, secondsPerTick(secondsPerTick)
 {}
 
@@ -17,7 +22,6 @@ void ServerEngine::tick(float dt) {
 
 	this->processNetworkUpdates();
 	Engine::tick(dt);
-	delegate->handleTerminal();
 	this->world->broadcastUpdates(comms);
 
 	if( annouceCount == 25 ) {

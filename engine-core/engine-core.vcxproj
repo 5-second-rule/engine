@@ -94,16 +94,20 @@
     <ClInclude Include="engine-core.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="EventFactory.h" />
     <ClInclude Include="EventType.h" />
     <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="GCHandleVector.h" />
     <ClInclude Include="Handle.h" />
     <ClInclude Include="IHasHandle.h" />
     <ClInclude Include="IEventReceiver.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
-    <ClInclude Include="ObjectCtorTable.h" />
+    <ClInclude Include="ConstructorTable.h" />
+    <ClInclude Include="RegistrationEvent.h" />
     <ClInclude Include="ServerEngine.h" />
     <ClInclude Include="Socket.h" />
+    <ClInclude Include="UpdateEvent.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
@@ -116,10 +120,12 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="EventFactory.cpp" />
     <ClCompile Include="Handle.cpp" />
-    <ClCompile Include="ObjectCtorTable.cpp" />
+    <ClCompile Include="RegistrationEvent.cpp" />
     <ClCompile Include="ServerEngine.cpp" />
     <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="UpdateEvent.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>

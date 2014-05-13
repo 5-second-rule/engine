@@ -9,19 +9,27 @@ struct COREDLL EventHeader {
 	int type;
 };
 
+struct COREDLL Args {};
+
 class COREDLL Event : public ISerializable
 {
-protected:
-	int type;
-
+private:
+	/* TODO: const */EventType type;
+	Event(); // intentionally private
 public:
-	Event();
-	~Event();
+	Event(EventType type);
+	virtual ~Event();
 
-	virtual void reserveSize(IReserve& buffer);
-	virtual void fillBuffer(IFill& buffer);
+	virtual void reserveSize(IReserve& buffer) const;
+	virtual void fillBuffer(IFill& buffer) const;
 	virtual void deserialize(BufferReader& buffer);
 
-	/*bool operator<(Event const&) const;
-	bool operator==(Event const&) const;*/
+	EventType getType();
+
+	template<class T> static T* cast(Event* e) {
+		if (T::TYPE == e->getType()) return static_cast<T*>(e);
+		else return nullptr;
+	}
+
+	static EventType getType(BufferReader&);
 };

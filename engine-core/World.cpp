@@ -1,11 +1,11 @@
 #include "World.h"
 
-#include "IEventReceiver.h"
 #include <iostream>
-#include <string>
-#include <sstream>
 
-World::World() {
+#include "IEventReceiver.h"
+#include "UpdateEvent.h"
+
+World::World() : updatable(this), serializable(this) {
 	for (int type = 0; type < 2; type++) {
 		this->lastAllocatedIndex[type] = 0;
 		this->objectIds[type] = 0;
@@ -35,6 +35,7 @@ void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 
 void World::insert(IHasHandle *object) {
 	Handle handle = object->getHandle();
+
 	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
 
 	while ((int)storage->size() <= handle.index) {
@@ -63,68 +64,59 @@ void World::remove(Handle *handle) {
 	// TODO remove from updatable and serializable vectors, in a separate pass
 }
 
-IHasHandle * World::get(const Handle *handle) {
-	std::vector<IHasHandle *> *storage = &this->objects[handle->getType()];
+IHasHandle * World::get(const Handle& handle) {
+	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
 
-	if (handle->index >= storage->size()) {
+	if (handle.index >= storage->size()) {
 		return nullptr;
 	}
 
-	IHasHandle *object = storage->at(handle->index);
-	if (object != nullptr && object->getHandle().id == handle->id) {
+	IHasHandle *object = storage->at(handle.index);
+	if (object != nullptr && object->getHandle().id == handle.id) {
 		return object;
 	}
 
 	return nullptr;
 }
 
+void World::replace( const Handle& handle,  IHasHandle* object) {
+	std::vector<IHasHandle *> *storage = &this->objects[handle.getType()];
+
+	if( handle.index >= storage->size() ) {
+		throw runtime_error( "Something bad has happened, you are trying to replace an object but it no exist." );
+	}
+
+	IHasHandle* oldObject = storage->at(handle.index);
+	storage->at( handle.index ) = object;
+	delete oldObject;
+}
+
 void World::update(float dt) {
 	frameCounter = (frameCounter + 1)%1000000000;
-	auto iterator = this->updatable.begin();
-	while (iterator != this->updatable.end()) {
-		IUpdatable *updatable = dynamic_cast<IUpdatable *>(this->get(&*iterator));
+	for (int i = 0; i < this->updatable.size(); i++) {
+		IUpdatable *updatable = this->updatable.getIndirect(i, false);
 
 		if (updatable != nullptr) {
 			updatable->update(dt);
 		}
-
-		iterator++;
 	}
 }
 
 void World::broadcastUpdates(CommsProcessor *comms) {
-	auto iterator = this->serializable.begin();
-	while (iterator != this->serializable.end()) {
-		IHasHandle *object = this->get(&*iterator);
-		ISerializable *serializable = dynamic_cast<ISerializable *>(object);
+	for (int i = 0; i < this->serializable.size(); i++) {
+		IHasHandle *object;
+		Serializable *serializable = this->serializable.getIndirect(i, false, &object);
+		BaseObject *bo = dynamic_cast<BaseObject*>(serializable);
 
-		if (serializable != nullptr) {
-			BufferBuilder buffer;
-			buffer.reserve(sizeof(struct EventHeader));
-			buffer.reserve(sizeof(struct ObjectUpdateHeader));
-			serializable->reserveSize(buffer);
-
-			buffer.allocate();
-
-			((struct EventHeader*)buffer.getPointer())->type = static_cast<int>(EventType::OBJECT_UPDATE);
-			buffer.filled();
-
-			struct ObjectUpdateHeader *ouHeader = (struct ObjectUpdateHeader*)buffer.getPointer();
-			ouHeader->handle = object->getHandle();
-			ouHeader->objectType = object->getType();
-			buffer.filled();
-
-			serializable->fillBuffer(buffer);
-
-			comms->sendUpdates(buffer.getBasePointer(), buffer.getSize());
+		if (bo != nullptr) {
+			UpdateEvent* event = new UpdateEvent(object->getHandle(), bo);
+			comms->sendEvent(event);
 		}
-
-		iterator++;
 	}
 }
 
 void World::dispatchEvent(Event *evt, Handle &handle) {
-	IHasHandle *obj = this->get(&handle);
+	IHasHandle *obj = this->get(handle);
 	IEventReceiver *reciever = dynamic_cast<IEventReceiver *>(obj);
 
 	if (reciever != nullptr) {
@@ -138,24 +130,4 @@ void World::dispatchEvent(Event *evt, Handle &handle) {
 
 bool World::isTick(long int n){
 	return frameCounter % n == 0;
-}
-
-string World::listOfObjects(){
-	stringstream buffer;
-	auto iterator = updatable.begin();
-	while (iterator != updatable.end()){
-		buffer << iterator->toString() << endl;
-	}
-	return buffer.str();
-}
-
-Handle* World::findObjectById(int id){
-	IHasHandle* obj;
-	auto iterator = updatable.begin();
-	while (iterator != updatable.end()){
-		obj = this->get(&*iterator);
-		if (obj->getHandle().id == id)
-			return &obj->getHandle();		
-	}
-	return nullptr;
 }

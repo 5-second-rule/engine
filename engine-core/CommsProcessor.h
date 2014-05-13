@@ -5,8 +5,12 @@
 #include <condition_variable>
 
 #include "engine-core.h"
+#include "Engine.h"
 #include "Socket.h"
 #include "DoubleBufferedQueue.h"
+#include "Event.h"
+#include "UpdateEvent.h"
+#include "RegistrationEvent.h"
 
 #ifdef WIN32
 // disable warning about zero-length arrays in MSVC
@@ -24,21 +28,17 @@ const int maxMsgSize = 65507; // max UDP size
 
 using namespace std;
 
+class Engine;
+
 /// <summary>Structure containing the Message header and data</summary>
 struct COREDLL Message {
 	struct _header {
 		uint8_t msgType;
 		uint8_t reserved1;
-		short reserved2;
+		uint16_t len;
 	} header;
 
-	uint8_t payload[0];
-};
-
-/// <summary>Structure that encapsulated Queued Items </summary>
-struct COREDLL QueueItem {
-	char *data;
-	size_t len;
+	char payload[0];
 };
 
 class COREDLL ArgumentException : public exception {
@@ -88,6 +88,7 @@ private:
 enum class COREDLL CommsProcessorRole {
 	SERVER,
 	CLIENT,
+	LOOPBACK,
 	MONITOR,
 	CUSTOM
 };
@@ -95,8 +96,8 @@ enum class COREDLL CommsProcessorRole {
 
 /// <summary>Message Type Enumerations</summary>
 enum class COREDLL MessageType {
-	WORLD_UPDATE,
-	CLIENT_UPDATE,
+	SERVER_EVENT,
+	CLIENT_EVENT,
 	SERVER_ANNOUNCE
 };
 
@@ -105,23 +106,22 @@ class COREDLL CommsProcessor {
 public:
 	/// <summary>Constructor</summary>
 	/// <param name="role">The role of this CommsProcessor object</param>
-	CommsProcessor( CommsProcessorRole role );
+	CommsProcessor( CommsProcessorRole role, Engine* owner );
 
 	/// <summary>Deconstructor</summary>
 	~CommsProcessor();
 
 	/// <summary>Sets the queue to handoff client or server updates too</summary>
 	/// <param name="q">The queue to use</param>
-	void setHandoffQ( DoubleBufferedQueue<QueueItem> *q );
+	void setHandoffQ( DoubleBufferedQueue<Event*> *q );
 
 	/// <summary>Gets the currently assigned queue to handoff client or server updates too</summary>
 	/// <returns>The currently assigned handoff queue</returns>
-	DoubleBufferedQueue<QueueItem> *getHandoffQ() const;
+	DoubleBufferedQueue<Event*> *getHandoffQ() const;
 
-	/// <summary>Sends a message</summary>
-	/// <param name="data">the byte stream representing a Message</param>
-	/// <param name="len">the length of the byte stream to send</param>
-	void sendUpdates( const char *data, size_t len );
+	/// <summary>Sends an event</summary>
+	/// <param name="evt">the the event to send</param>
+	void sendEvent( const Event* evt );
 
 	/// <summary>Sends a server announce message</summary>
 	/// <exception cref="NotImplementedException">Thrown when an the role is Custom</exception>
@@ -132,6 +132,8 @@ public:
 	void waitAnnouce();
 
 private:
+	// owning Engine object
+	Engine* owner;
 
 	// listen thread related
 	thread listenThread;
@@ -139,13 +141,14 @@ private:
 	bool running;
 	void serverCallback();
 	void clientCallback();
+	void loopbackCallback();
 	void monitorCallback();
 
 	// comms role
 	CommsProcessorRole role;
 
 	// handoffQ private pointer
-	DoubleBufferedQueue<QueueItem> *handoffQ;
+	DoubleBufferedQueue<Event*> *handoffQ;
 
 	// send update related
 	UDPSocket sendSocket;

@@ -1,19 +1,10 @@
 #include <cstring>
 
 #include "BaseObject.h"
-#include <sstream>
 
-BaseObject::BaseObject(){
-	this->objectType = objectType;
+BaseObject::BaseObject(int type) : IHasHandle(type) {}
 
-	this->position[0] = 0;
-	this->position[1] = 0;
-	this->position[2] = 0;
-}
-
-BaseObject::~BaseObject(){
-
-}
+BaseObject::~BaseObject(){}
 
 Handle BaseObject::getHandle(){
 	return this->handle;
@@ -23,26 +14,26 @@ void BaseObject::setHandle(Handle handle){
 	this->handle = handle;
 }
 
-void BaseObject::reserveSize(IReserve& buffer) {
-	buffer.reserve(sizeof(struct BaseObjectInfo));
+void BaseObject::reserveSize(IReserve& buffer) const {
+	buffer.reserve(sizeof(int));
+	handle.reserveSize(buffer);
 }
 
-void BaseObject::fillBuffer(IFill& buffer) {
-	struct BaseObjectInfo *hdr = reinterpret_cast<struct BaseObjectInfo *>(buffer.getPointer());
-
-	memcpy( hdr->position, position, sizeof( float ) * 3 );
-	memcpy( hdr->force, force, sizeof( float ) * 3 );
-
+void BaseObject::fillBuffer(IFill& buffer) const {
+	*reinterpret_cast<int*>(buffer.getPointer()) = IHasHandle::getType();
 	buffer.filled();
+
+	handle.fillBuffer(buffer);
 }
 
 void BaseObject::deserialize(BufferReader& buffer) {
-	const struct BaseObjectInfo *hdr = reinterpret_cast<const struct BaseObjectInfo *>(buffer.getPointer());
+	this->setType(*reinterpret_cast<const int*>(buffer.getPointer()));
+	buffer.finished(sizeof(int));
+	handle.deserialize(buffer);
+}
 
-	memcpy(position, hdr->position, sizeof(float) * 3);
-	memcpy(force, hdr->force, sizeof(float) * 3);
-
-	buffer.finished(sizeof(struct BaseObjectInfo));
+int BaseObject::getType(BufferReader& buffer) {
+	return *reinterpret_cast<const int*>(buffer.getPointer());
 }
 
 void BaseObject::update(float dt) {
@@ -56,21 +47,6 @@ void BaseObject::update(float dt) {
 	}
 }
 
-bool BaseObject::handleEvent(Event *evt) {
-	// do nothing by default
-	return true;
-}
-
-int BaseObject::getType() {
-	return this->objectType;
-}
-
 void BaseObject::enqueue(Event *evt) {
 	waitingEvents.push(evt);
-}
-
-string BaseObject::toString(){
-	stringstream buffer;
-	buffer << handle.toString();
-	return buffer.str();
 }
