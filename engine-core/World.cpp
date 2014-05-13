@@ -2,6 +2,8 @@
 
 #include "IEventReceiver.h"
 #include <iostream>
+#include <string>
+#include <sstream>
 
 World::World() {
 	for (int type = 0; type < 2; type++) {
@@ -136,4 +138,24 @@ void World::dispatchEvent(Event *evt, Handle &handle) {
 
 bool World::isTick(long int n){
 	return frameCounter % n == 0;
+}
+
+string World::listOfObjects(){
+	stringstream buffer;
+	auto iterator = updatable.begin();
+	while (iterator != updatable.end()){
+		buffer << iterator->toString() << endl;
+	}
+	return buffer.str();
+}
+
+Handle* World::findObjectById(int id){
+	IHasHandle* obj;
+	auto iterator = updatable.begin();
+	while (iterator != updatable.end()){
+		obj = this->get(&*iterator);
+		if (obj->getHandle().id == id)
+			return &obj->getHandle();		
+	}
+	return nullptr;
 }

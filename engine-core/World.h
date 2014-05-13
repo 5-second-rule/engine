@@ -42,4 +42,6 @@ public:
 
 	void dispatchEvent(Event *evt, Handle &handle);
 	bool isTick(long int n); // Return true if the number of frames already updated is multiple of n
+	string listOfObjects();
+	Handle* findObjectById(int id);
 };

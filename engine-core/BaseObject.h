@@ -57,4 +57,5 @@ public:
 	virtual void update(float dt);
 
 	virtual void enqueue(Event *evt);
+	virtual string toString();
 };

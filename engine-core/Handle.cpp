@@ -2,7 +2,6 @@
 
 Handle::Handle() : Handle(0, 0, HandleType::LOCAL) {}
 
-
 Handle::Handle(int index, unsigned int id, HandleType type) {
 	this->index = index;
 	this->id = id;
@@ -44,4 +43,12 @@ void Handle::deserialize(BufferReader& reader) {
 	memcpy(&this->id, buf + sizeof(size_t), sizeof(unsigned int));
 
 	reader.finished(sizeof(size_t) + sizeof(unsigned int));
+}
+
+string Handle::toString(){
+	stringstream buffer;
+	buffer << "---Handle---" << endl;
+	buffer << "index: " << index << endl;
+	buffer << "id: " << id;
+	return buffer.str();
 }

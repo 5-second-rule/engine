@@ -1,6 +1,7 @@
 #include <cstring>
 
 #include "BaseObject.h"
+#include <sstream>
 
 BaseObject::BaseObject(){
 	this->objectType = objectType;
@@ -66,4 +67,10 @@ int BaseObject::getType() {
 
 void BaseObject::enqueue(Event *evt) {
 	waitingEvents.push(evt);
+}
+
+string BaseObject::toString(){
+	stringstream buffer;
+	buffer << handle.toString();
+	return buffer.str();
 }

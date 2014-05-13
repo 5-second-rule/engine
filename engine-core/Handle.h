@@ -1,10 +1,13 @@
 #pragma once
 
-#include "engine-core.h"
 #include <cassert>
+#include <string>
+#include <sstream>
+
+#include "engine-core.h"
 
 #include "ISerializable.h"
-
+using namespace std;
 enum HandleType {
 	LOCAL = 0,
 	GLOBAL = 1
@@ -26,6 +29,7 @@ public:
 
 	HandleType getType() const;
 	bool operator==(Handle const&) const;
+	string toString();
 
 	void reserveSize(IReserve& buffer);
 	void fillBuffer(IFill& buffer);

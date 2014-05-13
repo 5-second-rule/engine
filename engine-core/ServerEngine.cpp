@@ -17,6 +17,7 @@ void ServerEngine::tick(float dt) {
 
 	this->processNetworkUpdates();
 	Engine::tick(dt);
+	delegate->handleTerminal();
 	this->world->broadcastUpdates(comms);
 
 	if( annouceCount == 25 ) {

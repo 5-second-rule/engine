@@ -13,7 +13,7 @@
 using namespace std;
 
 const string str_settings_file = "resources/Config.ini";
-const string str_template_settings_file = "/resources/ConfigTemplate.ini";
+const string str_template_settings_file = "resources/ConfigTemplate.ini";
 
 class COREDLL ConfigSettings {
 
