@@ -15,6 +15,7 @@
     <ClInclude Include="InputAdapter.h" />
     <ClInclude Include="IRenderable.h" />
     <ClInclude Include="ModelData.h" />
+    <ClInclude Include="PlayerCameraHandler.h" />
     <ClInclude Include="RenderableObject.h" />
     <ClInclude Include="RenderableWorld.h" />
     <ClInclude Include="RenderingEngine.h" />
@@ -26,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="InputAdapter.cpp" />
+    <ClCompile Include="PlayerCameraHandler.cpp" />
     <ClCompile Include="RenderableObject.cpp" />
     <ClCompile Include="RenderableWorld.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />

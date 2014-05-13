@@ -14,6 +14,7 @@ void RegistrationEvent::reserveSize( IReserve& buffer ) const {
 	buffer.reserve( sizeof( this->playerGuid ) );
 	buffer.reserve( sizeof( this->response ) );
 	buffer.reserve( sizeof( this->responseTag ) );
+	this->objectHandle.reserveSize(buffer);
 }
 
 void RegistrationEvent::fillBuffer( IFill& buffer ) const {
@@ -30,6 +31,7 @@ void RegistrationEvent::fillBuffer( IFill& buffer ) const {
 	int* responseTag = reinterpret_cast<int*>(buffer.getPointer());
 	*responseTag = this->responseTag;
 	buffer.filled();
+	this->objectHandle.fillBuffer(buffer);
 }
 
 void RegistrationEvent::deserialize( BufferReader& reader ) {
@@ -46,4 +48,5 @@ void RegistrationEvent::deserialize( BufferReader& reader ) {
 	const int* responseTag = reinterpret_cast<const int*>(reader.getPointer());
 	this->responseTag = *responseTag;
 	reader.finished( sizeof( this->responseTag ) );
+	this->objectHandle.deserialize(reader);
 }

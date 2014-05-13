@@ -21,6 +21,7 @@ public:
 	unsigned int playerGuid;
 	int responseTag;
 	Response response;
+	Handle objectHandle;
 	
 	RegistrationEvent();
 	~RegistrationEvent();

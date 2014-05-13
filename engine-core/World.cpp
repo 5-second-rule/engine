@@ -26,7 +26,7 @@ void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 		//nextIndex = (nextIndex + 1);
 	//}
 
-	this->lastAllocatedIndex[handleType] = nextIndex++;
+	this->lastAllocatedIndex[handleType] = ++nextIndex;
 	object->setHandle(Handle(nextIndex, objectIds[handleType]++, handleType));
 }
 

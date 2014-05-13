@@ -7,7 +7,8 @@ RenderingEngine::RenderingEngine(
 	RenderableWorld *world,
 	ConstructorTable<BaseObject> *objectCtors,
 	ConstructorTable<ActionEvent> *actionCtors,
-	void *appHandle
+	void *appHandle,
+	PlayerCameraHandler *cameraHandler
 ) 
 		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT)
 {
@@ -18,6 +19,7 @@ RenderingEngine::RenderingEngine(
 	this->renderableWorld = world;
 	this->inputAdapter = InputAdapter();
 	this->inputAdapter.setInput(this->input);
+	this->cameraHandler = cameraHandler;
 }
 
 RenderingEngine::~RenderingEngine() {}
@@ -46,20 +48,33 @@ void RenderingEngine::tick(float dt) {
 }
 
 void RenderingEngine::frame(float dt) {
+	// HACK to only player 0
+	if (this->localPlayers.size() > 0) {
+		IHasHandle *playerObject = this->world->get(this->playerMap[this->localPlayers[0]]);
+		if (playerObject != nullptr) {
+			this->cameraHandler->updateFor(playerObject);
+			Camera *camera = renderer->getCamera();
+			camera->set(this->cameraHandler->position, this->cameraHandler->lookAt);
+		}
+	}
+
 	renderer->clearFrame();
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
-
 }
 
 int RenderingEngine::loadModel(char *filename) {
+	return this->loadModel(filename, true);
+}
+
+int RenderingEngine::loadModel(char *filename, bool centered) {
 	ModelData data;
 
 	if (this->renderer->loadModelFile(
 			filename, 
 			&data.vertexBuffer, 
 			&data.indexBuffer,
-			true
+			centered
 			)
 		) {
 		this->models.push_back(data);

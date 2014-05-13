@@ -3,6 +3,7 @@
 #include "engine-renderer.h"
 #include "RenderableWorld.h"
 #include "ModelData.h"
+#include "PlayerCameraHandler.h"
 #include "engine-core/Engine.h"
 #include "engine-core/Event.h"
 #include "engine-core/ConstructorTable.h"
@@ -36,6 +37,7 @@ private:
 	std::vector<Shader *> pixelShaders;
 	std::vector<Shader *> vertexShaders;
 	InputAdapter inputAdapter;
+	PlayerCameraHandler *cameraHandler;
 	
 protected:
 	void translateInput();
@@ -46,9 +48,16 @@ protected:
 	virtual void tick(float dt);
 
 public:
-	RenderingEngine(RenderableWorld *world, ConstructorTable<BaseObject> *objectCtors, ConstructorTable<ActionEvent>* a, void *appHandle);
+	RenderingEngine(
+		RenderableWorld *world, 
+		ConstructorTable<BaseObject> *objectCtors, 
+		ConstructorTable<ActionEvent>* a, 
+		void *appHandle,
+		PlayerCameraHandler *cameraHandler);
+
 	~RenderingEngine();
 	int loadModel(char *filename);
+	int loadModel(char *filename, bool centered);
 	int loadTexture(char *filename);
 	int loadPixelShader( char *filename );
 	int loadVertexShader( char *filename );
