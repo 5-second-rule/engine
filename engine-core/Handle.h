@@ -34,10 +34,12 @@ public:
 
 	HandleType getType() const;
 	bool operator==(Handle const&) const;
-	string toString();
 
 	void reserveSize(IReserve& buffer) const;
 	void fillBuffer(IFill& buffer) const;
 	void deserialize(BufferReader& buffer);
+
+	// Debug
+	string toString();
 };
 
