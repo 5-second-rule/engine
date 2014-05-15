@@ -44,7 +44,7 @@ protected:
 
 public:
 	Engine(
-		World *world,
+		World *world, 
 		ConstructorTable<BaseObject> *objectCtors,
 		ConstructorTable<ActionEvent>* eventCtors,
 		CommsProcessorRole role

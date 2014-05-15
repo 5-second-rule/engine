@@ -45,3 +45,11 @@ void Handle::deserialize(BufferReader& reader) {
 
 	reader.finished(sizeof(size_t) + sizeof(unsigned int));
 }
+
+string Handle::toString(){
+	stringstream buffer;
+	buffer << "---Handle---" << endl;
+	buffer << "index: " << index << endl;
+	buffer << "id: " << id;
+	return buffer.str();
+}
