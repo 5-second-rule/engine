@@ -6,11 +6,6 @@ struct COREDLL ActionHeader {
 	unsigned int playerGuid;
 };
 
-struct COREDLL ActionArgs : Args {
-	unsigned int playerGuid;
-	int actionType;
-};
-
 class COREDLL ActionEvent : public Event {
 private:
 	int actionType;

@@ -1,5 +1,3 @@
-#include <cstring>
-
 #include "BaseObject.h"
 
 BaseObject::BaseObject(int type) : IHasHandle(type) {}

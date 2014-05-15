@@ -1,7 +1,4 @@
 #include "World.h"
-
-#include <iostream>
-
 #include "IEventReceiver.h"
 #include "UpdateEvent.h"
 
