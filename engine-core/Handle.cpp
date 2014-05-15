@@ -2,6 +2,7 @@
 
 Handle::Handle() : Handle(0, 0, HandleType::LOCAL) {}
 
+
 Handle::Handle(int index, unsigned int id, HandleType type) {
 	this->index = index;
 	this->id = id;

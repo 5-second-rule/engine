@@ -1,13 +1,10 @@
 #pragma once
 
-#include <cassert>
-#include <string>
-#include <sstream>
-
 #include "engine-core.h"
+#include <cassert>
 
 #include "ISerializable.h"
-using namespace std;
+
 enum HandleType {
 	LOCAL = 0,
 	GLOBAL = 1
@@ -39,7 +36,6 @@ public:
 	void fillBuffer(IFill& buffer) const;
 	void deserialize(BufferReader& buffer);
 
-	// Debug
 	string toString();
 };
 
