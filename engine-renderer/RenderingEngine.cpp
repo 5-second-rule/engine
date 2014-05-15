@@ -61,7 +61,8 @@ int RenderingEngine::loadModel(char *filename) {
 	if (this->renderer->loadModelFile(
 		filename, 
 		&data.vertexBuffer, 
-		&data.indexBuffer)) {
+		&data.indexBuffer,
+		true)) {
 
 		this->models.push_back(data);
 		return this->models.size() - 1;
