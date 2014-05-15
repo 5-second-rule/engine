@@ -35,5 +35,8 @@ public:
 	void reserveSize(IReserve& buffer) const;
 	void fillBuffer(IFill& buffer) const;
 	void deserialize(BufferReader& buffer);
+
+	// Debug
+	string toString();
 };
 
