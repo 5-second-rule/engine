@@ -109,14 +109,17 @@ void World::update(float dt) {
 	for (int i = 0; i < this->collidable.size(); i++) {
 		ICollidable* c1 = this->collidable.getIndirect(i, false);
 		for (int j = i + 1; j < this->collidable.size(); j++) {
-			ICollidable* c2 = this->collidable.getIndirect(i, false);
+			ICollidable* c2 = this->collidable.getIndirect(j, false);
 
 			unsigned int p1 = c1->getPriority();
 			unsigned int p2 = c2->getPriority();
 
 			if ((p1 <= p2) ? c1->collidesWith(c2) : c2->collidesWith(c1)) {
-				c1->handleCollision(c2);
-				c2->handleCollision(c1);
+				BoundingSphere c1Bound = c1->getBounds();
+				BoundingSphere c2Bound = c2->getBounds();
+
+				c1->handleCollision(c2Bound, dt);
+				c2->handleCollision(c1Bound, dt);
 			}
 		}
 	}
