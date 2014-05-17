@@ -36,6 +36,6 @@ public:
 	void fillBuffer(IFill& buffer) const;
 	void deserialize(BufferReader& buffer);
 
-	string toString();
+	std::string toString();
 };
 
