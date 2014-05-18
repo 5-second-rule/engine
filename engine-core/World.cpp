@@ -128,3 +128,11 @@ void World::dispatchEvent(Event *evt, Handle &handle) {
 bool World::isTick(long int n){
 	return frameCounter % n == 0;
 }
+
+Handle World::findObjectById(int id){
+	std::vector<IHasHandle*>::iterator it = objects[HandleType::GLOBAL].begin();
+	for (it; it != objects[HandleType::GLOBAL].end(); ++it) {
+		if ((*it)->getHandle().id == id)
+			return (*it)->getHandle();
+	}
+}
