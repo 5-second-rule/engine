@@ -47,4 +47,6 @@ public:
 	}
 
 	static int getType(BufferReader&);
+
+	virtual std::string toString();
 };

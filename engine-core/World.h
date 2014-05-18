@@ -50,5 +50,8 @@ public:
 
 	void dispatchEvent(Event *evt, Handle &handle);
 	bool isTick(long int n); // Return true if the number of frames already updated is multiple of n
+	
+	// Command Line
+	std::string listObjects();
 	Handle findObjectById(int id);
 };

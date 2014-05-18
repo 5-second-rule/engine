@@ -1,6 +1,6 @@
 #include "Handle.h"
 
-Handle::Handle() : Handle(0, 0, HandleType::LOCAL) {}
+Handle::Handle() : Handle(-1, -1, HandleType::LOCAL) {}
 
 
 Handle::Handle(int index, unsigned int id, HandleType type) {

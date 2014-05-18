@@ -19,6 +19,7 @@ public:
 
 	virtual Handle getHandle() = 0;
 	virtual void setHandle(Handle handle) = 0;
+	virtual std::string toString() = 0;
 
 	virtual int getType() const { 
 		return this->type; 
@@ -29,5 +30,4 @@ public:
 		if (T::TYPE == h->getType()) return static_cast<T*>(h);
 		else return nullptr;
 	}
-
 };

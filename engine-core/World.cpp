@@ -4,7 +4,7 @@
 
 World::World() : updatable(this), serializable(this) {
 	for (int type = 0; type < 2; type++) {
-		this->lastAllocatedIndex[type] = 0;
+		this->lastAllocatedIndex[type] = -1;
 		this->objectIds[type] = 0;
 		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
 	}
@@ -129,10 +129,21 @@ bool World::isTick(long int n){
 	return frameCounter % n == 0;
 }
 
+std::string World::listObjects(){
+	std::stringstream buffer;
+	std::vector<IHasHandle*>::iterator it = objects[HandleType::GLOBAL].begin();
+	for (it; it != objects[HandleType::GLOBAL].end(); ++it) {
+		buffer << (*it)->toString() << endl << endl;
+	}
+	
+	return buffer.str();
+}
+
 Handle World::findObjectById(int id){
 	std::vector<IHasHandle*>::iterator it = objects[HandleType::GLOBAL].begin();
 	for (it; it != objects[HandleType::GLOBAL].end(); ++it) {
 		if ((*it)->getHandle().id == id)
 			return (*it)->getHandle();
 	}
+	return Handle();
 }
