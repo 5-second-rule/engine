@@ -58,7 +58,7 @@ public:
 	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
 	void waitForServer();
 	int loadSound( char *filename );
-	bool playSound( int index, bool loop );
+	bool playSound( size_t index, bool loop );
 
 	IRenderingEngineDelegate* renderingDelegate;
 };

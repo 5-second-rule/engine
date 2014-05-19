@@ -142,6 +142,6 @@ int RenderingEngine::loadSound( char *filename ) {
 	return this->sound->LoadSoundFile( filename );
 }
 
-bool RenderingEngine::playSound( int index, bool loop ) {
+bool RenderingEngine::playSound( size_t index, bool loop ) {
 	return this->sound->PlaySoundAt( index, loop );
 }
