@@ -14,6 +14,7 @@ RenderingEngine::RenderingEngine(
 	this->window = Window::createWindow(appHandle);
 	this->input = this->window->getInput();
 	this->renderer = Renderer::createRenderer(this->window);
+	this->sound = Sound::createSound( this->window );
 	this->renderer->getTimer()->StartTimer();
 	this->renderableWorld = world;
 	this->inputAdapter = InputAdapter();
@@ -133,7 +134,14 @@ Model * RenderingEngine::createModelFromIndex( size_t modelIndex, size_t texture
 	return this->renderer->createModel( data.vertexBuffer, data.indexBuffer, texture, vertex, pixel );
 }
 
-
 void RenderingEngine::waitForServer() {
 	this->comms->waitAnnouce();
+}
+
+int RenderingEngine::loadSound( char *filename ) {
+	return this->sound->LoadSoundFile( filename );
+}
+
+bool RenderingEngine::playSound( int index, bool loop ) {
+	return this->sound->PlaySoundAt( index, loop );
 }
