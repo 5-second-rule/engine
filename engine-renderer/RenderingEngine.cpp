@@ -96,6 +96,18 @@ int RenderingEngine::loadTexture(char *filename) {
 	return -1;
 }
 
+int RenderingEngine::loadBumpMap(char *filename) {
+	Texture *bumpTexture = this->renderer->createTextureFromFile(filename);
+
+	// TODO validate this error check
+	if (bumpTexture != nullptr) {
+		this->bumpMaps.push_back(bumpTexture);
+		return this->bumpMaps.size() - 1;
+	}
+
+	return -1;
+}
+
 int RenderingEngine::loadPixelShader( char *filename ) {
 	Shader *shader = this->renderer->createPixelShader( filename );
 
@@ -133,6 +145,24 @@ Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureI
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture);
 }
 
+Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex) {
+	if (modelIndex < 0 || modelIndex >= this->models.size()) {
+		throw std::runtime_error("Model index out of range.");
+	}
+	else if (textureIndex < 0 || textureIndex >= this->textures.size()) {
+		throw std::runtime_error("Texture index out of range.");
+	}
+	else if (bumpIndex < 0 || bumpIndex >= this->bumpMaps.size()) {
+		throw std::runtime_error("BumpMap index out of range.");
+	}
+
+	ModelData data = this->models.at(modelIndex);
+	Texture *texture = this->textures.at(textureIndex);
+	Texture *bumpMap = this->bumpMaps.at(bumpIndex);
+
+	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture, bumpMap);
+}
+
 Model * RenderingEngine::createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader ) {
 	if( modelIndex < 0 || modelIndex >= this->models.size() ) {
 		throw std::runtime_error( "Model index out of range." );
@@ -146,6 +176,26 @@ Model * RenderingEngine::createModelFromIndex( size_t modelIndex, size_t texture
 	Shader* pixel = this->pixelShaders.at( pixelShader );
 
 	return this->renderer->createModel( data.vertexBuffer, data.indexBuffer, texture, vertex, pixel );
+}
+
+Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex, size_t vertexShader, size_t pixelShader) {
+	if (modelIndex < 0 || modelIndex >= this->models.size()) {
+		throw std::runtime_error("Model index out of range.");
+	}
+	else if (textureIndex < 0 || textureIndex >= this->textures.size()) {
+		throw std::runtime_error("Texture index out of range.");
+	}
+	else if (bumpIndex < 0 || bumpIndex >= this->bumpMaps.size()) {
+		throw std::runtime_error("Texture index out of range for bump texture.");
+	}
+
+	ModelData data = this->models.at(modelIndex);
+	Texture *texture = this->textures.at(textureIndex);
+	Texture *bumpMap = this->bumpMaps.at(bumpIndex);
+	Shader* vertex = this->vertexShaders.at(vertexShader);
+	Shader* pixel = this->pixelShaders.at(pixelShader);
+
+	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture, bumpMap, vertex, pixel);
 }
 
 
