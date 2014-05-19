@@ -12,6 +12,7 @@
 #include "renderer/Renderer.h"
 #include "renderer/Texture.h"
 #include "renderer/Shader.h"
+#include "renderer/Sound.h"
 
 #include "InputAdapter.h"
 
@@ -30,6 +31,7 @@ private:
 	const Transmission::Input *input;
 	Transmission::Window *window;
 	Transmission::Renderer *renderer;
+	Transmission::Sound *sound;
 	RenderableWorld *renderableWorld;
 	std::vector<ModelData> models;
 	std::vector<Transmission::Texture *> textures;
@@ -55,6 +57,8 @@ public:
 	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
 	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
 	void waitForServer();
+	int loadSound( char *filename );
+	bool playSound( int index, bool loop );
 
 	IRenderingEngineDelegate* renderingDelegate;
 };
