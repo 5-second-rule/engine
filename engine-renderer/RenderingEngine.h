@@ -13,6 +13,7 @@
 #include "renderer/Renderer.h"
 #include "renderer/Texture.h"
 #include "renderer/Shader.h"
+#include "renderer/Sound.h"
 
 #include "InputAdapter.h"
 
@@ -31,6 +32,7 @@ private:
 	const Transmission::Input *input;
 	Transmission::Window *window;
 	Transmission::Renderer *renderer;
+	Transmission::Sound *sound;
 	RenderableWorld *renderableWorld;
 	std::vector<ModelData> models;
 	std::vector<Transmission::Texture *> textures;
@@ -49,13 +51,13 @@ protected:
 	virtual void tick(float dt);
 
 public:
-	RenderingEngine(
-		RenderableWorld *world, 
-		ConstructorTable<BaseObject> *objectCtors, 
-		ConstructorTable<ActionEvent>* a, 
-		void *appHandle,
-		PlayerCameraHandler *cameraHandler);
-
+	RenderingEngine( RenderableWorld *world, 
+									 ConstructorTable<BaseObject> *objectCtors, 
+									 ConstructorTable<ActionEvent>* a, 
+									 void *appHandle,
+									 PlayerCameraHandler *cameraHandler,
+									 char* defaultVertex,
+									 char* defaultPixel );
 	~RenderingEngine();
 	int loadModel(char *filename);
 	int loadModel(char *filename, bool centered);
@@ -68,6 +70,8 @@ public:
 	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
 	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex, size_t vertexShader, size_t pixelShader);
 	void waitForServer();
+	int loadSound( char *filename );
+	bool playSound( size_t index, bool loop );
 
 	IRenderingEngineDelegate* renderingDelegate;
 };

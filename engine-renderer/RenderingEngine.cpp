@@ -3,18 +3,18 @@
 // constants
 static const char *testData = "This is a client update!!!\n";
 
-RenderingEngine::RenderingEngine(
-	RenderableWorld *world,
-	ConstructorTable<BaseObject> *objectCtors,
-	ConstructorTable<ActionEvent> *actionCtors,
-	void *appHandle,
-	PlayerCameraHandler *cameraHandler
-) 
-		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT)
-{
+RenderingEngine::RenderingEngine( RenderableWorld *world,
+																	ConstructorTable<BaseObject> *objectCtors,
+																	ConstructorTable<ActionEvent> *actionCtors,
+																	void *appHandle,
+																	PlayerCameraHandler *cameraHandler,
+																	char* defaultVertex,
+																	char* defaultPixel) 
+		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT) {
 	this->window = Window::createWindow(appHandle);
 	this->input = this->window->getInput();
-	this->renderer = Renderer::createRenderer(this->window);
+	this->renderer = Renderer::createRenderer(this->window, defaultVertex, defaultPixel);
+	this->sound = Sound::createSound( this->window );
 	this->renderer->getTimer()->StartTimer();
 	this->renderableWorld = world;
 	this->inputAdapter = InputAdapter();
@@ -198,7 +198,14 @@ Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureI
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture, bumpMap, vertex, pixel);
 }
 
-
 void RenderingEngine::waitForServer() {
 	this->comms->waitAnnouce();
+}
+
+int RenderingEngine::loadSound( char *filename ) {
+	return this->sound->LoadSoundFile( filename );
+}
+
+bool RenderingEngine::playSound( size_t index, bool loop ) {
+	return this->sound->PlaySoundAt( index, loop );
 }

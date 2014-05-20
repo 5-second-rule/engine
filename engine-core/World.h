@@ -19,9 +19,8 @@ class CommsProcessor;
 template <typename IUpdatable> class GCHandleVector;
 template <typename ISerializable> class GCHandleVector;
 
-using namespace std;
-template class COREDLL vector< Handle >;
-template class COREDLL vector< IHasHandle* >;
+template class COREDLL std::vector< Handle >;
+template class COREDLL std::vector< IHasHandle* >;
 
 class COREDLL World : public IUpdatable {
 private:
