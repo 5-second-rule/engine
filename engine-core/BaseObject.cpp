@@ -1,6 +1,6 @@
 #include "BaseObject.h"
 
-BaseObject::BaseObject(int type) : IHasHandle(type) {}
+BaseObject::BaseObject(int type) : IHasHandle(type) { }
 
 BaseObject::~BaseObject(){}
 

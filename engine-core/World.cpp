@@ -21,6 +21,7 @@ World::~World() {
 
 void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 	int nextIndex = this->lastAllocatedIndex[handleType];
+	object->setLocal(handleType == HandleType::LOCAL ? true : false);
 	// TODO implement better allocator, with wrap around
 	//while (objects[handleType].at(nextIndex) != nullptr){
 		//nextIndex = (nextIndex + 1);
@@ -105,7 +106,7 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 		ISerializable *serializable = this->serializable.getIndirect(i, false, &object);
 		BaseObject *bo = dynamic_cast<BaseObject*>(serializable);
 
-		if (bo != nullptr) {
+		if (bo != nullptr && !(bo->isLocal())) {
 			UpdateEvent* event = new UpdateEvent(object->getHandle(), bo);
 			comms->sendEvent(event);
 		}

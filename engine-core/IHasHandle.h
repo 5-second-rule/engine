@@ -7,6 +7,7 @@
 class COREDLL IHasHandle {
 private:
 	int type;
+	bool local;
 	IHasHandle();
 
 protected:
@@ -20,6 +21,14 @@ public:
 	virtual Handle getHandle() = 0;
 	virtual void setHandle(Handle handle) = 0;
 	virtual std::string toString() = 0;
+
+	void setLocal(bool flag){
+		this->local = flag;
+	}
+
+	bool isLocal(){
+		return this->local;
+	}
 
 	virtual int getType() const { 
 		return this->type; 
