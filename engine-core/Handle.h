@@ -38,6 +38,6 @@ public:
 	void deserialize(BufferReader& buffer);
 
 	// Debug
-	string toString();
+	std::string toString();
 };
 

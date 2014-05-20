@@ -1,3 +1,6 @@
+#include <string>
+#include <sstream>
+
 #include "World.h"
 #include "IEventReceiver.h"
 #include "UpdateEvent.h"

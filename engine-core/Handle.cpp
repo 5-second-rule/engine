@@ -1,7 +1,9 @@
 #include "Handle.h"
 
-Handle::Handle() : Handle(-1, -1, HandleType::LOCAL) {}
+#include <string>
+#include <sstream>
 
+Handle::Handle() : Handle(-1, -1, HandleType::LOCAL) {}
 
 Handle::Handle(int index, unsigned int id, HandleType type) {
 	this->index = index;
@@ -50,10 +52,10 @@ void Handle::deserialize(BufferReader& reader) {
 	reader.finished(sizeof(size_t) + sizeof(unsigned int));
 }
 
-string Handle::toString(){
-	stringstream buffer;
-	buffer << "---Handle---" << endl;
-	buffer << "index: " << index << endl;
+std::string Handle::toString(){
+	std::stringstream buffer;
+	buffer << "---Handle---" << std::endl;
+	buffer << "index: " << index << std::endl;
 	buffer << "id: " << id;
 	return buffer.str();
 }
