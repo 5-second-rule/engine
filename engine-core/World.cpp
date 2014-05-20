@@ -21,7 +21,6 @@ World::~World() {
 
 void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 	int nextIndex = this->lastAllocatedIndex[handleType];
-	object->setLocal(handleType == HandleType::LOCAL ? true : false);
 	// TODO implement better allocator, with wrap around
 	//while (objects[handleType].at(nextIndex) != nullptr){
 		//nextIndex = (nextIndex + 1);
@@ -106,7 +105,7 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 		ISerializable *serializable = this->serializable.getIndirect(i, false, &object);
 		BaseObject *bo = dynamic_cast<BaseObject*>(serializable);
 
-		if (bo != nullptr && !(bo->isLocal())) {
+		if (bo != nullptr && !(bo->getHandle().isLocal())) {
 			UpdateEvent* event = new UpdateEvent(object->getHandle(), bo);
 			comms->sendEvent(event);
 		}
@@ -133,18 +132,28 @@ bool World::isTick(long int n){
 std::string World::listObjects(){
 	std::stringstream buffer;
 	std::vector<IHasHandle*>::iterator it = objects[HandleType::GLOBAL].begin();
+	buffer << "__Global Objects__" << endl;
 	for (it; it != objects[HandleType::GLOBAL].end(); ++it) {
+		buffer << (*it)->toString() << endl << endl;
+	}
+
+	buffer << "__Local Objects__" << endl;
+	it = objects[HandleType::LOCAL].begin();
+	for (it; it != objects[HandleType::LOCAL].end(); ++it) {
 		buffer << (*it)->toString() << endl << endl;
 	}
 	
 	return buffer.str();
 }
 
-Handle World::findObjectById(int id){
-	std::vector<IHasHandle*>::iterator it = objects[HandleType::GLOBAL].begin();
-	for (it; it != objects[HandleType::GLOBAL].end(); ++it) {
-		if ((*it)->getHandle().id == id)
-			return (*it)->getHandle();
-	}
-	return Handle();
+Handle World::getLocalObjectByIndex(size_t index){
+	if (index >= objects[HandleType::LOCAL].size())
+		return Handle();
+	return objects[HandleType::LOCAL].at(index)->getHandle();
+}
+
+Handle World::getGlobalObjectByIndex(size_t index){
+	if (index >= objects[HandleType::LOCAL].size())
+		return Handle();
+	return objects[HandleType::GLOBAL].at(index)->getHandle();
 }

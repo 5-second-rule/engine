@@ -53,5 +53,6 @@ public:
 	
 	// Command Line
 	std::string listObjects();
-	Handle findObjectById(int id);
+	Handle getLocalObjectByIndex(size_t index);
+	Handle getGlobalObjectByIndex(size_t index);
 };
