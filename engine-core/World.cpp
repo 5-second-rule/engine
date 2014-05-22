@@ -1,10 +1,13 @@
+#include <string>
+#include <sstream>
+
 #include "World.h"
 #include "IEventReceiver.h"
 #include "UpdateEvent.h"
 
 World::World() : updatable(this), serializable(this) {
 	for (int type = 0; type < 2; type++) {
-		this->lastAllocatedIndex[type] = 0;
+		this->lastAllocatedIndex[type] = -1;
 		this->objectIds[type] = 0;
 		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
 	}
@@ -26,7 +29,7 @@ void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 		//nextIndex = (nextIndex + 1);
 	//}
 
-	this->lastAllocatedIndex[handleType] = nextIndex++;
+	this->lastAllocatedIndex[handleType] = ++nextIndex;
 	object->setHandle(Handle(nextIndex, objectIds[handleType]++, handleType));
 }
 
@@ -105,7 +108,7 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 		ISerializable *serializable = this->serializable.getIndirect(i, false, &object);
 		BaseObject *bo = dynamic_cast<BaseObject*>(serializable);
 
-		if (bo != nullptr) {
+		if (bo != nullptr && !(bo->getHandle().isLocal())) {
 			UpdateEvent* event = new UpdateEvent(object->getHandle(), bo);
 			comms->sendEvent(event);
 		}
@@ -127,4 +130,33 @@ void World::dispatchEvent(Event *evt, Handle &handle) {
 
 bool World::isTick(long int n){
 	return frameCounter % n == 0;
+}
+
+std::string World::listObjects(){
+	std::stringstream buffer;
+	std::vector<IHasHandle*>::iterator it = objects[HandleType::GLOBAL].begin();
+	buffer << "__Global Objects__" << endl;
+	for (it; it != objects[HandleType::GLOBAL].end(); ++it) {
+		buffer << (*it)->toString() << endl << endl;
+	}
+
+	buffer << "__Local Objects__" << endl;
+	it = objects[HandleType::LOCAL].begin();
+	for (it; it != objects[HandleType::LOCAL].end(); ++it) {
+		buffer << (*it)->toString() << endl << endl;
+	}
+	
+	return buffer.str();
+}
+
+Handle World::getLocalObjectByIndex(size_t index){
+	if (index >= objects[HandleType::LOCAL].size())
+		return Handle();
+	return objects[HandleType::LOCAL].at(index)->getHandle();
+}
+
+Handle World::getGlobalObjectByIndex(size_t index){
+	if (index >= objects[HandleType::LOCAL].size())
+		return Handle();
+	return objects[HandleType::GLOBAL].at(index)->getHandle();
 }

@@ -30,12 +30,14 @@ public:
 	~Handle();
 
 	HandleType getType() const;
+	bool isLocal() const;
 	bool operator==(Handle const&) const;
 
 	void reserveSize(IReserve& buffer) const;
 	void fillBuffer(IFill& buffer) const;
 	void deserialize(BufferReader& buffer);
 
+	// Debug
 	std::string toString();
 };
 

@@ -1,7 +1,9 @@
 #include "Handle.h"
 
-Handle::Handle() : Handle(0, 0, HandleType::LOCAL) {}
+#include <string>
+#include <sstream>
 
+Handle::Handle() : Handle(-1, -1, HandleType::LOCAL) {}
 
 Handle::Handle(int index, unsigned int id, HandleType type) {
 	this->index = index;
@@ -16,6 +18,10 @@ Handle::~Handle() {}
 
 HandleType Handle::getType() const {
 	return (HandleType)((this->id & LOCAL_MASK) != LOCAL_MASK);
+}
+
+bool Handle::isLocal() const {
+	return getType() == HandleType::LOCAL;
 }
 
 bool Handle::operator==(Handle const& handle) const {
