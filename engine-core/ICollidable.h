@@ -10,16 +10,23 @@ enum class BoundsType {
 	Sphere = 1
 };
 
-struct Bounds {
+class Bounds {
+public:
 	const BoundsType type = BoundsType::None;
+
+	Bounds() : type(BoundsType::None) {}
+	Bounds(BoundsType t) : type(t) {}
+
 };
 
-struct BoundingSphere : Bounds {
-	const BoundsType type = BoundsType::Sphere;
+class BoundingSphere : public Bounds {
+public:
 	Common::Vector4 position;
 	Common::Vector4 velocity;
 	float radius;
 	float mass;
+
+	BoundingSphere() : Bounds(BoundsType::Sphere) {}
 };
 
 class COREDLL ICollidable {
