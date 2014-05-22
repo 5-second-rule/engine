@@ -114,12 +114,15 @@ void World::update(float dt) {
 			unsigned int p1 = c1->getPriority();
 			unsigned int p2 = c2->getPriority();
 
-			if ((p1 <= p2) ? c1->collidesWith(c2) : c2->collidesWith(c1)) {
-				BoundingSphere c1Bound = c1->getBounds();
-				BoundingSphere c2Bound = c2->getBounds();
+			Common::Vector4 g1 = c1->getGroupingParameter();
+			Common::Vector4 g2 = c2->getGroupingParameter();
 
-				c1->handleCollision(c2Bound, dt);
-				c2->handleCollision(c1Bound, dt);
+			shared_ptr<const Bounds> b1 = c1->getBounds();
+			shared_ptr<const Bounds> b2 = c2->getBounds();
+
+			if ((p1 <= p2) ? c1->collidesWith(c2) : c2->collidesWith(c1)) {
+				c1->handleCollision(b2, dt);
+				c2->handleCollision(b1, dt);
 			}
 		}
 	}
