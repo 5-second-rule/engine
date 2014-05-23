@@ -3,6 +3,7 @@
 #include "engine-renderer.h"
 #include "RenderableWorld.h"
 #include "ModelData.h"
+#include "PlayerCameraHandler.h"
 #include "engine-core/Engine.h"
 #include "engine-core/Event.h"
 #include "engine-core/ConstructorTable.h"
@@ -35,9 +36,11 @@ private:
 	RenderableWorld *renderableWorld;
 	std::vector<ModelData> models;
 	std::vector<Transmission::Texture *> textures;
+	std::vector<Transmission::Texture *> bumpMaps;
 	std::vector<Shader *> pixelShaders;
 	std::vector<Shader *> vertexShaders;
 	InputAdapter inputAdapter;
+	PlayerCameraHandler *cameraHandler;
 	
 protected:
 	void translateInput();
@@ -52,15 +55,20 @@ public:
 									 ConstructorTable<BaseObject> *objectCtors, 
 									 ConstructorTable<ActionEvent>* a, 
 									 void *appHandle,
+									 PlayerCameraHandler *cameraHandler,
 									 char* defaultVertex,
 									 char* defaultPixel );
 	~RenderingEngine();
 	int loadModel(char *filename);
+	int loadModel(char *filename, bool centered);
 	int loadTexture(char *filename);
+	int loadBumpMap(char *filename);
 	int loadPixelShader( char *filename );
 	int loadVertexShader( char *filename );
 	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
+	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex);
 	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
+	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex, size_t vertexShader, size_t pixelShader);
 	void waitForServer();
 	int loadSound( char *filename );
 	bool playSound( size_t index, bool loop );

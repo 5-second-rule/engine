@@ -8,6 +8,7 @@
 #include "IHasHandle.h"
 #include "IUpdatable.h"
 #include "ISerializable.h"
+#include "ICollidable.h"
 #include "CommsProcessor.h"
 #include "Event.h"
 
@@ -31,7 +32,8 @@ private:
 	std::vector<IHasHandle *> objects[2];
 	GCHandleVector<IUpdatable> updatable;
 	GCHandleVector<ISerializable> serializable;
-	long int frameCounter;
+	GCHandleVector<ICollidable> collidable;
+
 public:
 	World();
 	~World();
@@ -49,5 +51,4 @@ public:
 	virtual void update( float dt );
 
 	void dispatchEvent(Event *evt, Handle &handle);
-	bool isTick(long int n); // Return true if the number of frames already updated is multiple of n
 };

@@ -16,6 +16,7 @@ Engine::Engine(
 	, objectCtors(objectCtors)
 	, eventCtors(new EventFactory(eventCtors))
 {
+	this->running = false;
 	// Set up network
 	this->comms = new CommsProcessor(role, this);
 	this->comms->setHandoffQ(&networkUpdates);
@@ -48,6 +49,10 @@ void Engine::run() {
 
 		this->frame(dt);		
 	}
+}
+
+bool Engine::isRunning() {
+	return this->running;
 }
 
 void Engine::stop() {
@@ -115,6 +120,7 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 
 	auto place = this->playerMap.find(event->playerGuid);
 	Response response = Response::FAIL;
+	Handle resultObjectHandle = Handle();
 	if (place == this->playerMap.end()) {
 		response = Response::OK;
 		// spot is available, yay!
@@ -127,6 +133,7 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 		modNum++;
 
 		this->playerMap[event->playerGuid] = obj->getHandle();
+		resultObjectHandle = obj->getHandle();
 
 		if (_DEBUG) std::cout << "=> player registered" << std::endl;
 	} else {
@@ -138,6 +145,7 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 	respEvent.playerGuid = event->playerGuid;
 	respEvent.response = response;
 	respEvent.responseTag = event->responseTag;
+	respEvent.objectHandle = resultObjectHandle;
 
 	comms->sendEvent(&respEvent);
 }
@@ -150,6 +158,7 @@ void Engine::handleRegistrationResponse( RegistrationEvent* event ) {
 		&& event->response == Response::OK) { 		// matches
 		this->waitingForRegistration = false;
 		this->localPlayers.push_back(this->waitingRegistration.playerGuid);
+		this->playerMap[event->playerGuid] = event->objectHandle;
 	}
 }
 

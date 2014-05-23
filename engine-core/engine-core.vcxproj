@@ -55,6 +55,7 @@
       <PreprocessorDefinitions>_IS_ENGINE_CORE;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <AdditionalIncludeDirectories>$(SolutionDir)../Common/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -99,6 +100,7 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="GCHandleVector.h" />
     <ClInclude Include="Handle.h" />
+    <ClInclude Include="ICollidable.h" />
     <ClInclude Include="IHasHandle.h" />
     <ClInclude Include="IEventReceiver.h" />
     <ClInclude Include="ISerializable.h" />

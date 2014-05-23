@@ -52,6 +52,7 @@ public:
 
 	virtual ~Engine();
 
+	bool isRunning();
 	virtual void run();
 	virtual void stop();
 

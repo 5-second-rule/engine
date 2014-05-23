@@ -2,15 +2,16 @@
 #include "IEventReceiver.h"
 #include "UpdateEvent.h"
 
-World::World() : updatable(this), serializable(this) {
+World::World() : updatable(this), serializable(this), collidable(this) {
 	for (int type = 0; type < 2; type++) {
 		this->lastAllocatedIndex[type] = 0;
 		this->objectIds[type] = 0;
 		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
 	}
-	frameCounter = 0;
+
 	this->updatable.reserve(DEFAULT_OBJECT_ALLOC);
 	this->serializable.reserve(DEFAULT_OBJECT_ALLOC);
+	this->collidable.reserve(DEFAULT_OBJECT_ALLOC);
 }
 
 World::~World() {
@@ -26,7 +27,7 @@ void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 		//nextIndex = (nextIndex + 1);
 	//}
 
-	this->lastAllocatedIndex[handleType] = nextIndex++;
+	this->lastAllocatedIndex[handleType] = ++nextIndex;
 	object->setHandle(Handle(nextIndex, objectIds[handleType]++, handleType));
 }
 
@@ -48,6 +49,10 @@ void World::insert(IHasHandle *object) {
 	if (dynamic_cast<ISerializable*>(object) != nullptr) {
 		this->serializable.push_back(handle);
 	}
+
+	if (dynamic_cast<ICollidable*>(object) != nullptr) {
+		this->collidable.push_back(handle);
+	}
 }
 
 void World::remove(Handle *handle) {
@@ -58,7 +63,7 @@ void World::remove(Handle *handle) {
 		storage->at(handle->index) = nullptr;
 	}
 
-	// TODO remove from updatable and serializable vectors, in a separate pass
+	// TODO remove from updatable, serializable, and collidable vectors, in a separate pass
 }
 
 IHasHandle * World::get(const Handle& handle) {
@@ -89,14 +94,40 @@ void World::replace( const Handle& handle,  IHasHandle* object) {
 }
 
 void World::update(float dt) {
-	frameCounter = (frameCounter + 1)%1000000000;
-	for (int i = 0; i < this->updatable.size(); i++) {
-		IUpdatable *updatable = this->updatable.getIndirect(i, false);
 
-		if (updatable != nullptr) {
-			updatable->update(dt);
+	for (int i = 0; i < this->updatable.size(); i++) {
+		IUpdatable *u = this->updatable.getIndirect(i, false);
+
+		if (u != nullptr) {
+			u->update(dt);
 		}
 	}
+
+	//also do collisions
+
+	// naive n^2/2 looping.
+	for (int i = 0; i < this->collidable.size(); i++) {
+		ICollidable* c1 = this->collidable.getIndirect(i, false);
+		for (int j = i + 1; j < this->collidable.size(); j++) {
+			ICollidable* c2 = this->collidable.getIndirect(j, false);
+
+			unsigned int p1 = c1->getPriority();
+			unsigned int p2 = c2->getPriority();
+
+			Common::Vector4 g1 = c1->getGroupingParameter();
+			Common::Vector4 g2 = c2->getGroupingParameter();
+
+			shared_ptr<const Bounds> b1 = c1->getBounds();
+			shared_ptr<const Bounds> b2 = c2->getBounds();
+
+			if ((p1 <= p2) ? c1->collidesWith(c2) : c2->collidesWith(c1)) {
+				std::cout << "Collision" << std::endl;
+				c1->handleCollision(b2, dt);
+				c2->handleCollision(b1, dt);
+			}
+		}
+	}
+
 }
 
 void World::broadcastUpdates(CommsProcessor *comms) {
@@ -123,8 +154,4 @@ void World::dispatchEvent(Event *evt, Handle &handle) {
 		// this little event is going places; not to an object, but places
 		delete evt;
 	}
-}
-
-bool World::isTick(long int n){
-	return frameCounter % n == 0;
 }
