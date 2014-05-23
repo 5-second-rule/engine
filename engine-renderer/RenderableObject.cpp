@@ -17,5 +17,5 @@ void RenderableObject::setPosition(const float pos[3]) {
 }
 
 void RenderableObject::setRotation(const Vector4& rot) {
-	this->model->setRotation(rot);
+	this->model->setRotation(rot.x(),rot.y(),rot.z());
 }
