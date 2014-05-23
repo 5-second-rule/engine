@@ -18,6 +18,10 @@ HandleType Handle::getType() const {
 	return (HandleType)((this->id & LOCAL_MASK) != LOCAL_MASK);
 }
 
+bool Handle::isLocal() const {
+	return getType() == HandleType::LOCAL;
+}
+
 bool Handle::operator==(Handle const& handle) const {
 	if (this->id == handle.id){
 		assert(this->index == handle.index);

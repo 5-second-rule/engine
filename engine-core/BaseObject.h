@@ -28,10 +28,6 @@ public:
 	BaseObject(int type);
 	virtual ~BaseObject();
 
-	// IHasHandle Methods
-	Handle getHandle();
-	void setHandle(Handle handle);
-
 	// ISerializable Methods
 	virtual void reserveSize(IReserve& buffer) const;
 	virtual void fillBuffer(IFill& buffer) const;

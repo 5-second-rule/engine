@@ -51,4 +51,9 @@ public:
 	virtual void update( float dt );
 
 	void dispatchEvent(Event *evt, Handle &handle);
+
+	// Command line
+	std::string listObjects();
+	Handle World::getLocalObjectByIndex(size_t index);
+	Handle World::getGlobalObjectByIndex(size_t index);
 };
