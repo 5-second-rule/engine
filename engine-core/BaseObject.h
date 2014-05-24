@@ -15,8 +15,6 @@ class COREDLL BaseObject
 	, public IEventReceiver
 {
 private:
-	Handle handle;
-
 	BaseObject(); // intentionally private
 
 protected:

@@ -7,11 +7,12 @@
 class COREDLL IHasHandle {
 private:
 	int type;
-	Handle handle;
 
 	IHasHandle();
 
 protected:
+	Handle handle;
+
 	void setType(int type) {
 		this->type = type;
 	}
