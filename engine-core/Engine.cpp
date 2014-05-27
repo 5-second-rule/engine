@@ -30,6 +30,10 @@ Engine::~Engine() {
 	delete this->comms;
 }
 
+void Engine::sendEvent( Event* evt ) {
+	this->comms->sendEvent( evt );
+}
+
 void Engine::run() {
 
 	steady_clock::time_point lastTickTime = steady_clock::now();
@@ -97,9 +101,7 @@ void Engine::dispatchUpdate(Event* event) {
 				this->handleRegistrationResponse( regEvent );
 				break;
 		}
-	}
-
-	if (!waitingForRegistration) {
+	} else if (!waitingForRegistration) {
 		switch (event->getType()) {
 		case EventType::UPDATE:
 			this->updateObject(Event::cast<UpdateEvent>(event));
@@ -108,8 +110,11 @@ void Engine::dispatchUpdate(Event* event) {
 			if (_DEBUG) std::cout << "action!" << std::endl;
 			this->dispatchAction(Event::cast<ActionEvent>(event));
 			break;
+		case EventType::SOUND:
+			this->dispatchSound( Event::cast<SoundEvent>( event ) );
+			break;
 		default:
-			//TODO log bad event
+			if( _DEBUG ) std::cout << "Urgh!" << std::endl;
 			break;
 		}
 	}
@@ -205,6 +210,8 @@ void Engine::dispatchAction( ActionEvent *evt ) {
 	}
 }
 
-void Engine::setInboundEventHandler(special_event_handler handler) {
-	this->specialEventHandler = handler;
+void Engine::dispatchSound( SoundEvent *evt ) {
+	// delete the event as there is nothing left to do on
+	// non-renderable engines
+	delete evt;
 }

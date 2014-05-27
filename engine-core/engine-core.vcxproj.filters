@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="ActionEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BaseObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -13,9 +10,6 @@
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Handle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -23,12 +17,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EventFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UpdateEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CommsProcessor.cpp">
@@ -46,8 +34,23 @@
     <ClCompile Include="Socket.cpp">
       <Filter>Comms</Filter>
     </ClCompile>
+    <ClCompile Include="ActionEvent.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
     <ClCompile Include="RegistrationEvent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEvent.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="UpdateEvent.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source Files\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="EventFactory.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +132,9 @@
     <ClInclude Include="ICollidable.h">
       <Filter>Header Files\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="SoundEvent.h">
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -153,6 +159,10 @@
     </Filter>
     <Filter Include="Comms">
       <UniqueIdentifier>{f411e96b-f363-4bb7-9857-e206b3af3e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Events">
+      <UniqueIdentifier>{0d11701b-0741-4235-879b-5280952e536b}</UniqueIdentifier>
+      <Extensions>Event</Extensions>
     </Filter>
   </ItemGroup>
 </Project>

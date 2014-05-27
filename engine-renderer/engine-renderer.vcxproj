@@ -19,6 +19,7 @@
     <ClInclude Include="RenderableObject.h" />
     <ClInclude Include="RenderableWorld.h" />
     <ClInclude Include="RenderingEngine.h" />
+    <ClInclude Include="SoundObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\engine-core\engine-core.vcxproj">
@@ -31,6 +32,7 @@
     <ClCompile Include="RenderableObject.cpp" />
     <ClCompile Include="RenderableWorld.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
+    <ClCompile Include="SoundObject.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E10C62BF-444A-4AB8-AB79-E650EB59E3DF}</ProjectGuid>

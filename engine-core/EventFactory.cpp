@@ -3,6 +3,7 @@
 #include "EventType.h"
 #include "UpdateEvent.h"
 #include "RegistrationEvent.h"
+#include "SoundEvent.h"
 
 #define SIZE 10
 
@@ -22,6 +23,13 @@ EventFactory::EventFactory(ConstructorTable<ActionEvent>* ctorTable)
 		[](ConstructorTable<Event>* t) -> Event* {
 			return new RegistrationEvent();
 		}
+	);
+
+	this->setConstructor(
+		static_cast<int>(EventType::SOUND),
+		[]( ConstructorTable<Event>* t ) -> Event* {
+		return new SoundEvent();
+	}
 	);
 }
 
