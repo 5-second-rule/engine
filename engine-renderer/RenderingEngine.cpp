@@ -4,15 +4,17 @@
 static const char *testData = "This is a client update!!!\n";
 
 RenderingEngine::RenderingEngine( RenderableWorld *world,
-																	ConstructorTable<BaseObject> *objectCtors,
-																	ConstructorTable<ActionEvent> *actionCtors,
-																	ConstructorTable<SoundObject> *soundCtors,
-																	void *appHandle,
-																	PlayerCameraHandler *cameraHandler,
-																	char* defaultVertex,
-																	char* defaultPixel) 
+	ConstructorTable<BaseObject> *objectCtors,
+	ConstructorTable<ActionEvent> *actionCtors,
+	ConstructorTable<SoundObject> *soundCtors,
+	void *appHandle,
+	PlayerCameraHandler *cameraHandler,
+	char* defaultVertex,
+	char* defaultPixel,
+	const wchar_t* windowName
+	) 
 		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT) {
-	this->window = Window::createWindow(appHandle);
+	this->window = Window::createWindow(appHandle, windowName, 800, 600);
 	this->input = this->window->getInput();
 	this->renderer = Renderer::createRenderer(this->window, defaultVertex, defaultPixel);
 	this->renderer->getTimer()->StartTimer();
