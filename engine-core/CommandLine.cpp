@@ -15,16 +15,21 @@ CommandLine::~CommandLine() {
 void CommandLine::readCommands() {
 	std::string str;
 	
-	std::cout << "> " << std::endl;
+	std::cout << std::endl << "> ";
 
 	while (this->running && std::getline(std::cin, str)) {
 		Command* cmd = Command::parse(str);
 		
-		queue_lock.lock();
-		queue.push(cmd);
-		queue_lock.unlock();
+		if (cmd != nullptr) {
+			queue_lock.lock();
+			queue.push(cmd);
+			queue_lock.unlock();
+		}
+		else {
+			std::cout << "error: Unknown command" << std::endl;
+		}
 
-		std::cout << "> " << std::endl;
+		std::cout << std::endl << "> ";
 	}
 }
 
@@ -36,7 +41,7 @@ void CommandLine::update() {
 		cmd->execute();
 		delete cmd;
 	}
-	this->queue_lock.unlock();;
+	this->queue_lock.unlock();
 }
 
 Command* Command::parse(std::string cmd) {
