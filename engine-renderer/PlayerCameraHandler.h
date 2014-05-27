@@ -9,6 +9,7 @@ class RENDERDLL PlayerCameraHandler
 public:
 	Common::Vector4 position;
 	Common::Vector4 lookAt;
+	Common::Vector4 up;
 
 	PlayerCameraHandler();
 	~PlayerCameraHandler();

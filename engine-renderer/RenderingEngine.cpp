@@ -56,7 +56,7 @@ void RenderingEngine::frame(float dt) {
 		if (playerObject != nullptr) {
 			this->cameraHandler->updateFor(playerObject);
 			Camera *camera = renderer->getCamera();
-			camera->set(this->cameraHandler->position, this->cameraHandler->lookAt);
+			camera->set(this->cameraHandler->position, this->cameraHandler->lookAt, this->cameraHandler->up);
 		}
 	}
 
