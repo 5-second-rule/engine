@@ -198,6 +198,14 @@ Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureI
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture, bumpMap, vertex, pixel);
 }
 
+Model * RenderingEngine::create2DModelFromVertices(Vertex* v, int numVertices, Index* i, int numIndices, Texture* texture) {
+	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture);
+}
+
+Model * RenderingEngine::create2DModelFromVertices(Vertex* v, int numVertices, Index* i, int numIndices, Texture* texture, Shader* vs, Shader* ps) {
+	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture, vs, ps);
+}
+
 
 void RenderingEngine::waitForServer() {
 	this->comms->waitAnnouce();

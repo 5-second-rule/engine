@@ -67,6 +67,8 @@ public:
 	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex);
 	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
 	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex, size_t vertexShader, size_t pixelShader);
+	Model * create2DModelFromVertices(Vertex* v, int numVertices, Index* i, int numIndices, Texture* texture);
+	Model * create2DModelFromVertices(Vertex* v, int numVertices, Index* i, int numIndices, Texture* texture, Shader* vs, Shader* ps);
 	void waitForServer();
 
 	IRenderingEngineDelegate* renderingDelegate;
