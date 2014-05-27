@@ -212,12 +212,33 @@ Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureI
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture, bumpMap, vertex, pixel);
 }
 
-Model * RenderingEngine::create2DModelFromVertices(Vertex* v, int numVertices, Index* i, int numIndices, Texture* texture) {
+Model * RenderingEngine::create2DModelFromVertices(Vertex *v, int numVertices, Index *i, int numIndices, Texture *texture) {
 	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture);
 }
 
-Model * RenderingEngine::create2DModelFromVertices(Vertex* v, int numVertices, Index* i, int numIndices, Texture* texture, Shader* vs, Shader* ps) {
+Model * RenderingEngine::create2DModelFromVertices(Vertex *v, int numVertices, Index *i, int numIndices, Texture *texture, Shader *vs, Shader *ps) {
 	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture, vs, ps);
+}
+
+Model * RenderingEngine::create2DModelFromScratch(Vertex *v, int numVertices, Index *i, int numIndices, char *textureFile, std::vector<Transmission::Texture *> textureStorage, bool isTransparent) {
+	Texture *texture = this->renderer->createTextureFromFile(textureFile);
+	if (v == nullptr || i == nullptr || texture == nullptr) {
+		return nullptr;
+	}
+
+	textureStorage.push_back(texture);
+
+	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture, isTransparent);
+}
+Model * RenderingEngine::create2DModelFromScratch(Vertex *v, int numVertices, Index *i, int numIndices, char *textureFile, std::vector<Transmission::Texture *> textureStorage, Shader *vs, Shader *ps, bool isTransparent) {
+	Texture *texture = this->renderer->createTextureFromFile(textureFile);
+	if (v == nullptr || i == nullptr || texture == nullptr || vs == nullptr || ps == nullptr) {
+		return nullptr;
+	}
+
+	textureStorage.push_back(texture);
+
+	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture, vs, ps, isTransparent);
 }
 
 Sound * RenderingEngine::createSoundFromIndex( size_t soundIndex ) {

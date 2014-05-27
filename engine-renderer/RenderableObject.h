@@ -16,7 +16,8 @@ public:
 
 	virtual void render();
 
-protected:
 	void setPosition(const float pos[3]);
+	void setScale(const float scale);
+protected:
 	void setRotation(const Vector4& rot);
 };

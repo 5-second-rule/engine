@@ -28,6 +28,9 @@ Engine::Engine(
 
 Engine::~Engine() {
 	delete this->comms;
+	delete this->registrar;
+	this->comms = nullptr;
+	this->registrar = nullptr;;
 }
 
 void Engine::sendEvent( Event* evt ) {
@@ -65,6 +68,10 @@ void Engine::stop() {
 
 World* Engine::getWorld() {
 	return this->world;
+}
+
+ConstructorTable<BaseObject> *Engine::getObjCtors() {
+	return this->objectCtors;
 }
 
 bool Engine::shouldContinueFrames() {
@@ -129,16 +136,17 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 	if (place == this->playerMap.end()) {
 		response = Response::OK;
 		// spot is available, yay!
-
+		
 		// HACK make first model for now
-		BaseObject * obj = this->objectCtors->invoke( modNum );
-		world->allocateHandle(obj, HandleType::GLOBAL);
-		world->insert(obj);
+		//BaseObject * obj = addPlayer(event->playerGuid);
+		//BaseObject * obj = this->objectCtors->invoke( modNum );
+		//world->allocateHandle(obj, HandleType::GLOBAL);
+		//world->insert(obj);
 
-		modNum++;
+		//modNum++;
 
-		this->playerMap[event->playerGuid] = obj->getHandle();
-		resultObjectHandle = obj->getHandle();
+		//this->playerMap[event->playerGuid] = obj->getHandle();
+		//resultObjectHandle = obj->getHandle();
 
 		if (_DEBUG) std::cout << "=> player registered" << std::endl;
 	} else {
@@ -165,6 +173,10 @@ void Engine::handleRegistrationResponse( RegistrationEvent* event ) {
 		this->localPlayers.push_back(this->waitingRegistration.playerGuid);
 		this->playerMap[event->playerGuid] = event->objectHandle;
 	}
+}
+
+void Engine::setPlayerRegistration(IRegisterPlayers *registrar) {
+	this->registrar = registrar;
 }
 
 // HACK not really safe either, no prevention of double call

@@ -12,6 +12,7 @@
 #include "SoundEvent.h"
 #include "RegistrationEvent.h"
 #include "BaseObject.h"
+#include "IRegisterPlayers.h"
 
 #include <map>
 
@@ -33,6 +34,7 @@ protected:
 	CommsProcessor *comms;
 	ConstructorTable<BaseObject> *objectCtors;
 	EventFactory *eventCtors;
+	IRegisterPlayers *registrar;
 
 	std::map<unsigned int, Handle> playerMap;
 	std::vector<unsigned int> localPlayers;
@@ -57,8 +59,10 @@ public:
 	virtual void run();
 	virtual void stop();
 
-	World* getWorld();
+	World *getWorld();
+	ConstructorTable<BaseObject> *getObjCtors();
 
+	void setPlayerRegistration(IRegisterPlayers *registrar);
 	void registerPlayer(bool wait);
 	unsigned int getLocalPlayerGuid(unsigned int playerIndex);
 
