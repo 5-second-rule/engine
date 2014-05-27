@@ -27,9 +27,9 @@ void ServerEngine::tick(float dt) {
 	if( annouceCount == 25 ) {
 		comms->sendAnnouce();
 		annouceCount = 0;
-	}
-	else
-		++annouceCount;
+	} else ++annouceCount;
+
+	this->commandLine.update();
 
 }
 
