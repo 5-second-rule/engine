@@ -9,12 +9,12 @@
 #include "ActionEvent.h"
 #include "EventFactory.h"
 #include "UpdateEvent.h"
+#include "SoundEvent.h"
 #include "RegistrationEvent.h"
 #include "BaseObject.h"
 
 #include <map>
 
-typedef void(*special_event_handler)(BufferReader& buffer);
 typedef std::chrono::duration<float, std::ratio<1, 1>> float_seconds;
 
 class World;
@@ -24,7 +24,6 @@ class COREDLL Engine {
 	friend class CommsProcessor;
 private:
 	DoubleBufferedQueue<Event*> networkUpdates;
-	special_event_handler specialEventHandler;
 
 	bool running;
 	bool waitingForRegistration;
@@ -52,13 +51,13 @@ public:
 
 	virtual ~Engine();
 
+	void sendEvent( Event* evt );
+
 	bool isRunning();
 	virtual void run();
 	virtual void stop();
 
 	World* getWorld();
-
-	void setInboundEventHandler(special_event_handler handler);
 
 	void registerPlayer(bool wait);
 	unsigned int getLocalPlayerGuid(unsigned int playerIndex);
@@ -71,9 +70,10 @@ protected:
 	virtual void frame(float dt) = 0;
 
 	virtual void dispatchUpdate( Event* event );
-	virtual void dispatchAction(ActionEvent *buffer);
+	virtual void dispatchAction( ActionEvent *evt );
+	virtual void dispatchSound( SoundEvent *evt );
 
-	virtual void updateObject(UpdateEvent* evt);
+	virtual void updateObject( UpdateEvent* evt );
 
 	virtual void handleRegistrationRequest( RegistrationEvent* event );
 	virtual void handleRegistrationResponse( RegistrationEvent* event );
