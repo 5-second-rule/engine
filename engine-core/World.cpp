@@ -4,7 +4,7 @@
 
 World::World() : updatable(this), serializable(this), collidable(this) {
 	for (int type = 0; type < 2; type++) {
-		this->lastAllocatedIndex[type] = 0;
+		this->lastAllocatedIndex[type] = -1;
 		this->objectIds[type] = 0;
 		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
 	}
@@ -136,7 +136,7 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 		ISerializable *serializable = this->serializable.getIndirect(i, false, &object);
 		BaseObject *bo = dynamic_cast<BaseObject*>(serializable);
 
-		if (bo != nullptr) {
+		if (bo != nullptr && !(bo->getHandle().isLocal())) {
 			UpdateEvent* event = new UpdateEvent(object->getHandle(), bo);
 			comms->sendEvent(event);
 		}

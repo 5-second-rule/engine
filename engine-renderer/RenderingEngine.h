@@ -60,7 +60,8 @@ public:
 									 void *appHandle,
 									 PlayerCameraHandler *cameraHandler,
 									 char* defaultVertex,
-									 char* defaultPixel );
+									 char* defaultPixel,
+									 const wchar_t* windowName);
 	~RenderingEngine();
 
 	ConstructorTable<SoundObject>* soundCtors;
