@@ -12,7 +12,7 @@ RenderingEngine::RenderingEngine( RenderableWorld *world,
 																	char* defaultVertex,
 																	char* defaultPixel) 
 		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT) {
-	this->window = Window::createWindow(appHandle);
+	this->window = Window::createWindow(appHandle, L"Vein: Rivers of Blood", 800, 600);
 	this->input = this->window->getInput();
 	this->renderer = Renderer::createRenderer(this->window, defaultVertex, defaultPixel);
 	this->renderer->getTimer()->StartTimer();
