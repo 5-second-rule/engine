@@ -4,14 +4,6 @@ BaseObject::BaseObject(int type) : IHasHandle(type) {}
 
 BaseObject::~BaseObject(){}
 
-Handle BaseObject::getHandle(){
-	return this->handle;
-}
-
-void BaseObject::setHandle(Handle handle){
-	this->handle = handle;
-}
-
 void BaseObject::reserveSize(IReserve& buffer) const {
 	buffer.reserve(sizeof(int));
 	handle.reserveSize(buffer);

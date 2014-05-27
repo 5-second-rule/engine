@@ -4,7 +4,7 @@
 
 World::World() : updatable(this), serializable(this), collidable(this) {
 	for (int type = 0; type < 2; type++) {
-		this->lastAllocatedIndex[type] = 0;
+		this->lastAllocatedIndex[type] = -1;
 		this->objectIds[type] = 0;
 		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
 	}
@@ -136,7 +136,7 @@ void World::broadcastUpdates(CommsProcessor *comms) {
 		ISerializable *serializable = this->serializable.getIndirect(i, false, &object);
 		BaseObject *bo = dynamic_cast<BaseObject*>(serializable);
 
-		if (bo != nullptr) {
+		if (bo != nullptr && !(bo->getHandle().isLocal())) {
 			UpdateEvent* event = new UpdateEvent(object->getHandle(), bo);
 			comms->sendEvent(event);
 		}
@@ -154,4 +154,33 @@ void World::dispatchEvent(Event *evt, Handle &handle) {
 		// this little event is going places; not to an object, but places
 		delete evt;
 	}
+}
+
+std::string World::listObjects(){
+	std::stringstream buffer;
+	std::vector<IHasHandle*>::iterator it = objects[HandleType::GLOBAL].begin();
+	buffer << "__Global Objects__" << endl;
+	for (it; it != objects[HandleType::GLOBAL].end(); ++it) {
+		buffer << (*it)->toString() << endl << endl;
+	}
+
+	buffer << "__Local Objects__" << endl;
+	it = objects[HandleType::LOCAL].begin();
+	for (it; it != objects[HandleType::LOCAL].end(); ++it) {
+		buffer << (*it)->toString() << endl << endl;
+	}
+
+	return buffer.str();
+}
+
+Handle World::getLocalObjectByIndex(size_t index){
+	if (index >= objects[HandleType::LOCAL].size())
+		return Handle();
+	return objects[HandleType::LOCAL].at(index)->getHandle();
+}
+
+Handle World::getGlobalObjectByIndex(size_t index){
+	if (index >= objects[HandleType::GLOBAL].size())
+		return Handle();
+	return objects[HandleType::GLOBAL].at(index)->getHandle();
 }

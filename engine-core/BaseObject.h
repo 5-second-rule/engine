@@ -15,8 +15,6 @@ class COREDLL BaseObject
 	, public IEventReceiver
 {
 private:
-	Handle handle;
-
 	BaseObject(); // intentionally private
 
 protected:
@@ -27,10 +25,6 @@ protected:
 public:
 	BaseObject(int type);
 	virtual ~BaseObject();
-
-	// IHasHandle Methods
-	Handle getHandle();
-	void setHandle(Handle handle);
 
 	// ISerializable Methods
 	virtual void reserveSize(IReserve& buffer) const;

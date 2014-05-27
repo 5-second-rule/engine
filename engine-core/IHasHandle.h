@@ -7,9 +7,12 @@
 class COREDLL IHasHandle {
 private:
 	int type;
+
 	IHasHandle();
 
 protected:
+	Handle handle;
+
 	void setType(int type) {
 		this->type = type;
 	}
@@ -17,8 +20,17 @@ protected:
 public:
 	IHasHandle(int type) : type(type) {}
 
-	virtual Handle getHandle() = 0;
-	virtual void setHandle(Handle handle) = 0;
+	Handle getHandle(){
+		return this->handle;
+	}
+
+	void setHandle(Handle handle){
+		this->handle = handle;
+	}
+
+	virtual std::string toString(){
+		return handle.toString();
+	}
 
 	virtual int getType() const { 
 		return this->type; 
