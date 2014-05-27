@@ -13,8 +13,10 @@
 #include "renderer/Renderer.h"
 #include "renderer/Texture.h"
 #include "renderer/Shader.h"
+#include "renderer/Sounder.h"
 
 #include "InputAdapter.h"
+#include "SoundObject.h"
 
 #include <vector>
 
@@ -31,12 +33,14 @@ private:
 	const Transmission::Input *input;
 	Transmission::Window *window;
 	Transmission::Renderer *renderer;
+	Transmission::Sounder *sounder;
 	RenderableWorld *renderableWorld;
 	std::vector<ModelData> models;
 	std::vector<Transmission::Texture *> textures;
 	std::vector<Transmission::Texture *> bumpMaps;
 	std::vector<Shader *> pixelShaders;
 	std::vector<Shader *> vertexShaders;
+	std::vector<Sound *> sounds;
 	InputAdapter inputAdapter;
 	PlayerCameraHandler *cameraHandler;
 	
@@ -49,26 +53,37 @@ protected:
 	virtual void tick(float dt);
 
 public:
-	RenderingEngine(
-		RenderableWorld *world, 
-		ConstructorTable<BaseObject> *objectCtors, 
-		ConstructorTable<ActionEvent>* a, 
-		void *appHandle,
-		PlayerCameraHandler *cameraHandler);
-
+	RenderingEngine( RenderableWorld *world, 
+									 ConstructorTable<BaseObject> *objectCtors, 
+									 ConstructorTable<ActionEvent>* actionCtors,
+									 ConstructorTable<SoundObject>* soundCtors,
+									 void *appHandle,
+									 PlayerCameraHandler *cameraHandler,
+									 char* defaultVertex,
+									 char* defaultPixel );
 	~RenderingEngine();
+
+	ConstructorTable<SoundObject>* soundCtors;
+
 	int loadModel(char *filename);
 	int loadModel(char *filename, bool centered);
 	int loadTexture(char *filename);
 	int loadBumpMap(char *filename);
 	int loadPixelShader( char *filename );
 	int loadVertexShader( char *filename );
-	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
-	Transmission::Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex);
+	int loadSound( char *filename );
+	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
+	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex);
 	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
 	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex, size_t vertexShader, size_t pixelShader);
+
 	Model * create2DModelFromVertices(Vertex* v, int numVertices, Index* i, int numIndices, Texture* texture);
 	Model * create2DModelFromVertices(Vertex* v, int numVertices, Index* i, int numIndices, Texture* texture, Shader* vs, Shader* ps);
+
+	Sound * createSoundFromIndex( size_t soundIndex );
+  
+	virtual void dispatchSound( SoundEvent *evt );
+
 	void waitForServer();
 
 	IRenderingEngineDelegate* renderingDelegate;

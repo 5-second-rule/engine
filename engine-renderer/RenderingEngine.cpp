@@ -3,23 +3,25 @@
 // constants
 static const char *testData = "This is a client update!!!\n";
 
-RenderingEngine::RenderingEngine(
-	RenderableWorld *world,
-	ConstructorTable<BaseObject> *objectCtors,
-	ConstructorTable<ActionEvent> *actionCtors,
-	void *appHandle,
-	PlayerCameraHandler *cameraHandler
-) 
-		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT)
-{
+RenderingEngine::RenderingEngine( RenderableWorld *world,
+																	ConstructorTable<BaseObject> *objectCtors,
+																	ConstructorTable<ActionEvent> *actionCtors,
+																	ConstructorTable<SoundObject> *soundCtors,
+																	void *appHandle,
+																	PlayerCameraHandler *cameraHandler,
+																	char* defaultVertex,
+																	char* defaultPixel) 
+		: Engine(world, objectCtors, actionCtors, CommsProcessorRole::CLIENT) {
 	this->window = Window::createWindow(appHandle);
 	this->input = this->window->getInput();
-	this->renderer = Renderer::createRenderer(this->window);
+	this->renderer = Renderer::createRenderer(this->window, defaultVertex, defaultPixel);
 	this->renderer->getTimer()->StartTimer();
+	this->sounder = Sounder::createSounder( this->window );
 	this->renderableWorld = world;
 	this->inputAdapter = InputAdapter();
 	this->inputAdapter.setInput(this->input);
 	this->cameraHandler = cameraHandler;
+	this->soundCtors = soundCtors;
 }
 
 RenderingEngine::~RenderingEngine() {}
@@ -132,6 +134,18 @@ int RenderingEngine::loadVertexShader( char *filename ) {
 	return -1;
 }
 
+int RenderingEngine::loadSound( char *filename ) {
+	Sound *sound = this->sounder->createSoundFromFile( filename );
+
+	// TODO validate this error check
+	if( sound != nullptr ) {
+		this->sounds.push_back( sound );
+		return this->sounds.size() - 1;
+	}
+
+	return -1;
+}
+
 Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureIndex) {
 	if (modelIndex < 0 || modelIndex >= this->models.size()) {
 		throw std::runtime_error("Model index out of range.");
@@ -206,6 +220,32 @@ Model * RenderingEngine::create2DModelFromVertices(Vertex* v, int numVertices, I
 	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture, vs, ps);
 }
 
+Sound * RenderingEngine::createSoundFromIndex( size_t soundIndex ) {
+	// ok not really a create function but it follows the naming scheme 
+	// and conventions used so far in engine
+	if( soundIndex < 0 || soundIndex >= this->sounds.size() ) {
+		throw std::runtime_error( "Model index out of range." );
+	}
+
+	return this->sounds.at( soundIndex );
+}
+
+void RenderingEngine::dispatchSound( SoundEvent *evt ) {
+	SoundObject* obj = soundCtors->invoke(evt->soundType);
+	Sound* snd = obj->sound;
+	if( evt->shouldStop ) {
+		snd->stop();
+	} else {
+		if( evt->isLooped ) {
+			snd->playLooped();
+		} else {
+			snd->play();
+		}
+	}
+
+	delete obj;
+	delete evt;
+}
 
 void RenderingEngine::waitForServer() {
 	this->comms->waitAnnouce();

@@ -6,5 +6,6 @@ enum class COREDLL EventType{
 	UPDATE,
 	ACTION,
 	REGISTRATION,
+	SOUND,
 	SPECIAL
 };

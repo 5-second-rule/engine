@@ -68,8 +68,8 @@ T* ConstructorTable<T>::invoke(int index) {
 
 template<typename T>
 T* ConstructorTable<T>::invoke(BufferReader& reader) {
-	T* t = this->invoke(static_cast<int>(T::getType(reader)));
-	t->deserialize(reader);
+	T* t = this->invoke( static_cast<int>(T::getType( reader )) );
+	t->deserialize( reader );
 	return t;
 }
 

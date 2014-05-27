@@ -3,8 +3,8 @@
 
 PlayerCameraHandler::PlayerCameraHandler()
 {
-	this->position = Common::Vector4(0,0,0);
-	this->lookAt = Common::Vector4(0,0,0);
+	this->position = Common::Point(0,0,-10);
+	this->lookAt = Common::Point(0,0,0);
 }
 
 PlayerCameraHandler::~PlayerCameraHandler()
