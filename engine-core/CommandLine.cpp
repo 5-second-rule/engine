@@ -2,23 +2,46 @@
 
 #include <iostream>
 
-CommandLine::CommandLine() {}
+CommandLine::CommandLine()
+	: running(true)
+	, reader(&CommandLine::readCommands, this)
+{}
 
 
-CommandLine::~CommandLine() {}
+CommandLine::~CommandLine() {
+	this->running = false;
+}
 
-void CommandLine::update() {
+void CommandLine::readCommands() {
 	std::string str;
-	while (std::getline(std::cin, str)) {
-		std::unique_ptr<Command> cmd = Command::parse(str);
-		if(cmd) cmd->execute();
+	
+	std::cout << "> " << std::endl;
+
+	while (this->running && std::getline(std::cin, str)) {
+		Command* cmd = Command::parse(str);
+		
+		queue_lock.lock();
+		queue.push(cmd);
+		queue_lock.unlock();
+
 		std::cout << "> " << std::endl;
 	}
 }
 
-std::unique_ptr<Command> Command::parse(std::string cmd) {
+void CommandLine::update() {
+	this->queue_lock.lock();
+	while (!this->queue.empty()) {
+		Command* cmd = this->queue.front();
+		this->queue.pop();
+		cmd->execute();
+		delete cmd;
+	}
+	this->queue_lock.unlock();;
+}
+
+Command* Command::parse(std::string cmd) {
 	if (cmd.substr(0, 4) == std::string("echo"))
-		return std::unique_ptr<Command>(new Echo(cmd.substr(4)));
+		return new Echo(cmd.substr(4));
 	else
 		return nullptr;
 }
