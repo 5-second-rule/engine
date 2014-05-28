@@ -1,12 +1,14 @@
 #include "CommandLine.h"
 
 #include <iostream>
+#include <sstream>
 
 CommandLine::CommandLine()
 	: running(true)
 	, reader(&CommandLine::readCommands, this)
-{}
-
+{
+	Command::registerCommand<Echo>("echo");
+}
 
 CommandLine::~CommandLine() {
 	this->running = false;
@@ -44,11 +46,19 @@ void CommandLine::update() {
 	this->queue_lock.unlock();
 }
 
+std::map<std::string, std::function<Command*(std::string)>> Command::commands;
+
 Command* Command::parse(std::string cmd) {
-	if (cmd.substr(0, 4) == std::string("echo"))
-		return new Echo(cmd.substr(4));
-	else
+	std::stringstream stream(cmd);
+	std::string word;
+	stream >> word;
+
+	if (Command::commands.count(word) != 0) {
+		return Command::commands[word](cmd.substr(word.length()));
+	} else {
 		return nullptr;
+	}
+
 }
 
 Echo::Echo(std::string cmd) : echo(cmd) {}
