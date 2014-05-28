@@ -6,6 +6,7 @@
 class COREDLL IRegisterPlayers {
 protected:
 	int state;
+
 public:
 	virtual BaseObject * addPlayer(unsigned int playerGuid) = 0;
 	virtual int getState() {
