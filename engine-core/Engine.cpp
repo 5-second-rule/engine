@@ -137,6 +137,7 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 		response = Response::OK;
 		// spot is available, yay!
 		
+		registrar->addPlayer(event->playerGuid);
 		// HACK make first model for now
 		//BaseObject * obj = addPlayer(event->playerGuid);
 		//BaseObject * obj = this->objectCtors->invoke( modNum );
@@ -158,7 +159,7 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 	respEvent.playerGuid = event->playerGuid;
 	respEvent.response = response;
 	respEvent.responseTag = event->responseTag;
-	respEvent.objectHandle = resultObjectHandle;
+	//respEvent.objectHandle = resultObjectHandle;
 
 	comms->sendEvent(&respEvent);
 }
@@ -177,6 +178,10 @@ void Engine::handleRegistrationResponse( RegistrationEvent* event ) {
 
 void Engine::setPlayerRegistration(IRegisterPlayers *registrar) {
 	this->registrar = registrar;
+}
+
+IRegisterPlayers *Engine::getPlayerRegistration() {
+	return this->registrar;
 }
 
 // HACK not really safe either, no prevention of double call

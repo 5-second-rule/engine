@@ -15,7 +15,3 @@ void RenderableObject::render() {
 IMoveable* RenderableObject::getMoveable() {
 	return this->model;
 }
-
-void RenderableObject::setScale(const float scale) {
-	this->model->setScale(Vector4(scale, scale, scale, 0));
-}

@@ -89,6 +89,7 @@ public:
 
 	void waitForServer();
 
-	IRenderingEngineDelegate* renderingDelegate;
+	IRenderingEngineDelegate* gameplayRenderingDelegate;
+	IRenderingEngineDelegate* selectionRenderingDelegate;
 };
 

@@ -16,6 +16,6 @@ public:
 
 	virtual void render();
 
-protected:
+//protected:
 	IMoveable* getMoveable();
 };

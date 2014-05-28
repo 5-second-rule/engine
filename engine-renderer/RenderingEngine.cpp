@@ -29,7 +29,16 @@ RenderingEngine::RenderingEngine( RenderableWorld *world,
 RenderingEngine::~RenderingEngine() {}
 
 void RenderingEngine::translateInput() {
-	std::vector<Event *> inputEventVector = this->renderingDelegate->inputTranslator(&this->inputAdapter);
+	std::vector<Event *> inputEventVector;
+	switch (registrar->getState()) {
+	case (2) : // Selection
+		inputEventVector = this->selectionRenderingDelegate->inputTranslator(&this->inputAdapter);
+		break;
+	case (3) : // Game
+		inputEventVector = this->gameplayRenderingDelegate->inputTranslator(&this->inputAdapter);
+		break;
+	}
+	
 	std::vector<Event *>::iterator it;
 	for (it = inputEventVector.begin(); it != inputEventVector.end(); ++it) {
 		this->comms->sendEvent(*it);

@@ -63,6 +63,8 @@ public:
 	ConstructorTable<BaseObject> *getObjCtors();
 
 	void setPlayerRegistration(IRegisterPlayers *registrar);
+	IRegisterPlayers *getPlayerRegistration();
+
 	void registerPlayer(bool wait);
 	unsigned int getLocalPlayerGuid(unsigned int playerIndex);
 
