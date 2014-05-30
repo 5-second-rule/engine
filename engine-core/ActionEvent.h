@@ -22,7 +22,7 @@ public:
 	// Typing
 	static const EventType TYPE = EventType::ACTION;
 
-	int getActionType();
+	int getActionType() const;
 	static int getActionType(BufferReader& reader);
 
 	template<class T> static T* cast(ActionEvent* e) {
