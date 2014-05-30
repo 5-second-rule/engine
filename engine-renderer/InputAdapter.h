@@ -2,7 +2,7 @@
 
 #include "engine-renderer.h"
 #include "renderer/Input.h"
-#include "../../common/common/Vector4.h"
+#include "common/Vector4.h"
 
 class RENDERDLL InputAdapter
 {
@@ -11,6 +11,7 @@ private:
 
 public:
 	InputAdapter();
+	~InputAdapter();
 	void setInput(const Transmission::Input *input);
 	Transmission::Input::KeyState getKeyState(Transmission::Input::Key key);
 	float getAnalogTriggerValue(Transmission::Input::Key key);

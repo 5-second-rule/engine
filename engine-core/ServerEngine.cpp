@@ -15,8 +15,6 @@ ServerEngine::ServerEngine(
 	, secondsPerTick(secondsPerTick)
 {}
 
-ServerEngine::~ServerEngine() {}
-
 void ServerEngine::tick(float dt) {
 	static int annouceCount = 0;
 

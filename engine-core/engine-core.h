@@ -14,6 +14,3 @@
 #else
 #define COREDLL
 #endif
-
-#include <string>
-#include <sstream>

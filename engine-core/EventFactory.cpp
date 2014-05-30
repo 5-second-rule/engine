@@ -5,6 +5,13 @@
 #include "RegistrationEvent.h"
 #include "SoundEvent.h"
 
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
 #define SIZE 10
 
 EventFactory::EventFactory(ConstructorTable<ActionEvent>* ctorTable)
@@ -33,7 +40,9 @@ EventFactory::EventFactory(ConstructorTable<ActionEvent>* ctorTable)
 	);
 }
 
-EventFactory::~EventFactory() {}
+EventFactory::~EventFactory() {
+	delete this->actionEventCtors;
+}
 
 Event* EventFactory::invoke( BufferReader& reader ) {
 	Event* e;

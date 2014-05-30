@@ -26,13 +26,45 @@ RenderingEngine::RenderingEngine( RenderableWorld *world,
 	this->soundCtors = soundCtors;
 }
 
-RenderingEngine::~RenderingEngine() {}
+RenderingEngine::~RenderingEngine() {
+	for( size_t i = 0; i < textures.size(); ++i ) {
+		delete this->textures[i];
+	}
+
+	for( size_t i = 0; i < bumpMaps.size(); ++i ) {
+		delete this->bumpMaps[i];
+	}
+
+	for( size_t i = 0; i < pixelShaders.size(); ++i ) {
+		delete this->pixelShaders[i];
+	}
+
+	for( size_t i = 0; i < vertexShaders.size(); ++i ) {
+		delete this->vertexShaders[i];
+	}
+
+	for( size_t i = 0; i < sounds.size(); ++i ) {
+		delete this->sounds[i];
+	}
+
+	for( size_t i = 0; i < models.size(); ++i ) {
+		delete this->models[i].indexBuffer;
+		delete this->models[i].vertexBuffer;
+	}
+	
+	delete this->renderer;
+	delete this->sounder;
+	delete this->cameraHandler;
+	delete this->soundCtors;
+	delete this->window;
+}
 
 void RenderingEngine::translateInput() {
 	std::vector<Event *> inputEventVector = this->renderingDelegate->inputTranslator(&this->inputAdapter);
 	std::vector<Event *>::iterator it;
 	for (it = inputEventVector.begin(); it != inputEventVector.end(); ++it) {
 		this->comms->sendEvent(*it);
+		delete *it;
 	}
 }
 
