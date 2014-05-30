@@ -198,10 +198,12 @@ void Engine::updateObject(UpdateEvent* evt) {
 
 	if (this->world->get(evt->getHandle()) == nullptr) {
 		world->insert(evt->getChild());
+		if (notify) notify->newObject(evt->getChild()->getHandle(), evt->getChild()->getType());
 	} else {
 		world->replace( evt->getHandle(), evt->getChild() );
-	}
+		if (notify) notify->updatedObject(evt->getChild()->getHandle(), evt->getChild()->getType());
 
+	}
 
 }
 

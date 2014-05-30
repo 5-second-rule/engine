@@ -13,6 +13,7 @@
 #include "RegistrationEvent.h"
 #include "BaseObject.h"
 #include "IRegisterPlayers.h"
+#include "NotificationDelegate.h"
 
 #include <map>
 
@@ -52,6 +53,8 @@ public:
 	);
 
 	virtual ~Engine();
+
+	NotificationDelegate* notify;
 
 	void sendEvent( Event* evt );
 
