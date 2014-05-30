@@ -5,16 +5,18 @@ string ConfigSettings::str_screen_height = "ScreenHeight";
 string ConfigSettings::str_full_screen = "FullScreen";
 
 typedef pair <string, string> String_Pair;
-ConfigSettings* ConfigSettings::config = new ConfigSettings();
+ConfigSettings ConfigSettings::config;
+
+const string ConfigSettings::str_settings_file = "resources/Config.ini";
+const string ConfigSettings::str_template_settings_file = "/resources/ConfigTemplate.ini";
 
 ConfigSettings* Utility::configInstance(){
-	return ConfigSettings::config;
+	return &ConfigSettings::config;
 }
 
 ConfigSettings::ConfigSettings(string fname, string template_fname) {
 	file_name = fname;
 	template_file_name = template_fname;
-	settings = new hash_map<string, string>();
 
 	if(!loadSettingsFile()){ //loads settings
 		copySettingsTemplate();
@@ -22,6 +24,9 @@ ConfigSettings::ConfigSettings(string fname, string template_fname) {
 	else{
 		copyMissingSettings();
 	}
+}
+
+ConfigSettings::~ConfigSettings() {
 }
 
 //Reads and loads the settings
@@ -41,7 +46,7 @@ bool ConfigSettings::loadSettingsFile(){
 				key = line.substr(0,pos);
 				value = line.substr(pos+2);
 
-				settings->insert(String_Pair(key, value));
+				settings.insert(String_Pair(key, value));
 			}
 		}
 		settings_loaded = true;
@@ -54,7 +59,7 @@ bool ConfigSettings::loadSettingsFile(){
 
 //clears data read and loads from the settings file
 bool ConfigSettings::reloadSettingsFile(){
-	settings->clear();
+	settings.clear();
 	return loadSettingsFile();
 }
 
@@ -83,7 +88,7 @@ void ConfigSettings::copySettingsTemplate() {
 					myfile << line << endl;
 				}
 			
-				settings->insert(String_Pair(key, value)); //loads the config file while copying
+				settings.insert(String_Pair(key, value)); //loads the config file while copying
 			}
 		}
 		settings_loaded = true;
@@ -111,13 +116,13 @@ void ConfigSettings::copyMissingSettings() {
 				key = line.substr(0,pos);
 				value = line.substr(pos+2);
 			
-				hash_map <string,string>::iterator i = settings->find(key);
+				hash_map <string,string>::iterator i = settings.find(key);
 	
-				if(i == settings->end()){
+				if(i == settings.end()){
 					if(myfile.is_open()){
 						myfile << line << endl;
 					}
-					settings->insert(String_Pair(key, value));
+					settings.insert(String_Pair(key, value));
 				}
 			}
 		}
@@ -135,10 +140,10 @@ void ConfigSettings::saveSettingsFile(){
 
 	if(myfile.is_open()){
 		string line;
-		hash_map <string,string>::iterator endIter = settings->end();
+		hash_map <string,string>::iterator endIter = settings.end();
 		hash_map <string,string>::iterator iter;
 		
-		for(iter = settings->begin(); iter != endIter; iter++){
+		for(iter = settings.begin(); iter != endIter; iter++){
 			myfile << iter->first << ": " << iter->second << endl;
 		}
 
@@ -148,9 +153,9 @@ void ConfigSettings::saveSettingsFile(){
 }
 
 bool ConfigSettings::getValue(string key, string & ret){
-	hash_map <string,string>::iterator i = settings->find(key);
+	hash_map <string,string>::iterator i = settings.find(key);
 	
-	if(i != settings->end()){
+	if(i != settings.end()){
 		ret = i->second;
 		return true;
 	}
@@ -158,9 +163,9 @@ bool ConfigSettings::getValue(string key, string & ret){
 }
 
 bool ConfigSettings::getValue(string key, bool & ret){
-	hash_map <string,string>::iterator i = settings->find(key);
+	hash_map <string,string>::iterator i = settings.find(key);
 	
-	if(i != settings->end()){
+	if(i != settings.end()){
 		if(i->second == "true"){
 			ret = true;
 		}else{
@@ -172,9 +177,9 @@ bool ConfigSettings::getValue(string key, bool & ret){
 }
 
 bool ConfigSettings::getValue(string key, int & ret){
-	hash_map <string,string>::iterator i = settings->find(key);
+	hash_map <string,string>::iterator i = settings.find(key);
 	
-	if(i != settings->end()){
+	if(i != settings.end()){
 		ret = atoi(i->second.c_str()); //error results in 0
 		return true;
 	}
@@ -182,9 +187,9 @@ bool ConfigSettings::getValue(string key, int & ret){
 }
 
 bool ConfigSettings::getValue(string key, float & ret){
-	hash_map <string,string>::iterator i = settings->find(key);
+	hash_map <string,string>::iterator i = settings.find(key);
 	
-	if(i != settings->end()){
+	if(i != settings.end()){
 		ret = (float) atof(i->second.c_str()); //error results in 0
 		return true;
 	}
@@ -192,9 +197,9 @@ bool ConfigSettings::getValue(string key, float & ret){
 }
 
 bool ConfigSettings::getValue(string key, double & ret){
-	hash_map <string,string>::iterator i = settings->find(key);
+	hash_map <string,string>::iterator i = settings.find(key);
 	
-	if(i != settings->end()){
+	if(i != settings.end()){
 		ret = atof(i->second.c_str()); //error results in 0
 		return true;
 	}
@@ -202,15 +207,15 @@ bool ConfigSettings::getValue(string key, double & ret){
 }
 
 void ConfigSettings::updateValue(string key, string value){
-	settings->insert(String_Pair(key, value));
+	settings.insert(String_Pair(key, value));
 }
 
 
 void ConfigSettings::updateValue(string key, bool value){
 	if(value){
-		settings->insert(String_Pair(key, "true"));
+		settings.insert(String_Pair(key, "true"));
 	}else{
-		settings->insert(String_Pair(key, "false"));
+		settings.insert(String_Pair(key, "false"));
 	}
 }
 
@@ -218,7 +223,7 @@ void ConfigSettings::updateValue(string key, int value){
 	stringstream s;
 	s << value;
 	
-	settings->insert(String_Pair(key, s.str()));
+	settings.insert(String_Pair(key, s.str()));
 }
 
 
@@ -226,14 +231,14 @@ void ConfigSettings::updateValue(string key, float value){
 	stringstream s;
 	s << value;
 	
-	settings->insert(String_Pair(key, s.str()));
+	settings.insert(String_Pair(key, s.str()));
 }
 
 void ConfigSettings::updateValue(string key, double value){
 	stringstream s;
 	s << value;
 	
-	settings->insert(String_Pair(key, s.str()));
+	settings.insert(String_Pair(key, s.str()));
 }
 
 //returns true if loaded the saved settings, otherwise false

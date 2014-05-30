@@ -16,6 +16,7 @@ protected:
 
 public:
 	IHasHandle(int type) : type(type) {}
+	virtual ~IHasHandle() {}
 
 	virtual Handle getHandle() = 0;
 	virtual void setHandle(Handle handle) = 0;

@@ -1,6 +1,8 @@
 #include "InputAdapter.h"
 
-InputAdapter::InputAdapter() { }
+InputAdapter::InputAdapter() {}
+
+InputAdapter::~InputAdapter() {}
 
 void InputAdapter::setInput(const Transmission::Input *input) {
 	this->input = input;

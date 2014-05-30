@@ -30,9 +30,9 @@ private:
 	int objectIds[2];
 
 	std::vector<IHasHandle *> objects[2];
-	GCHandleVector<IUpdatable> updatable;
-	GCHandleVector<ISerializable> serializable;
-	GCHandleVector<ICollidable> collidable;
+	GCHandleVector<IUpdatable>* updatable;
+	GCHandleVector<ISerializable>* serializable;
+	GCHandleVector<ICollidable>* collidable;
 
 public:
 	World();
