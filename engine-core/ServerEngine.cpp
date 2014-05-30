@@ -20,6 +20,7 @@ ServerEngine::ServerEngine(
 	this->commandLine.registerCommand( "exit", exit );
 	this->commandLine.registerCommand( "quit", exit );
 	this->commandLine.registerCommand( "stop", exit );
+	this->commandLine.registerCommand( "setDebugLevel", new Debug(this) );
 }
 
 void ServerEngine::tick(float dt) {
