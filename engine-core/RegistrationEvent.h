@@ -24,7 +24,7 @@ public:
 	Handle objectHandle;
 	
 	RegistrationEvent();
-	~RegistrationEvent();
+	virtual ~RegistrationEvent();
 
 	//ISerializable methods
 	void reserveSize( IReserve& buffer ) const;

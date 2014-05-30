@@ -19,8 +19,6 @@ public:
 		ConstructorTable<ActionEvent>*,
 		float minimumFrameTime);
 
-	~ServerEngine();
-
 	virtual void run();
 };
 

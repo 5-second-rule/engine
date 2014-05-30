@@ -15,7 +15,7 @@ public:
 	static const EventType TYPE = EventType::UPDATE;
 
 	UpdateEvent(Handle handle, BaseObject* child);
-	~UpdateEvent();
+	virtual ~UpdateEvent();
 
 	const Handle& getHandle();
 	BaseObject* getChild();

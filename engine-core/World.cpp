@@ -2,22 +2,37 @@
 #include "IEventReceiver.h"
 #include "UpdateEvent.h"
 
-World::World() : updatable(this), serializable(this), collidable(this) {
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
+World::World() {
 	for (int type = 0; type < 2; type++) {
 		this->lastAllocatedIndex[type] = -1;
 		this->objectIds[type] = 0;
 		this->objects[type].reserve(DEFAULT_OBJECT_ALLOC);
 	}
 
-	this->updatable.reserve(DEFAULT_OBJECT_ALLOC);
-	this->serializable.reserve(DEFAULT_OBJECT_ALLOC);
-	this->collidable.reserve(DEFAULT_OBJECT_ALLOC);
+	this->updatable = new GCHandleVector<IUpdatable>( this );
+	this->serializable = new GCHandleVector<ISerializable>( this );
+	this->collidable = new GCHandleVector<ICollidable>( this );
+
+	this->updatable->reserve(DEFAULT_OBJECT_ALLOC);
+	this->serializable->reserve(DEFAULT_OBJECT_ALLOC);
+	this->collidable->reserve(DEFAULT_OBJECT_ALLOC);
 }
 
 World::~World() {
-	for (int i = 0; i < 2; ++i)
-		for (std::vector<IHasHandle *>::iterator it = objects[i].begin(); it != objects[i].end(); ++it)
-			delete *it;
+	for( size_t i = 0; i < 2; ++i )
+		for( size_t j = 0; j < objects[i].size(); ++j )
+			delete this->objects[i][j];
+
+	delete this->updatable;
+	delete this->serializable;
+	delete this->collidable;
 }
 
 void World::allocateHandle(IHasHandle *object, HandleType handleType) {
@@ -43,15 +58,15 @@ void World::insert(IHasHandle *object) {
 	*(storage->begin() + handle.index) = object;
 
 	if (dynamic_cast<IUpdatable*>(object) != nullptr) {
-		this->updatable.push_back(handle);
+		this->updatable->push_back(handle);
 	}
 
 	if (dynamic_cast<ISerializable*>(object) != nullptr) {
-		this->serializable.push_back(handle);
+		this->serializable->push_back(handle);
 	}
 
 	if (dynamic_cast<ICollidable*>(object) != nullptr) {
-		this->collidable.push_back(handle);
+		this->collidable->push_back(handle);
 	}
 }
 
@@ -95,8 +110,8 @@ void World::replace( const Handle& handle,  IHasHandle* object) {
 
 void World::update(float dt) {
 
-	for (int i = 0; i < this->updatable.size(); i++) {
-		IUpdatable *u = this->updatable.getIndirect(i, false);
+	for (int i = 0; i < this->updatable->size(); i++) {
+		IUpdatable *u = this->updatable->getIndirect(i, false);
 
 		if (u != nullptr) {
 			u->update(dt);
@@ -106,10 +121,10 @@ void World::update(float dt) {
 	//also do collisions
 
 	// naive n^2/2 looping.
-	for (int i = 0; i < this->collidable.size(); i++) {
-		ICollidable* c1 = this->collidable.getIndirect(i, false);
-		for (int j = i + 1; j < this->collidable.size(); j++) {
-			ICollidable* c2 = this->collidable.getIndirect(j, false);
+	for (int i = 0; i < this->collidable->size(); i++) {
+		ICollidable* c1 = this->collidable->getIndirect(i, false);
+		for (int j = i + 1; j < this->collidable->size(); j++) {
+			ICollidable* c2 = this->collidable->getIndirect(j, false);
 
 			unsigned int p1 = c1->getPriority();
 			unsigned int p2 = c2->getPriority();
@@ -131,9 +146,9 @@ void World::update(float dt) {
 }
 
 void World::broadcastUpdates(CommsProcessor *comms) {
-	for (int i = 0; i < this->serializable.size(); i++) {
+	for (int i = 0; i < this->serializable->size(); i++) {
 		IHasHandle *object;
-		ISerializable *serializable = this->serializable.getIndirect(i, false, &object);
+		ISerializable *serializable = this->serializable->getIndirect(i, false, &object);
 		BaseObject *bo = dynamic_cast<BaseObject*>(serializable);
 
 		if (bo != nullptr && !(bo->getHandle().isLocal())) {

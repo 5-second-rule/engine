@@ -12,9 +12,6 @@
 
 using namespace std;
 
-const string str_settings_file = "resources/Config.ini";
-const string str_template_settings_file = "/resources/ConfigTemplate.ini";
-
 class COREDLL ConfigSettings {
 
 public:
@@ -22,8 +19,12 @@ public:
 	static string str_screen_height;
 	static string str_full_screen;
 
+	static const string str_settings_file;
+	static const string str_template_settings_file;
+
 public:
-	static ConfigSettings * config; // Use this static reference instead of your own call to the constructor
+	static ConfigSettings config; // Use this static reference instead of your own call to the constructor
+	~ConfigSettings();
 
 	bool checkIfLoaded();
 	void saveSettingsFile();
@@ -50,7 +51,7 @@ private:
 	ConfigSettings(string file_name=str_settings_file, string template_file_name=str_template_settings_file);
 
 
-	hash_map<string,string> *settings;
+	hash_map<string,string> settings;
 	bool settings_loaded;
 
 	string file_name;
