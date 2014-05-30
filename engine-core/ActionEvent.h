@@ -30,6 +30,11 @@ public:
 		else return nullptr;
 	}
 
+	template<class T> static T* cast(const ActionEvent* e) {
+		if (static_cast<int>(T::ACTIONTYPE) == e->getActionType()) return static_cast<const T*>(e);
+		else return nullptr;
+	}
+
 
 	// ISerialize Methods
 	virtual void reserveSize(IReserve& buffer) const;
