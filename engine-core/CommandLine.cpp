@@ -51,10 +51,12 @@ std::map<std::string, std::function<Command*(std::string)>> Command::commands;
 Command* Command::parse(std::string cmd) {
 	std::stringstream stream(cmd);
 	std::string word;
+	std::string args;
 	stream >> word;
+	stream >> args;
 
 	if (Command::commands.count(word) != 0) {
-		return Command::commands[word](cmd.substr(word.length()));
+		return Command::commands[word](args);
 	} else {
 		return nullptr;
 	}
