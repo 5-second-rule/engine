@@ -29,6 +29,8 @@ RenderingEngine::RenderingEngine( RenderableWorld *world,
 RenderingEngine::~RenderingEngine() {}
 
 void RenderingEngine::translateInput() {
+	if (this->renderingDelegate == nullptr)
+		return;
 	std::vector<Event *> inputEventVector = this->renderingDelegate->inputTranslator(&this->inputAdapter);
 	
 	std::vector<Event *>::iterator it;
@@ -54,7 +56,7 @@ void RenderingEngine::tick(float dt) {
 
 void RenderingEngine::frame(float dt) {
 	// HACK to only player 0
-	if (this->localPlayers.size() > 0) {
+	if (this->localPlayers.size() > 0 && this->playerMap[this->localPlayers[0]] != nullptr) {
 		IHasHandle *playerObject = this->world->get(this->playerMap[this->localPlayers[0]]->cameraTarget());
 		if (playerObject != nullptr) {
 			this->cameraHandler->updateFor(playerObject);
