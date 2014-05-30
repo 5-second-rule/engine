@@ -34,7 +34,7 @@ void ActionEvent::deserialize( BufferReader& buffer ) {
 	buffer.finished( sizeof( struct ActionHeader ) );
 }
 
-int ActionEvent::getActionType() {
+int ActionEvent::getActionType() const {
 	return this->actionType;
 }
 
@@ -43,7 +43,7 @@ int ActionEvent::getActionType(BufferReader& reader) {
 	return *reinterpret_cast<const int*>(reader.getPointer() + sizeof(EventHeader));
 }
 
-int ActionEvent::getPlayerGuid() {
+int ActionEvent::getPlayerGuid() const {
 	return this->playerGuid;
 }
 

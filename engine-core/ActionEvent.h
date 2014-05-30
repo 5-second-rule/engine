@@ -17,7 +17,7 @@ public:
 	ActionEvent(unsigned int playerGuid,  int actionType);
 	virtual ~ActionEvent();
 
-	int getPlayerGuid();
+	int getPlayerGuid() const;
 
 	// Typing
 	static const EventType TYPE = EventType::ACTION;
