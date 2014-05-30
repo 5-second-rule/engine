@@ -5,7 +5,7 @@
 
 class COREDLL PlayerDelegate {
 public:
-	virtual Handle routeEvent(const ActionEvent* evt) = 0;
+	virtual void handleEvent(const ActionEvent* evt) = 0;
 	virtual Handle cameraTarget() = 0;
 };
 

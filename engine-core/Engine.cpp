@@ -210,7 +210,7 @@ void Engine::dispatchAction( ActionEvent *evt ) {
 	auto playerHandle = this->playerMap.find(evt->getPlayerGuid());
 
 	if (playerHandle != this->playerMap.end()) {
-		this->world->dispatchEvent(evt, playerHandle->second->routeEvent(evt));
+		playerHandle->second->handleEvent(evt);
 	} else {
 		std::cout << "WARN: unknown player attempted an action" << std::endl;
 	}
