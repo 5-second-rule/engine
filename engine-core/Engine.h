@@ -36,7 +36,7 @@ protected:
 	EventFactory *eventCtors;
 	IRegisterPlayers *registrar;
 
-	std::map<unsigned int, Handle> playerMap;
+	std::map<unsigned int, PlayerDelegate*> playerMap;
 	std::vector<unsigned int> localPlayers;
 
 	World *world;

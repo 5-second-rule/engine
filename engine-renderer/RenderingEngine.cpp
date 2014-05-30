@@ -55,7 +55,7 @@ void RenderingEngine::tick(float dt) {
 void RenderingEngine::frame(float dt) {
 	// HACK to only player 0
 	if (this->localPlayers.size() > 0) {
-		IHasHandle *playerObject = this->world->get(this->playerMap[this->localPlayers[0]]);
+		IHasHandle *playerObject = this->world->get(this->playerMap[this->localPlayers[0]]->cameraTarget());
 		if (playerObject != nullptr) {
 			this->cameraHandler->updateFor(playerObject);
 			Camera *camera = renderer->getCamera();

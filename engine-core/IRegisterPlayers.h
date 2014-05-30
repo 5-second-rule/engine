@@ -3,13 +3,14 @@
 #include "engine-core.h"
 #include "BaseObject.h"
 
-class COREDLL IRegisterPlayers {
-protected:
-	int state;
-
+class COREDLL PlayerDelegate {
 public:
-	virtual BaseObject * addPlayer(unsigned int playerGuid) = 0;
-	virtual int getState() {
-		return this->state;
-	};
+	virtual Handle routeEvent(const ActionEvent* evt) = 0;
+	virtual Handle cameraTarget() = 0;
+};
+
+class COREDLL IRegisterPlayers {
+public:
+	virtual PlayerDelegate* addPlayer(unsigned int playerGuid) = 0;
+
 };

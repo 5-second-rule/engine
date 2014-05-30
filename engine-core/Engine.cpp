@@ -137,17 +137,7 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 		response = Response::OK;
 		// spot is available, yay!
 		
-		registrar->addPlayer(event->playerGuid);
-		// HACK make first model for now
-		//BaseObject * obj = addPlayer(event->playerGuid);
-		//BaseObject * obj = this->objectCtors->invoke( modNum );
-		//world->allocateHandle(obj, HandleType::GLOBAL);
-		//world->insert(obj);
-
-		//modNum++;
-
-		//this->playerMap[event->playerGuid] = obj->getHandle();
-		//resultObjectHandle = obj->getHandle();
+		playerMap[event->playerGuid] = registrar->addPlayer(event->playerGuid);
 
 		if (_DEBUG) std::cout << "=> player registered" << std::endl;
 	} else {
@@ -172,7 +162,6 @@ void Engine::handleRegistrationResponse( RegistrationEvent* event ) {
 		&& event->response == Response::OK) { 		// matches
 		this->waitingForRegistration = false;
 		this->localPlayers.push_back(this->waitingRegistration.playerGuid);
-		this->playerMap[event->playerGuid] = event->objectHandle;
 	}
 }
 
@@ -221,7 +210,7 @@ void Engine::dispatchAction( ActionEvent *evt ) {
 	auto playerHandle = this->playerMap.find(evt->getPlayerGuid());
 
 	if (playerHandle != this->playerMap.end()) {
-		this->world->dispatchEvent(evt, playerHandle->second);
+		this->world->dispatchEvent(evt, playerHandle->second->routeEvent(evt));
 	} else {
 		std::cout << "WARN: unknown player attempted an action" << std::endl;
 	}
