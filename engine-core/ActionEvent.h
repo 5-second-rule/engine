@@ -30,7 +30,7 @@ public:
 		else return nullptr;
 	}
 
-	template<class T> static T* cast(const ActionEvent* e) {
+	template<class T> static const T* cast(const ActionEvent* e) {
 		if (static_cast<int>(T::ACTIONTYPE) == e->getActionType()) return static_cast<const T*>(e);
 		else return nullptr;
 	}

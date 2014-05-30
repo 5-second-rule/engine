@@ -1,7 +1,8 @@
 #pragma once
-
 #include "engine-core.h"
-#include "BaseObject.h"
+
+#include "ActionEvent.h"
+#include "Handle.h"
 
 class COREDLL PlayerDelegate {
 public:
