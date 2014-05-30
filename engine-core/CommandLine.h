@@ -19,6 +19,8 @@ class CommandLine
 {
 private:
 	bool running;
+	bool first;
+	bool error;
 	std::thread reader;
 	std::mutex queue_lock;
 	std::queue<std::pair<Command*, std::string>> queue;
@@ -40,6 +42,15 @@ public:
 class Echo : public Command {
 private:
 public:
-	Echo();
+	Echo() {}
+	void execute( std::string args );
+};
+
+class Help : public Command {
+private:
+	std::map<std::string, Command*>* commands;
+
+public:
+	Help( std::map<std::string, Command*>* commands) : commands( commands ) {}
 	void execute( std::string args );
 };

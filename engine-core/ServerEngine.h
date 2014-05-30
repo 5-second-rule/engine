@@ -7,6 +7,7 @@
 
 class COREDLL ServerEngine : public Engine
 {
+	friend class Debug;
 private:
 	const float secondsPerTick;
 	CommandLine commandLine;
@@ -22,8 +23,6 @@ public:
 		ConstructorTable<BaseObject> *objectCtors,
 		ConstructorTable<ActionEvent>*,
 		float minimumFrameTime);
-
-	virtual void run();
 };
 
 // command-line extensions for ServerEngine
@@ -32,5 +31,21 @@ private:
 	World* world;
 public:
 	PrintWorld( World* world ) : world( world ) {}
+	void execute( std::string args );
+};
+
+class Exit : public Command {
+private:
+	Engine* engine;
+public:
+	Exit( Engine* engine ) : engine( engine ) {}
+	void execute( std::string args );
+};
+
+class Debug : public Command {
+private:
+	ServerEngine* engine;
+public:
+	Debug( ServerEngine* engine ) : engine( engine ) {}
 	void execute( std::string args );
 };

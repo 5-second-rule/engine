@@ -140,7 +140,7 @@ void World::update(float dt) {
 			shared_ptr<const Bounds> b2 = c2->getBounds();
 
 			if ((p1 <= p2) ? c1->collidesWith(c2) : c2->collidesWith(c1)) {
-				std::cout << "Collision" << std::endl;
+				//std::cout << "Collision" << std::endl;
 				c1->handleCollision(b2, dt);
 				c2->handleCollision(b1, dt);
 			}

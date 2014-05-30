@@ -1,6 +1,7 @@
 #include "ServerEngine.h"
 #include <chrono>
 #include <thread>
+#include <sstream>
 
 using namespace std::chrono;
 using namespace std::this_thread;
@@ -15,6 +16,10 @@ ServerEngine::ServerEngine(
 	, secondsPerTick(secondsPerTick)
 {
 	this->commandLine.registerCommand( "printWorld", new PrintWorld(this->world) );
+	Command* exit = new Exit( this );
+	this->commandLine.registerCommand( "exit", exit );
+	this->commandLine.registerCommand( "quit", exit );
+	this->commandLine.registerCommand( "stop", exit );
 }
 
 void ServerEngine::tick(float dt) {
@@ -39,13 +44,24 @@ void ServerEngine::frame(float dt) {
 	sleep_for(duration_cast<nanoseconds>(float_seconds(this->secondsPerTick - dt)));
 }
 
-void ServerEngine::run(){
-	Engine::run();
-}
-
 // command-line extensions for ServerEngine
 void PrintWorld::execute( std::string args ) {
 	for( size_t i = 0; i < this->world->getObjects()->size(); ++i ) {
-		std::cout << this->world->getObjects()->at( i )->toString();
+		std::cout << std::endl << this->world->getObjects()->at( i )->toString() << std::endl;
 	}
+}
+
+void Exit::execute( std::string args ) {
+	this->engine->stop();
+	std::cout << "Press Enter to close server";
+}
+
+void Debug::execute( std::string args ) {
+	if( args == "" ) {
+		std::cout << "Setting Debug level requires one argument" << std::endl;
+		return;
+	}
+
+	std::stringstream ss( args );
+	ss >> this->engine->debugLevel;
 }
