@@ -28,3 +28,11 @@ public:
 	virtual void run();
 };
 
+// command-line extensions for ServerEngine
+class PrintWorld : public Command {
+private:
+	World* world;
+public:
+	PrintWorld( World* world ) : world( world ) {}
+	void execute( std::string args );
+};

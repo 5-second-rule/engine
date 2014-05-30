@@ -13,7 +13,9 @@ ServerEngine::ServerEngine(
 )
 	: Engine(world, objectCtors, actionCtors, CommsProcessorRole::SERVER)
 	, secondsPerTick(secondsPerTick)
-{}
+{
+	this->commandLine.registerCommand( "printWorld", new PrintWorld(this->world) );
+}
 
 ServerEngine::~ServerEngine() {}
 
@@ -41,4 +43,11 @@ void ServerEngine::frame(float dt) {
 
 void ServerEngine::run(){
 	Engine::run();
+}
+
+// command-line extensions for ServerEngine
+void PrintWorld::execute( std::string args ) {
+	for( size_t i = 0; i < this->world->getObjects()->size(); ++i ) {
+		std::cout << this->world->getObjects()->at( i )->toString();
+	}
 }

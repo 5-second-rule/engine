@@ -5,13 +5,14 @@
 
 CommandLine::CommandLine()
 	: running(true)
-	, reader(&CommandLine::readCommands, this)
-{
-	Command::registerCommand<Echo>("echo");
+	, reader(&CommandLine::readCommands, this) {
+	
+	this->registerCommand( "echo", new Echo() );
 }
 
 CommandLine::~CommandLine() {
 	this->running = false;
+	//TODO clean up map command pointers
 }
 
 void CommandLine::readCommands() {
@@ -20,9 +21,9 @@ void CommandLine::readCommands() {
 	std::cout << std::endl << "> ";
 
 	while (this->running && std::getline(std::cin, str)) {
-		Command* cmd = Command::parse(str);
+		std::pair<Command*, std::string> cmd = this->parse( str );
 		
-		if (cmd != nullptr) {
+		if (cmd.first != nullptr) {
 			queue_lock.lock();
 			queue.push(cmd);
 			queue_lock.unlock();
@@ -38,32 +39,38 @@ void CommandLine::readCommands() {
 void CommandLine::update() {
 	this->queue_lock.lock();
 	while (!this->queue.empty()) {
-		Command* cmd = this->queue.front();
+		std::pair<Command*, std::string> cmd = this->queue.front();
 		this->queue.pop();
-		cmd->execute();
-		delete cmd;
+		cmd.first->execute(cmd.second);
 	}
 	this->queue_lock.unlock();
 }
 
-std::map<std::string, std::function<Command*(std::string)>> Command::commands;
-
-Command* Command::parse(std::string cmd) {
+std::pair<Command*, std::string> CommandLine::parse( std::string cmd ) {
 	std::stringstream stream(cmd);
 	std::string word;
 	std::string args;
 	stream >> word;
 	stream >> args;
 
-	if (Command::commands.count(word) != 0) {
-		return Command::commands[word](args);
+	if (this->commands.count(word) != 0) {
+		return std::pair<Command*, std::string>(this->commands[word], args);
 	} else {
-		return nullptr;
+		return std::pair<Command*, std::string>( nullptr, args );
 	}
 
 }
 
-Echo::Echo(std::string cmd) : echo(cmd) {}
-void Echo::execute() {
-	std::cout << this->echo << std::endl;
+bool CommandLine::registerCommand(std::string word, Command* cmd) {
+	if( this->commands.count( word ) != 0 ) {
+		return false;
+	} else {
+		this->commands[word] = cmd;
+		return true;
+	}
+}
+
+Echo::Echo() {}
+void Echo::execute( std::string args ) {
+	std::cout << args << std::endl;
 }

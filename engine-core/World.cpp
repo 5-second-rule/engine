@@ -20,6 +20,10 @@ World::~World() {
 			delete *it;
 }
 
+const std::vector<IHasHandle *>* World::getObjects() const {
+	return &this->objects[GLOBAL];
+}
+
 void World::allocateHandle(IHasHandle *object, HandleType handleType) {
 	int nextIndex = this->lastAllocatedIndex[handleType];
 	// TODO implement better allocator, with wrap around
