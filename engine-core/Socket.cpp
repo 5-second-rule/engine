@@ -15,6 +15,13 @@ typedef char raw_type;       // Type used for raw data on this platform
 typedef void raw_type;       // Type used for raw data on this platform
 #endif
 
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
 #include <errno.h>             // For errno
 #include <cstdlib>
 

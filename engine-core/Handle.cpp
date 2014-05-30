@@ -1,4 +1,5 @@
 #include "Handle.h"
+#include <sstream>
 
 Handle::Handle() : Handle(0, 0, HandleType::LOCAL) {}
 

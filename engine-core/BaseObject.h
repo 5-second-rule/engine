@@ -8,6 +8,7 @@
 
 #include <queue>
 
+
 class COREDLL BaseObject
 	: public IHasHandle
 	, public ISerializable

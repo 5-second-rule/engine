@@ -1,14 +1,10 @@
 #include "RenderableWorld.h"
 
 
-RenderableWorld::RenderableWorld()
-{
-}
+RenderableWorld::RenderableWorld(){}
 
+RenderableWorld::~RenderableWorld() {}
 
-RenderableWorld::~RenderableWorld()
-{
-}
 
 void RenderableWorld::insert(IHasHandle *object) {
 	World::insert(object);

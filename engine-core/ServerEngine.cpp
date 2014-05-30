@@ -17,8 +17,6 @@ ServerEngine::ServerEngine(
 	this->commandLine.registerCommand( "printWorld", new PrintWorld(this->world) );
 }
 
-ServerEngine::~ServerEngine() {}
-
 void ServerEngine::tick(float dt) {
 	static int annouceCount = 0;
 

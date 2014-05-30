@@ -1,12 +1,13 @@
 #pragma once
 #include "Event.h"
+
 class COREDLL SoundEvent : public Event {
 public:
 	static const EventType TYPE = EventType::SOUND;
 
 	SoundEvent();
 	SoundEvent(int soundType, bool isLooped, bool shouldStop);
-	~SoundEvent();
+	virtual ~SoundEvent();
 
 	int soundType;
 	bool isLooped;
