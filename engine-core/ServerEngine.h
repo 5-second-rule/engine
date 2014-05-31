@@ -8,9 +8,11 @@
 class COREDLL ServerEngine : public Engine
 {
 	friend class Debug;
+	friend class Pause;
 private:
 	const float secondsPerTick;
 	CommandLine commandLine;
+	bool paused;
 
 protected:
 
@@ -47,5 +49,13 @@ private:
 	ServerEngine* engine;
 public:
 	Debug( ServerEngine* engine ) : engine( engine ) {}
+	void execute( std::string args );
+};
+
+class Pause : public Command {
+private:
+	ServerEngine* engine;
+public:
+	Pause( ServerEngine* engine ) : engine( engine ) {}
 	void execute( std::string args );
 };

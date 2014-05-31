@@ -15,28 +15,31 @@ ServerEngine::ServerEngine(
 	: Engine(world, objectCtors, actionCtors, CommsProcessorRole::SERVER)
 	, secondsPerTick(secondsPerTick)
 {
+	this->paused = false;
 	this->commandLine.registerCommand( "printWorld", new PrintWorld(this->world) );
 	Command* exit = new Exit( this );
 	this->commandLine.registerCommand( "exit", exit );
 	this->commandLine.registerCommand( "quit", exit );
 	this->commandLine.registerCommand( "stop", exit );
 	this->commandLine.registerCommand( "setDebugLevel", new Debug(this) );
+	this->commandLine.registerCommand( "pause", new Pause( this ));
 }
 
 void ServerEngine::tick(float dt) {
 	static int annouceCount = 0;
 
-	this->processNetworkUpdates();
-	Engine::tick(dt);
-	this->world->broadcastUpdates(comms);
+	if( !this->paused ) {
+		this->processNetworkUpdates();
+		Engine::tick( dt );
+		this->world->broadcastUpdates( comms );
+	}
 
-	if( annouceCount == 25 ) {
+	if( annouceCount == 25 ) { // about every 2 seconds
 		comms->sendAnnouce();
 		annouceCount = 0;
 	} else ++annouceCount;
 
 	this->commandLine.update();
-
 }
 
 
@@ -65,4 +68,19 @@ void Debug::execute( std::string args ) {
 
 	std::stringstream ss( args );
 	ss >> this->engine->debugLevel;
+}
+
+void Pause::execute( std::string args ) {
+	if( args == "" ) {
+		std::cout << "Pause requires an argument of on or off" << std::endl;
+		return;
+	}
+
+	if( args == "on" || args == "true" || args == "yes" ) {
+		this->engine->paused = true;
+	} else if( args == "off" || args == "false" || args == "no" ) {
+		this->engine->paused = false;
+	} else {
+		std::cout << args << " is an invalid setting (on/yes/true or off/no/false)" << std::endl;
+	}
 }
