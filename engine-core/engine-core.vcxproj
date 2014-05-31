@@ -88,6 +88,7 @@
     <ClInclude Include="BufferBuilder.h" />
     <ClInclude Include="BufferReader.h" />
     <ClInclude Include="BufferRemainder.h" />
+    <ClInclude Include="CommandLine.h" />
     <ClInclude Include="CommsProcessor.h" />
     <ClInclude Include="ConfigSettings.h" />
     <ClInclude Include="DoubleBufferedQueue.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="BufferBuilder.cpp" />
     <ClCompile Include="BufferReader.cpp" />
     <ClCompile Include="BufferRemainder.cpp" />
+    <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="CommsProcessor.cpp" />
     <ClCompile Include="ConfigSettings.cpp" />
     <ClCompile Include="Engine.cpp" />

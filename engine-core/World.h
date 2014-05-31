@@ -38,7 +38,8 @@ public:
 	World();
 	~World();
 
-	
+	const std::vector<IHasHandle *>* getObjects() const;
+
 	void allocateHandle(IHasHandle *object, HandleType type);
 	virtual void insert(IHasHandle *object);
 	void remove(Handle *handle);

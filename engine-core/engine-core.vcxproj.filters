@@ -52,6 +52,9 @@
     <ClCompile Include="EventFactory.cpp">
       <Filter>Source Files\Events</Filter>
     </ClCompile>
+    <ClCompile Include="CommandLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseObject.h">
@@ -125,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="SoundEvent.h">
       <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandLine.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BufferBuilder.h">
       <Filter>Comms</Filter>
