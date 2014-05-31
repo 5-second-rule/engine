@@ -15,6 +15,7 @@ Engine::Engine(
 	, world(world)
 	, objectCtors(objectCtors)
 	, eventCtors(new EventFactory(eventCtors))
+	, notify(nullptr)
 {
 	this->running = false;
 	// Set up network
@@ -198,10 +199,10 @@ void Engine::updateObject(UpdateEvent* evt) {
 
 	if (this->world->get(evt->getHandle()) == nullptr) {
 		world->insert(evt->getChild());
-		if (notify) notify->newObject(evt->getChild()->getHandle(), evt->getChild()->getType());
+		if (notify != nullptr) notify->newObject(evt->getChild()->getHandle(), evt->getChild()->getType());
 	} else {
 		world->replace( evt->getHandle(), evt->getChild() );
-		if (notify) notify->updatedObject(evt->getChild()->getHandle(), evt->getChild()->getType());
+		if (notify != nullptr) notify->updatedObject(evt->getChild()->getHandle(), evt->getChild()->getType());
 
 	}
 
