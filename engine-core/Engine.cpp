@@ -224,3 +224,7 @@ void Engine::dispatchSound( SoundEvent *evt ) {
 	// non-renderable engines
 	delete evt;
 }
+
+void Engine::setPlayerHandler(unsigned int guid, PlayerDelegate* player) {
+	this->playerMap[guid] = player;
+}

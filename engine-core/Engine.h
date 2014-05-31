@@ -71,6 +71,8 @@ public:
 	void registerPlayer(bool wait);
 	unsigned int getLocalPlayerGuid(unsigned int playerIndex);
 
+	void setPlayerHandler(unsigned int guid, PlayerDelegate* player);
+
 protected:
 	virtual bool checkForTick(float dt);
 	virtual void tick(float dt);
