@@ -24,6 +24,7 @@ RenderingEngine::RenderingEngine( RenderableWorld *world,
 	this->inputAdapter.setInput(this->input);
 	this->cameraHandler = cameraHandler;
 	this->soundCtors = soundCtors;
+	this->renderingDelegate = nullptr;
 }
 
 RenderingEngine::~RenderingEngine() {}
