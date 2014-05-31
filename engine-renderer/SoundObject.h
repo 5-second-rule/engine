@@ -3,6 +3,7 @@
 #include "engine-renderer.h"
 #include "renderer\Sound.h"
 #include "engine-core\ISerializable.h"
+
 class RENDERDLL SoundObject : public ISerializable {
 public:
 	SoundObject( Transmission::Sound* sound);

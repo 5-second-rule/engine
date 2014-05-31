@@ -1,5 +1,12 @@
 #include "CommsProcessor.h"
 
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
 // Argument Exception
 ArgumentException::ArgumentException( const string &message, bool inclSysMsg ) : userMessage( message ) {
 	if( inclSysMsg ) {
@@ -137,8 +144,10 @@ void CommsProcessor::clientCallback() {
 					UpdateEvent* updateEvent = Event::cast<UpdateEvent>(event);
 					updateEvent->setChild(owner->objectCtors->invoke(readBuffer));
 					handoffQ->push(event);
-				} else {
+				} else if ( owner->isRunning() ){
 					handoffQ->push( event );
+				} else {
+					delete event;
 				}
 				break;
 			}

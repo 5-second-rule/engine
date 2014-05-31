@@ -1,6 +1,13 @@
 #include "Engine.h"
 #include <iostream>
 
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif  // _DEBUG
+
 const static int TICKS_PER_SEC = 25;
 
 using namespace std::chrono;
@@ -17,21 +24,37 @@ Engine::Engine(
 	, eventCtors(new EventFactory(eventCtors))
 	, notify(nullptr)
 {
+	this->debugLevel = 0;
 	this->running = false;
 	// Set up network
-	this->comms = new CommsProcessor(role, this);
-	this->comms->setHandoffQ(&networkUpdates);
-
+	this->comms = new CommsProcessor( role, this );
+	this->comms->setHandoffQ( &networkUpdates );
 	waitingForRegistration = false;
 
 	srand((unsigned int)time(NULL));
 }
 
 Engine::~Engine() {
-	delete this->comms;
-	delete this->registrar;
-	this->comms = nullptr;
-	this->registrar = nullptr;;
+	// clean out networkUpdates
+	while( !this->networkUpdates.readEmpty() ) {
+		Event* event = this->networkUpdates.pop();
+		if( event->getType() == EventType::UPDATE ) {
+			delete Event::cast<UpdateEvent>( event )->getChild();
+		}
+		delete event;
+	}
+	this->networkUpdates.swap();
+	while( !this->networkUpdates.readEmpty() ) {
+		Event* event = this->networkUpdates.pop();
+		if( event->getType() == EventType::UPDATE ) {
+			delete Event::cast<UpdateEvent>( event )->getChild();
+		}
+		delete event;
+	}
+
+	delete this->world;
+	delete this->eventCtors;
+	delete this->objectCtors;
 }
 
 void Engine::sendEvent( Event* evt ) {
@@ -39,7 +62,6 @@ void Engine::sendEvent( Event* evt ) {
 }
 
 void Engine::run() {
-
 	steady_clock::time_point lastTickTime = steady_clock::now();
 
 	this->running = true;
@@ -65,6 +87,7 @@ bool Engine::isRunning() {
 
 void Engine::stop() {
 	running = false;
+	delete this->comms;
 }
 
 World* Engine::getWorld() {
@@ -99,10 +122,10 @@ void Engine::processNetworkUpdates() {
 
 void Engine::dispatchUpdate(Event* event) {
 	if( event->getType() == EventType::REGISTRATION ) {
-		RegistrationEvent* regEvent = static_cast<RegistrationEvent*>(event);
+		RegistrationEvent* regEvent = Event::cast<RegistrationEvent>( event );
 		switch( regEvent->regType ) {
 			case RegistrationType::REQUEST:
-				if( _DEBUG ) std::cout << "player registration inbound" << std::endl;
+				if( this->debugLevel > 0 ) std::cout << "player registration inbound" << std::endl;
 				this->handleRegistrationRequest( regEvent );
 				break;
 			case RegistrationType::RESPONSE:
@@ -115,16 +138,21 @@ void Engine::dispatchUpdate(Event* event) {
 			this->updateObject(Event::cast<UpdateEvent>(event));
 			break;
 		case EventType::ACTION:
-			if (_DEBUG) std::cout << "action!" << std::endl;
+			if( this->debugLevel > 0 ) std::cout << "action!" << std::endl;
 			this->dispatchAction(Event::cast<ActionEvent>(event));
 			break;
 		case EventType::SOUND:
 			this->dispatchSound( Event::cast<SoundEvent>( event ) );
 			break;
 		default:
-			if( _DEBUG ) std::cout << "Urgh!" << std::endl;
+			if( this->debugLevel > 0 ) std::cout << "Urgh!" << std::endl;
 			break;
 		}
+	} else {
+		if( event->getType() == EventType::UPDATE ) {
+			delete Event::cast<UpdateEvent>( event )->getChild();
+		}
+		delete event;
 	}
 }
 
@@ -140,9 +168,9 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 		
 		playerMap[event->playerGuid] = registrar->addPlayer(event->playerGuid);
 
-		if (_DEBUG) std::cout << "=> player registered" << std::endl;
+		if( this->debugLevel > 0 ) std::cout << "=> player registered" << std::endl;
 	} else {
-		if (_DEBUG) std::cout << "=> player NOT registered #fail" << std::endl;
+		if( this->debugLevel > 0 ) std::cout << "=> player NOT registered #fail" << std::endl;
 	}
 
 	RegistrationEvent respEvent;
@@ -152,6 +180,7 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 	respEvent.responseTag = event->responseTag;
 	//respEvent.objectHandle = resultObjectHandle;
 
+	delete event;
 	comms->sendEvent(&respEvent);
 }
 
@@ -164,6 +193,7 @@ void Engine::handleRegistrationResponse( RegistrationEvent* event ) {
 		this->waitingForRegistration = false;
 		this->localPlayers.push_back(this->waitingRegistration.playerGuid);
 	}
+	delete event;
 }
 
 void Engine::setPlayerRegistration(IRegisterPlayers *registrar) {
@@ -206,6 +236,7 @@ void Engine::updateObject(UpdateEvent* evt) {
 
 	}
 
+	delete evt;
 }
 
 void Engine::dispatchAction( ActionEvent *evt ) {

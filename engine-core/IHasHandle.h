@@ -16,6 +16,7 @@ protected:
 
 public:
 	IHasHandle(int type) : type(type) {}
+	virtual ~IHasHandle() {}
 
 	virtual Handle getHandle() = 0;
 	virtual void setHandle(Handle handle) = 0;
@@ -30,4 +31,9 @@ public:
 		else return nullptr;
 	}
 
+	virtual std::string toString() {
+		// default implementation, should be overridden
+		// to print more useful info.
+		return this->getHandle().toString();
+	}
 };
