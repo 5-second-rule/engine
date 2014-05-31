@@ -137,8 +137,8 @@ void World::update(float dt) {
 
 			if ((p1 <= p2) ? c1->collidesWith(c2) : c2->collidesWith(c1)) {
 				std::cout << "Collision" << std::endl;
-				c1->handleCollision(b2, dt);
-				c2->handleCollision(b1, dt);
+				c1->handleCollision(b2, dt, c2->getCollisionMetadata());
+				c2->handleCollision(b1, dt, c1->getCollisionMetadata());
 			}
 		}
 	}
