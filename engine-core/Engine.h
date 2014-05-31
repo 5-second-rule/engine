@@ -30,6 +30,7 @@ private:
 	RegistrationEvent waitingRegistration;
 
 protected:
+	int debugLevel;
 	CommsProcessor *comms;
 	ConstructorTable<BaseObject> *objectCtors;
 	EventFactory *eventCtors;
@@ -61,6 +62,8 @@ public:
 
 	void registerPlayer(bool wait);
 	unsigned int getLocalPlayerGuid(unsigned int playerIndex);
+
+	int getDebugLevel();
 
 protected:
 	virtual bool checkForTick(float dt);

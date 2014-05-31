@@ -23,6 +23,7 @@ Engine::Engine(
 	, objectCtors(objectCtors)
 	, eventCtors(new EventFactory(eventCtors))
 {
+	this->debugLevel = 0;
 	this->running = false;
 	// Set up network
 	this->comms = new CommsProcessor( role, this );
@@ -119,7 +120,7 @@ void Engine::dispatchUpdate(Event* event) {
 		RegistrationEvent* regEvent = Event::cast<RegistrationEvent>( event );
 		switch( regEvent->regType ) {
 			case RegistrationType::REQUEST:
-				if( _DEBUG ) std::cout << "player registration inbound" << std::endl;
+				if( this->debugLevel > 0 ) std::cout << "player registration inbound" << std::endl;
 				this->handleRegistrationRequest( regEvent );
 				break;
 			case RegistrationType::RESPONSE:
@@ -132,14 +133,14 @@ void Engine::dispatchUpdate(Event* event) {
 			this->updateObject(Event::cast<UpdateEvent>(event));
 			break;
 		case EventType::ACTION:
-			if (_DEBUG) std::cout << "action!" << std::endl;
+			if( this->debugLevel > 0 ) std::cout << "action!" << std::endl;
 			this->dispatchAction(Event::cast<ActionEvent>(event));
 			break;
 		case EventType::SOUND:
 			this->dispatchSound( Event::cast<SoundEvent>( event ) );
 			break;
 		default:
-			if( _DEBUG ) std::cout << "Urgh!" << std::endl;
+			if( this->debugLevel > 0 ) std::cout << "Urgh!" << std::endl;
 			break;
 		}
 	} else {
@@ -170,9 +171,9 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 		this->playerMap[event->playerGuid] = obj->getHandle();
 		resultObjectHandle = obj->getHandle();
 
-		if (_DEBUG) std::cout << "=> player registered" << std::endl;
+		if( this->debugLevel > 0 ) std::cout << "=> player registered" << std::endl;
 	} else {
-		if (_DEBUG) std::cout << "=> player NOT registered #fail" << std::endl;
+		if( this->debugLevel > 0 ) std::cout << "=> player NOT registered #fail" << std::endl;
 	}
 
 	RegistrationEvent respEvent;
