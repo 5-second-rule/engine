@@ -293,6 +293,10 @@ Sound * RenderingEngine::createSoundFromIndex( size_t soundIndex ) {
 }
 
 void RenderingEngine::dispatchSound( SoundEvent *evt ) {
+	static const int ATT_SCALE = 5;
+
+	Vector4 sndPosition = Vector( evt->position[0], evt->position[1], evt->position[2] );
+	float distance = (sndPosition - this->cameraHandler->position).lengthSquared();
 	SoundObject* obj = soundCtors->invoke(evt->soundType);
 	Sound* snd = obj->sound;
 	if( evt->shouldStop ) {
@@ -301,6 +305,7 @@ void RenderingEngine::dispatchSound( SoundEvent *evt ) {
 		if( evt->isLooped ) {
 			snd->playLooped();
 		} else {
+			snd->setVolume( static_cast<int>(distance) * ATT_SCALE );
 			snd->play();
 		}
 	}
