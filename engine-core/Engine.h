@@ -74,6 +74,7 @@ public:
 
 	void setPlayerHandler(unsigned int guid, PlayerDelegate* player);
 
+	std::vector<Handle> getPlayers();
 	int getDebugLevel();
 
 protected:

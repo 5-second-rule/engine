@@ -12,15 +12,32 @@
 
 using namespace std;
 
+const string str_settings_file = "resources/Config.ini";
+const string str_template_settings_file = "/resources/ConfigTemplate.ini";
+
 class COREDLL ConfigSettings {
 
 public:
-	static string str_screen_width;
-	static string str_screen_height;
-	static string str_full_screen;
+	float frame_rate;
 
-	static const string str_settings_file;
-	static const string str_template_settings_file;
+	// Physics
+	float fluid_force;
+	float tube_radius;
+	float tube_radius_sq;
+	float mass;
+	float drag_coefficient;
+	float max_speed;
+	float max_force;
+
+	// Steering Behavior Configurations
+	float deceleration_tweaker;
+	float wander_radius;
+	float wander_distance;
+	float wander_jitter;
+	float way_point_seek_distance;
+	float way_point_seek_distance_sq;
+	float weight_wander;
+	float weight_follow_path;
 
 public:
 	static ConfigSettings config; // Use this static reference instead of your own call to the constructor
@@ -33,6 +50,9 @@ public:
 
 	void copySettingsTemplate();
 	void copyMissingSettings();
+
+	template< class T >
+	bool getValueOrDefault(string key, T &ret, T def);
 
 	bool getValue(string key, bool & ret);
 	bool getValue(string key, int & ret);
@@ -48,17 +68,20 @@ public:
 
 private:
 	//default parameters for a default constructor option
-	ConfigSettings(string file_name=str_settings_file, string template_file_name=str_template_settings_file);
+	ConfigSettings(string file_name = str_settings_file, string template_file_name = str_template_settings_file);
 
 
-	hash_map<string,string> settings;
+	hash_map<string, string> settings;
 	bool settings_loaded;
 
 	string file_name;
 	string template_file_name;
 };
 
-
-namespace Utility{
-	COREDLL ConfigSettings* configInstance();
+template< class T >
+bool ConfigSettings::getValueOrDefault(string key, T &ret, T def){
+	if (this->getValue(key, ret))
+		return true;
+	ret = def;
+	return false;
 }
