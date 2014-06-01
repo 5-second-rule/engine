@@ -34,6 +34,9 @@ void ServerEngine::tick(float dt) {
 		this->world->broadcastUpdates( comms );
 	}
 
+	// garbagage collect objects marked as gc after sending this update out to clients
+	this->world->garbageCollectWorld();
+
 	if( annouceCount == 25 ) { // about every 2 seconds
 		comms->sendAnnouce();
 		annouceCount = 0;
@@ -50,9 +53,7 @@ void ServerEngine::frame(float dt) {
 
 // command-line extensions for ServerEngine
 void PrintWorld::execute( std::string args ) {
-	for( size_t i = 0; i < this->world->getObjects()->size(); ++i ) {
-		std::cout << std::endl << this->world->getObjects()->at( i )->toString() << std::endl;
-	}
+	this->world->printWorld();
 }
 
 void Exit::execute( std::string args ) {

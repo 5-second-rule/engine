@@ -83,7 +83,10 @@ bool RenderingEngine::shouldContinueFrames() {
 
 void RenderingEngine::tick(float dt) {
 	this->processNetworkUpdates();
-	//Engine::tick(dt);
+
+	// cleanup world after gc status has been pushed by server
+	this->world->garbageCollectWorld();
+
 	this->translateInput();
 }
 
