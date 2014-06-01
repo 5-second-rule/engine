@@ -293,7 +293,7 @@ Sound * RenderingEngine::createSoundFromIndex( size_t soundIndex ) {
 }
 
 void RenderingEngine::dispatchSound( SoundEvent *evt ) {
-	static const int ATT_SCALE = 5;
+	static const int ATT_SCALE = 50;
 
 	Vector4 sndPosition = Vector( evt->position[0], evt->position[1], evt->position[2] );
 	float distance = (sndPosition - this->cameraHandler->position).lengthSquared();
