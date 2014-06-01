@@ -115,7 +115,7 @@ void World::replace( const Handle& handle,  IHasHandle* object) {
 void World::garbageCollectWorld() {
 	for( size_t i = 0; i < 2; ++i )
 		for( size_t j = 0; j < objects[i].size(); ++j ) {
-			if( this->objects[i][j]->gc ) {
+		if( this->objects[i][j] != nullptr && this->objects[i][j]->gc ) {
 				delete this->objects[i][j];
 				this->objects[i][j] = nullptr;
 			}
