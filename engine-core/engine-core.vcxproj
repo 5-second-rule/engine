@@ -103,9 +103,11 @@
     <ClInclude Include="ICollidable.h" />
     <ClInclude Include="IHasHandle.h" />
     <ClInclude Include="IEventReceiver.h" />
+    <ClInclude Include="IRegisterPlayers.h" />
     <ClInclude Include="ISerializable.h" />
     <ClInclude Include="IUpdatable.h" />
     <ClInclude Include="ConstructorTable.h" />
+    <ClInclude Include="NotificationDelegate.h" />
     <ClInclude Include="RegistrationEvent.h" />
     <ClInclude Include="ServerEngine.h" />
     <ClInclude Include="Socket.h" />

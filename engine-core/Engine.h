@@ -12,6 +12,8 @@
 #include "SoundEvent.h"
 #include "RegistrationEvent.h"
 #include "BaseObject.h"
+#include "IRegisterPlayers.h"
+#include "NotificationDelegate.h"
 
 #include <map>
 
@@ -34,8 +36,9 @@ protected:
 	CommsProcessor *comms;
 	ConstructorTable<BaseObject> *objectCtors;
 	EventFactory *eventCtors;
+	IRegisterPlayers *registrar;
 
-	std::map<unsigned int, Handle> playerMap;
+	std::map<unsigned int, PlayerDelegate*> playerMap;
 	std::vector<unsigned int> localPlayers;
 
 	World *world;
@@ -52,16 +55,24 @@ public:
 
 	virtual ~Engine();
 
+	NotificationDelegate* notify;
+
 	void sendEvent( Event* evt );
 
 	bool isRunning();
 	virtual void run();
 	virtual void stop();
 
-	World* getWorld();
+	World *getWorld();
+	ConstructorTable<BaseObject> *getObjCtors();
+
+	void setPlayerRegistration(IRegisterPlayers *registrar);
+	IRegisterPlayers *getPlayerRegistration();
 
 	void registerPlayer(bool wait);
 	unsigned int getLocalPlayerGuid(unsigned int playerIndex);
+
+	void setPlayerHandler(unsigned int guid, PlayerDelegate* player);
 
 	int getDebugLevel();
 

@@ -17,16 +17,21 @@ public:
 	ActionEvent(unsigned int playerGuid,  int actionType);
 	virtual ~ActionEvent();
 
-	int getPlayerGuid();
+	int getPlayerGuid() const;
 
 	// Typing
 	static const EventType TYPE = EventType::ACTION;
 
-	int getActionType();
+	int getActionType() const;
 	static int getActionType(BufferReader& reader);
 
 	template<class T> static T* cast(ActionEvent* e) {
 		if (static_cast<int>(T::ACTIONTYPE) == e->getActionType()) return static_cast<T*>(e);
+		else return nullptr;
+	}
+
+	template<class T> static const T* cast(const ActionEvent* e) {
+		if (static_cast<int>(T::ACTIONTYPE) == e->getActionType()) return static_cast<const T*>(e);
 		else return nullptr;
 	}
 
