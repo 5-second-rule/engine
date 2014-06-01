@@ -15,7 +15,8 @@ protected:
 	}
 
 public:
-	IHasHandle(int type) : type(type) {}
+	bool gc;
+	IHasHandle(int type) : type(type), gc(false) {}
 	virtual ~IHasHandle() {}
 
 	virtual Handle getHandle() = 0;

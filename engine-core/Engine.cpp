@@ -22,6 +22,7 @@ Engine::Engine(
 	, world(world)
 	, objectCtors(objectCtors)
 	, eventCtors(new EventFactory(eventCtors))
+	, notify(nullptr)
 {
 	this->debugLevel = 0;
 	this->running = false;
@@ -93,6 +94,10 @@ World* Engine::getWorld() {
 	return this->world;
 }
 
+ConstructorTable<BaseObject> *Engine::getObjCtors() {
+	return this->objectCtors;
+}
+
 bool Engine::shouldContinueFrames() {
 	return running;
 }
@@ -160,16 +165,8 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 	if (place == this->playerMap.end()) {
 		response = Response::OK;
 		// spot is available, yay!
-
-		// HACK make first model for now
-		BaseObject * obj = this->objectCtors->invoke( modNum );
-		world->allocateHandle(obj, HandleType::GLOBAL);
-		world->insert(obj);
-
-		modNum++;
-
-		this->playerMap[event->playerGuid] = obj->getHandle();
-		resultObjectHandle = obj->getHandle();
+		
+		playerMap[event->playerGuid] = registrar->addPlayer(event->playerGuid);
 
 		if( this->debugLevel > 0 ) std::cout << "=> player registered" << std::endl;
 	} else {
@@ -181,7 +178,7 @@ void Engine::handleRegistrationRequest(RegistrationEvent* event) {
 	respEvent.playerGuid = event->playerGuid;
 	respEvent.response = response;
 	respEvent.responseTag = event->responseTag;
-	respEvent.objectHandle = resultObjectHandle;
+	//respEvent.objectHandle = resultObjectHandle;
 
 	delete event;
 	comms->sendEvent(&respEvent);
@@ -195,10 +192,16 @@ void Engine::handleRegistrationResponse( RegistrationEvent* event ) {
 		&& event->response == Response::OK) { 		// matches
 		this->waitingForRegistration = false;
 		this->localPlayers.push_back(this->waitingRegistration.playerGuid);
-		this->playerMap[event->playerGuid] = event->objectHandle;
 	}
-
 	delete event;
+}
+
+void Engine::setPlayerRegistration(IRegisterPlayers *registrar) {
+	this->registrar = registrar;
+}
+
+IRegisterPlayers *Engine::getPlayerRegistration() {
+	return this->registrar;
 }
 
 // HACK not really safe either, no prevention of double call
@@ -226,8 +229,11 @@ void Engine::updateObject(UpdateEvent* evt) {
 
 	if (this->world->get(evt->getHandle()) == nullptr) {
 		world->insert(evt->getChild());
+		if (notify != nullptr) notify->newObject(evt->getChild()->getHandle(), evt->getChild()->getType());
 	} else {
 		world->replace( evt->getHandle(), evt->getChild() );
+		if (notify != nullptr) notify->updatedObject(evt->getChild()->getHandle(), evt->getChild()->getType());
+
 	}
 
 	delete evt;
@@ -238,7 +244,7 @@ void Engine::dispatchAction( ActionEvent *evt ) {
 	auto playerHandle = this->playerMap.find(evt->getPlayerGuid());
 
 	if (playerHandle != this->playerMap.end()) {
-		this->world->dispatchEvent(evt, playerHandle->second);
+		playerHandle->second->handleEvent(evt);
 	} else {
 		std::cout << "WARN: unknown player attempted an action" << std::endl;
 	}
@@ -248,4 +254,8 @@ void Engine::dispatchSound( SoundEvent *evt ) {
 	// delete the event as there is nothing left to do on
 	// non-renderable engines
 	delete evt;
+}
+
+void Engine::setPlayerHandler(unsigned int guid, PlayerDelegate* player) {
+	this->playerMap[guid] = player;
 }

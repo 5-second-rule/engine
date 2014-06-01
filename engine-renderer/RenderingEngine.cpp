@@ -24,6 +24,7 @@ RenderingEngine::RenderingEngine( RenderableWorld *world,
 	this->inputAdapter.setInput(this->input);
 	this->cameraHandler = cameraHandler;
 	this->soundCtors = soundCtors;
+	this->renderingDelegate = nullptr;
 }
 
 RenderingEngine::~RenderingEngine() {
@@ -60,7 +61,10 @@ RenderingEngine::~RenderingEngine() {
 }
 
 void RenderingEngine::translateInput() {
+	if (this->renderingDelegate == nullptr)
+		return;
 	std::vector<Event *> inputEventVector = this->renderingDelegate->inputTranslator(&this->inputAdapter);
+	
 	std::vector<Event *>::iterator it;
 	for (it = inputEventVector.begin(); it != inputEventVector.end(); ++it) {
 		this->comms->sendEvent(*it);
@@ -79,14 +83,17 @@ bool RenderingEngine::shouldContinueFrames() {
 
 void RenderingEngine::tick(float dt) {
 	this->processNetworkUpdates();
-	//Engine::tick(dt);
+
+	// cleanup world after gc status has been pushed by server
+	this->world->garbageCollectWorld();
+
 	this->translateInput();
 }
 
 void RenderingEngine::frame(float dt) {
 	// HACK to only player 0
-	if (this->localPlayers.size() > 0) {
-		IHasHandle *playerObject = this->world->get(this->playerMap[this->localPlayers[0]]);
+	if (this->localPlayers.size() > 0 && this->playerMap[this->localPlayers[0]] != nullptr) {
+		IHasHandle *playerObject = this->world->get(this->playerMap[this->localPlayers[0]]->cameraTarget());
 		if (playerObject != nullptr) {
 			this->cameraHandler->updateFor(playerObject);
 			Camera *camera = renderer->getCamera();
@@ -246,6 +253,35 @@ Model * RenderingEngine::createModelFromIndex(size_t modelIndex, size_t textureI
 	return this->renderer->createModel(data.vertexBuffer, data.indexBuffer, texture, bumpMap, vertex, pixel);
 }
 
+Model * RenderingEngine::create2DModelFromVertices(Vertex *v, int numVertices, Index *i, int numIndices, Texture *texture) {
+	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture);
+}
+
+Model * RenderingEngine::create2DModelFromVertices(Vertex *v, int numVertices, Index *i, int numIndices, Texture *texture, Shader *vs, Shader *ps) {
+	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture, vs, ps);
+}
+
+Model * RenderingEngine::create2DModelFromScratch(Vertex *v, int numVertices, Index *i, int numIndices, char *textureFile, std::vector<Transmission::Texture *> textureStorage, bool isTransparent) {
+	Texture *texture = this->renderer->createTextureFromFile(textureFile);
+	if (v == nullptr || i == nullptr || texture == nullptr) {
+		return nullptr;
+	}
+
+	textureStorage.push_back(texture);
+
+	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture, isTransparent);
+}
+Model * RenderingEngine::create2DModelFromScratch(Vertex *v, int numVertices, Index *i, int numIndices, char *textureFile, std::vector<Transmission::Texture *> textureStorage, Shader *vs, Shader *ps, bool isTransparent) {
+	Texture *texture = this->renderer->createTextureFromFile(textureFile);
+	if (v == nullptr || i == nullptr || texture == nullptr || vs == nullptr || ps == nullptr) {
+		return nullptr;
+	}
+
+	textureStorage.push_back(texture);
+
+	return this->renderer->create2DModelFromVertices(v, numVertices, i, numIndices, texture, vs, ps, isTransparent);
+}
+
 Sound * RenderingEngine::createSoundFromIndex( size_t soundIndex ) {
 	// ok not really a create function but it follows the naming scheme 
 	// and conventions used so far in engine
@@ -257,6 +293,10 @@ Sound * RenderingEngine::createSoundFromIndex( size_t soundIndex ) {
 }
 
 void RenderingEngine::dispatchSound( SoundEvent *evt ) {
+	static const int ATT_SCALE = 50;
+
+	Vector4 sndPosition = Vector( evt->position[0], evt->position[1], evt->position[2] );
+	float distance = (sndPosition - this->cameraHandler->position).lengthSquared();
 	SoundObject* obj = soundCtors->invoke(evt->soundType);
 	Sound* snd = obj->sound;
 	if( evt->shouldStop ) {
@@ -265,6 +305,7 @@ void RenderingEngine::dispatchSound( SoundEvent *evt ) {
 		if( evt->isLooped ) {
 			snd->playLooped();
 		} else {
+			snd->setVolume( static_cast<int>(distance) * ATT_SCALE );
 			snd->play();
 		}
 	}

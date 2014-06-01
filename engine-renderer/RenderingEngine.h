@@ -75,10 +75,18 @@ public:
 	int loadSound( char *filename );
 	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex);
 	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex);
-	Model * createModelFromIndex( size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader );
+	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t vertexShader, size_t pixelShader);
 	Model * createModelFromIndex(size_t modelIndex, size_t textureIndex, size_t bumpIndex, size_t vertexShader, size_t pixelShader);
+
+	Model * create2DModelFromVertices(Vertex *v, int numVertices, Index *i, int numIndices, Texture *texture);
+	Model * create2DModelFromVertices(Vertex *v, int numVertices, Index *i, int numIndices, Texture *texture, Shader *vs, Shader *ps);
+	Model * create2DModelFromScratch(Vertex *v, int numVertices, Index *i, int numIndices, char *textureFile, std::vector<Transmission::Texture *> textureStorage, bool transparent);
+	Model * create2DModelFromScratch(Vertex *v, int numVertices, Index *i, int numIndices, char *textureFile, std::vector<Transmission::Texture *> textureStorage, Shader *vs, Shader *ps, bool transparent);
+
 	Sound * createSoundFromIndex( size_t soundIndex );
+  
 	virtual void dispatchSound( SoundEvent *evt );
+
 	void waitForServer();
 
 	IRenderingEngineDelegate* renderingDelegate;
