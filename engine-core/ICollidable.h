@@ -33,7 +33,11 @@ class COREDLL ICollidable {
 public:
 	virtual Common::Vector4 getGroupingParameter() const = 0;
 	virtual bool collidesWith(const ICollidable*) const = 0;
-	virtual void handleCollision(std::shared_ptr<const Bounds>, float dt) = 0;
+	virtual void handleCollision(std::shared_ptr<const Bounds>, float dt, int metadata) = 0;
 	virtual std::shared_ptr<const Bounds> getBounds() const = 0;
 	virtual unsigned int getPriority() const = 0;
+
+	virtual int getCollisionMetadata() const {
+		return 0;
+	};
 };
