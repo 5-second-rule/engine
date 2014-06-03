@@ -115,7 +115,7 @@ void World::replace( const Handle& handle,  IHasHandle* object) {
 void World::garbageCollectWorld() {
 	for( size_t i = 0; i < 2; ++i )
 		for( size_t j = 0; j < objects[i].size(); ++j ) {
-			if( this->objects[i][j]->gc ) {
+		if( this->objects[i][j] != nullptr && this->objects[i][j]->gc ) {
 				delete this->objects[i][j];
 				this->objects[i][j] = nullptr;
 			}
@@ -157,9 +157,9 @@ void World::update(float dt) {
 			shared_ptr<const Bounds> b2 = c2->getBounds();
 
 			if ((p1 <= p2) ? c1->collidesWith(c2) : c2->collidesWith(c1)) {
+				c1->handleCollision(b2, dt, c2->getCollisionMetadata());
+				c2->handleCollision(b1, dt, c1->getCollisionMetadata());
 				//std::cout << "Collision" << std::endl;
-				c1->handleCollision(b2, dt);
-				c2->handleCollision(b1, dt);
 			}
 		}
 	}
