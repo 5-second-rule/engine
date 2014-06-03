@@ -27,6 +27,11 @@ public:
 	virtual std::vector<Event *> inputTranslator(InputAdapter *inputAdapter) = 0;
 };
 
+class RENDERDLL IFrameDelegate {
+public:
+	virtual void beforeDraw() = 0;
+};
+
 class RENDERDLL RenderingEngine : public Engine
 {
 private:
@@ -87,8 +92,11 @@ public:
   
 	virtual void dispatchSound( SoundEvent *evt );
 
+	void setLightBuffers(Common::Vector4 lightPos[], Common::Vector4 lightCol[], size_t num);
+
 	void waitForServer();
 
 	IRenderingEngineDelegate* renderingDelegate;
+	IFrameDelegate* frameDelegate;
 };
 
