@@ -74,7 +74,7 @@ public:
 
 	void setPlayerHandler(unsigned int guid, PlayerDelegate* player);
 
-	int getDebugLevel();
+	virtual int getDebugLevel();
 
 protected:
 	virtual bool checkForTick(float dt);

@@ -259,3 +259,7 @@ void Engine::dispatchSound( SoundEvent *evt ) {
 void Engine::setPlayerHandler(unsigned int guid, PlayerDelegate* player) {
 	this->playerMap[guid] = player;
 }
+
+int Engine::getDebugLevel() {
+	return this->debugLevel;
+}
