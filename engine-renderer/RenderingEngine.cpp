@@ -102,6 +102,7 @@ void RenderingEngine::frame(float dt) {
 	}
 
 	renderer->clearFrame();
+	if (this->frameDelegate) this->frameDelegate->beforeDraw();
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 }
@@ -316,4 +317,8 @@ void RenderingEngine::dispatchSound( SoundEvent *evt ) {
 
 void RenderingEngine::waitForServer() {
 	this->comms->waitAnnouce();
+}
+
+void RenderingEngine::setLightBuffers(Common::Vector4 lightPos[], Common::Vector4 lightCol[], size_t num) {
+	this->renderer->setLightBuffers(lightPos, lightCol, num);
 }
