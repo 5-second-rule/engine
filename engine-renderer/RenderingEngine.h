@@ -96,6 +96,9 @@ public:
 
 	void waitForServer();
 
+	void changeSaturation(float ds) { this->renderer->saturation += ds; }
+	void changeLightness(float dl) { this->renderer->lightness += dl; }
+
 	IRenderingEngineDelegate* renderingDelegate;
 	IFrameDelegate* frameDelegate;
 };
