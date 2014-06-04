@@ -263,3 +263,7 @@ void Engine::setPlayerHandler(unsigned int guid, PlayerDelegate* player) {
 int Engine::getDebugLevel() {
 	return this->debugLevel;
 }
+
+bool Engine::shouldProcessEvents() {
+	return true;
+}

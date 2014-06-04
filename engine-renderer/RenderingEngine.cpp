@@ -294,7 +294,6 @@ Sound * RenderingEngine::createSoundFromIndex( size_t soundIndex ) {
 }
 
 void RenderingEngine::dispatchSound( SoundEvent *evt ) {
-	static const int ATT_SCALE = 5;
 
 	Vector4 sndPosition = Vector( evt->position[0], evt->position[1], evt->position[2] );
 	float distance = (sndPosition - this->cameraHandler->position).length();
@@ -304,9 +303,10 @@ void RenderingEngine::dispatchSound( SoundEvent *evt ) {
 		snd->stop();
 	} else {
 		if( evt->isLooped ) {
+			snd->setVolume( 1500 );
 			snd->playLooped();
 		} else {
-			snd->setVolume( static_cast<int>(distance) * ATT_SCALE );
+			snd->setVolume( static_cast<int>(distance)*2 );
 			snd->play();
 		}
 	}
@@ -321,4 +321,8 @@ void RenderingEngine::waitForServer() {
 
 void RenderingEngine::setLightBuffers(Common::Vector4 lightPos[], Common::Vector4 lightCol[], size_t num) {
 	this->renderer->setLightBuffers(lightPos, lightCol, num);
+}
+
+bool RenderingEngine::shouldProcessEvents() {
+	return this->frameDelegate->loadingDone();
 }

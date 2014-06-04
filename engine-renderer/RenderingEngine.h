@@ -30,6 +30,7 @@ public:
 class RENDERDLL IFrameDelegate {
 public:
 	virtual void beforeDraw() = 0;
+	virtual bool loadingDone() = 0;
 };
 
 class RENDERDLL RenderingEngine : public Engine
@@ -56,6 +57,8 @@ protected:
 	virtual void frame(float dt);
 
 	virtual void tick(float dt);
+
+	bool shouldProcessEvents();
 
 public:
 	RenderingEngine( RenderableWorld *world, 
