@@ -75,8 +75,6 @@ public:
 	void setPlayerHandler(unsigned int guid, PlayerDelegate* player);
 
 	virtual int getDebugLevel();
-	std::vector<Handle> getPlayers();
-	int getDebugLevel();
 
 protected:
 	virtual bool checkForTick(float dt);

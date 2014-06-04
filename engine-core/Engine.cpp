@@ -263,14 +263,3 @@ void Engine::setPlayerHandler(unsigned int guid, PlayerDelegate* player) {
 int Engine::getDebugLevel() {
 	return this->debugLevel;
 }
-
-vector<Handle> Engine::getPlayers(){
-	vector<Handle> list;
-	map<unsigned int, PlayerDelegate*>::iterator it = playerMap.begin();
-
-	while (it != playerMap.end()){
-		list.push_back(it->second->cameraTarget());
-		it++;
-	}
-	return list;
-}
