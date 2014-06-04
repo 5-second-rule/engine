@@ -11,58 +11,20 @@ ConfigSettings::ConfigSettings(string fname, string template_fname) {
 
 	if (!loadSettingsFile()){ //loads settings
 		copySettingsTemplate();
-		cout << "oi";
 	}
 	else{
 		copyMissingSettings();
 	}
-
-	getValue("tube_radius", tube_radius);
-	getValue("fluid_force", fluid_force);
-	getValue("default_drag_coefficient", drag_coefficient);
-	getValue("default_max_speed", max_speed);
-	getValue("default_max_force", max_force);
-	getValue("default_mass", mass);
-
-	// Steering Behavior
-	getValue("frame_rate", frame_rate);
-	getValue("deceleration_tweaker", deceleration_tweaker);
-	getValue("wander_jitter", wander_jitter);
-	getValue("wander_radius", wander_radius);
-	getValue("wander_distance", wander_distance);
-	getValue("weight_wander", weight_wander);
-	getValue("weight_follow_path", weight_follow_path);
-	getValue("way_point_seek_distance", way_point_seek_distance);
-
-	/* DEBUG
-	assert(getValue("tube_radius", tube_radius));
-	assert(getValue("fluid_force", fluid_force));
-	assert(getValue("default_drag_coefficient", drag_coefficient));
-	assert(getValue("default_max_speed", max_speed));
-	assert(getValue("default_max_force", max_force));
-	assert(getValue("default_mass", mass));
-
-	// Steering Behavior
-	assert(getValue("frame_rate", frame_rate));
-	assert(getValue("deceleration_tweaker", deceleration_tweaker));
-	assert(getValue("wander_jitter", wander_jitter));
-	assert(getValue("wander_radius", wander_radius));
-	assert(getValue("wander_distance", wander_distance));
-	assert(getValue("weight_wander", weight_wander));
-	assert(getValue("weight_follow_path", weight_follow_path));
-	assert(getValue("way_point_seek_distance", way_point_seek_distance));
-	*/
-	tube_radius_sq = tube_radius * tube_radius;
 }
 
-ConfigSettings::~ConfigSettings() {
-}
+ConfigSettings::~ConfigSettings() {}
 
 //Reads and loads the settings
 bool ConfigSettings::loadSettingsFile(){
 
 	ifstream myfile;
 	myfile.open(file_name);
+	cout << file_name << endl;
 
 	if (myfile.is_open()){
 		string line;

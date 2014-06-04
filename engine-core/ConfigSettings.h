@@ -13,32 +13,9 @@
 using namespace std;
 
 const string str_settings_file = "resources/Config.ini";
-const string str_template_settings_file = "/resources/ConfigTemplate.ini";
+const string str_template_settings_file = "resources/ConfigTemplate.ini";
 
 class COREDLL ConfigSettings {
-
-public:
-	float frame_rate;
-
-	// Physics
-	float fluid_force;
-	float tube_radius;
-	float tube_radius_sq;
-	float mass;
-	float drag_coefficient;
-	float max_speed;
-	float max_force;
-
-	// Steering Behavior Configurations
-	float deceleration_tweaker;
-	float wander_radius;
-	float wander_distance;
-	float wander_jitter;
-	float way_point_seek_distance;
-	float way_point_seek_distance_sq;
-	float weight_wander;
-	float weight_follow_path;
-
 public:
 	static ConfigSettings config; // Use this static reference instead of your own call to the constructor
 	~ConfigSettings();
