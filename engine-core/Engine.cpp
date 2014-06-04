@@ -260,6 +260,10 @@ void Engine::setPlayerHandler(unsigned int guid, PlayerDelegate* player) {
 	this->playerMap[guid] = player;
 }
 
+int Engine::getDebugLevel() {
+	return this->debugLevel;
+}
+
 vector<Handle> Engine::getPlayers(){
 	vector<Handle> list;
 	map<unsigned int, PlayerDelegate*>::iterator it = playerMap.begin();

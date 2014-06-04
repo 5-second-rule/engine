@@ -102,6 +102,7 @@ void RenderingEngine::frame(float dt) {
 	}
 
 	renderer->clearFrame();
+	if (this->frameDelegate) this->frameDelegate->beforeDraw();
 	this->renderableWorld->renderAll();
 	renderer->drawFrame();
 }
@@ -293,10 +294,10 @@ Sound * RenderingEngine::createSoundFromIndex( size_t soundIndex ) {
 }
 
 void RenderingEngine::dispatchSound( SoundEvent *evt ) {
-	static const int ATT_SCALE = 50;
+	static const int ATT_SCALE = 5;
 
 	Vector4 sndPosition = Vector( evt->position[0], evt->position[1], evt->position[2] );
-	float distance = (sndPosition - this->cameraHandler->position).lengthSquared();
+	float distance = (sndPosition - this->cameraHandler->position).length();
 	SoundObject* obj = soundCtors->invoke(evt->soundType);
 	Sound* snd = obj->sound;
 	if( evt->shouldStop ) {
@@ -316,4 +317,8 @@ void RenderingEngine::dispatchSound( SoundEvent *evt ) {
 
 void RenderingEngine::waitForServer() {
 	this->comms->waitAnnouce();
+}
+
+void RenderingEngine::setLightBuffers(Common::Vector4 lightPos[], Common::Vector4 lightCol[], size_t num) {
+	this->renderer->setLightBuffers(lightPos, lightCol, num);
 }
