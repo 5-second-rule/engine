@@ -140,10 +140,12 @@ void CommsProcessor::clientCallback() {
 			{
 				BufferReader readBuffer( buf->payload, buf->header.len );
 				Event* event = owner->eventCtors->invoke(readBuffer);
-				if (event->getType() == EventType::UPDATE && owner->isRunning()) {
-					UpdateEvent* updateEvent = Event::cast<UpdateEvent>(event);
-					updateEvent->setChild(owner->objectCtors->invoke(readBuffer));
-					handoffQ->push(event);
+				if( event->getType() == EventType::UPDATE && owner->isRunning() ) {
+					if( owner->shouldProcessEvents() ) {
+						UpdateEvent* updateEvent = Event::cast<UpdateEvent>( event );
+						updateEvent->setChild( owner->objectCtors->invoke( readBuffer ) );
+						handoffQ->push( event );
+					} else delete event;
 				} else if ( owner->isRunning() ){
 					handoffQ->push( event );
 				} else {
