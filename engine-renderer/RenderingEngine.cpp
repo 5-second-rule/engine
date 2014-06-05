@@ -61,11 +61,11 @@ RenderingEngine::~RenderingEngine() {
 }
 
 unsigned int RenderingEngine::getWindowWidth() {
-	return this->window->getWidth();
+	return this->renderer->getWindowWidth();
 }
 
 unsigned int RenderingEngine::getWindowHeight() {
-	return this->window->getHeight();
+	return this->renderer->getWindowHeight();
 }
 
 void RenderingEngine::translateInput() {
