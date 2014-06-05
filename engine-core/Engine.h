@@ -92,5 +92,7 @@ protected:
 	virtual void handleRegistrationRequest( RegistrationEvent* event );
 	virtual void handleRegistrationResponse( RegistrationEvent* event );
 
+	virtual bool shouldProcessEvents();
+
 	void processNetworkUpdates();
 };

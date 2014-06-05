@@ -27,6 +27,12 @@ public:
 	virtual std::vector<Event *> inputTranslator(InputAdapter *inputAdapter) = 0;
 };
 
+class RENDERDLL IFrameDelegate {
+public:
+	virtual void beforeDraw() = 0;
+	virtual bool loadingDone() = 0;
+};
+
 class RENDERDLL RenderingEngine : public Engine
 {
 private:
@@ -51,6 +57,8 @@ protected:
 	virtual void frame(float dt);
 
 	virtual void tick(float dt);
+
+	bool shouldProcessEvents();
 
 public:
 	RenderingEngine( RenderableWorld *world, 
@@ -90,8 +98,14 @@ public:
   
 	virtual void dispatchSound( SoundEvent *evt );
 
+	void setLightBuffers(Common::Vector4 lightPos[], Common::Vector4 lightCol[], size_t num);
+
 	void waitForServer();
 
+	void changeSaturation(float ds) { this->renderer->saturation += ds; }
+	void changeLightness(float dl) { this->renderer->lightness += dl; }
+
 	IRenderingEngineDelegate* renderingDelegate;
+	IFrameDelegate* frameDelegate;
 };
 
