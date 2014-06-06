@@ -31,6 +31,7 @@ public:
 
 	// IHasHandle Methods
 	Handle getHandle();
+	virtual void setGC();
 	void setHandle(Handle handle);
 
 	// ISerializable Methods

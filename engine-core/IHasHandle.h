@@ -15,12 +15,12 @@ protected:
 	}
 
 public:
-	bool gc;
-	IHasHandle(int type) : type(type), gc(false) {}
+	IHasHandle(int type) : type(type) {}
 	virtual ~IHasHandle() {}
 
 	virtual Handle getHandle() = 0;
 	virtual void setHandle(Handle handle) = 0;
+	virtual void setGC() = 0;
 
 	virtual int getType() const { 
 		return this->type; 
