@@ -23,6 +23,7 @@ private:
 public:
 	size_t index;
 	unsigned int id;
+	bool gc;
 
 	Handle();
 	Handle(int index, unsigned int id, HandleType type);

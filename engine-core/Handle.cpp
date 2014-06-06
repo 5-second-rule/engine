@@ -7,6 +7,7 @@ Handle::Handle() : Handle(0, 0, HandleType::LOCAL) {}
 Handle::Handle(int index, unsigned int id, HandleType type) {
 	this->index = index;
 	this->id = id;
+	this->gc = false;
 
 	if (type == HandleType::LOCAL) {
 		this->id |= LOCAL_MASK;
@@ -32,13 +33,14 @@ bool Handle::operator==(Handle const& handle) const {
 }
 
 void Handle::reserveSize(IReserve& buffer) const {
-	buffer.reserve(sizeof(size_t) + sizeof(unsigned int));
+	buffer.reserve(sizeof(size_t) + sizeof(unsigned int) + sizeof(bool));
 }
 
 void Handle::fillBuffer(IFill& buffer) const {
 	char *buf = buffer.getPointer();
 	memcpy(buf, &this->index, sizeof(size_t));
 	memcpy(buf + sizeof(size_t), &this->id, sizeof(unsigned int));
+	memcpy( buf + sizeof(size_t)+sizeof(unsigned int), &this->gc, sizeof(bool) );
 	buffer.filled();
 }
 
@@ -47,8 +49,9 @@ void Handle::deserialize(BufferReader& reader) {
 
 	memcpy(&this->index, buf, sizeof(size_t));
 	memcpy(&this->id, buf + sizeof(size_t), sizeof(unsigned int));
+	memcpy( &this->gc, buf + sizeof(size_t)+sizeof(unsigned int), sizeof(bool) );
 
-	reader.finished(sizeof(size_t) + sizeof(unsigned int));
+	reader.finished(sizeof(size_t) + sizeof(unsigned int)+sizeof(bool));
 }
 
 std::string Handle::toString() const {
