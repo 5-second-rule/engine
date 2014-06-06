@@ -93,6 +93,9 @@ Socket::Socket( int type, int protocol )
 	{
 		throw SocketException( "Socket creation failed (socket())", true );
 	}
+
+	BOOL reuse = true;
+	setsockopt( sockDesc, SOL_SOCKET, SO_REUSEADDR, (char*)&reuse, sizeof(reuse) );
 }
 
 Socket::Socket( int sockDesc )

@@ -11,7 +11,6 @@ class COREDLL ServerEngine : public Engine
 	friend class Pause;
 private:
 	const float secondsPerTick;
-	CommandLine commandLine;
 	bool paused;
 
 protected:
@@ -25,6 +24,7 @@ public:
 		ConstructorTable<BaseObject> *objectCtors,
 		ConstructorTable<ActionEvent>*,
 		float minimumFrameTime);
+	CommandLine commandLine;
 };
 
 // command-line extensions for ServerEngine

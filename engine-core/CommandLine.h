@@ -8,14 +8,16 @@
 #include <utility>
 #include <map>
 #include <functional>
+#include "engine-core.h"
 
-class Command {
+class COREDLL Command
+{
 private:
 public:
 	virtual void execute(std::string args) = 0;
 };
 
-class CommandLine
+class COREDLL CommandLine
 {
 private:
 	bool running;

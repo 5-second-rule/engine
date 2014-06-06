@@ -50,5 +50,5 @@ public:
 
 	static int getType(BufferReader&);
 
-	std::string toString() const;
+	virtual std::string toString() const;
 };
