@@ -74,6 +74,9 @@ public:
 
 	ConstructorTable<SoundObject>* soundCtors;
 
+	unsigned int getWindowWidth();
+	unsigned int getWindowHeight();
+
 	int loadModel(char *filename);
 	int loadModel(char *filename, bool centered);
 	int loadTexture(char *filename);

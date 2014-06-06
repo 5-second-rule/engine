@@ -60,6 +60,14 @@ RenderingEngine::~RenderingEngine() {
 	delete this->window;
 }
 
+unsigned int RenderingEngine::getWindowWidth() {
+	return this->window->getWidth();
+}
+
+unsigned int RenderingEngine::getWindowHeight() {
+	return this->window->getHeight();
+}
+
 void RenderingEngine::translateInput() {
 	if (this->renderingDelegate == nullptr)
 		return;
