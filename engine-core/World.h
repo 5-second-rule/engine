@@ -45,7 +45,7 @@ public:
 	void remove(Handle *handle);
 	IHasHandle * get(const Handle& handle);
 	void replace( const Handle& handle, IHasHandle* object );
-	void garbageCollectWorld();
+	virtual void garbageCollectWorld();
 
 	void printWorld();
 

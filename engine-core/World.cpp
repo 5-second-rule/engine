@@ -79,7 +79,7 @@ void World::remove(Handle *handle) {
 
 	IHasHandle *object = storage->at(handle->index);
 	if (object != nullptr && object->getHandle().id == handle->id) {
-		storage->at(handle->index)->gc = true;
+		storage->at(handle->index)->setGC();
 	}
 
 	// TODO remove from updatable, serializable, and collidable vectors, in a separate pass
@@ -115,11 +115,15 @@ void World::replace( const Handle& handle,  IHasHandle* object) {
 void World::garbageCollectWorld() {
 	for( size_t i = 0; i < 2; ++i )
 		for( size_t j = 0; j < objects[i].size(); ++j ) {
-		if( this->objects[i][j] != nullptr && this->objects[i][j]->gc ) {
+		if( this->objects[i][j] != nullptr && this->objects[i][j]->getHandle().gc ) {
 				delete this->objects[i][j];
 				this->objects[i][j] = nullptr;
 			}
 	}
+
+	this->collidable->collectGarbage();
+	this->serializable->collectGarbage();
+	this->updatable->collectGarbage();
 }
 
 void World::printWorld() {

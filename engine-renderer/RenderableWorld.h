@@ -9,13 +9,14 @@
 class RENDERDLL RenderableWorld : public World
 {
 private:
-	std::vector<Handle> renderable;
+	GCHandleVector<IRenderable>* renderable;
 
 public:
 	RenderableWorld();
 	~RenderableWorld();
 
 	virtual void insert(IHasHandle *object);
+	virtual void garbageCollectWorld();
 
 	void renderAll();
 };

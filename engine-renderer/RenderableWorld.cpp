@@ -1,29 +1,36 @@
 #include "RenderableWorld.h"
 
 
-RenderableWorld::RenderableWorld(){}
+RenderableWorld::RenderableWorld(){
+	this->renderable = new GCHandleVector<IRenderable>(this);
+}
 
-RenderableWorld::~RenderableWorld() {}
+RenderableWorld::~RenderableWorld() {
+	delete this->renderable;
+}
 
 
 void RenderableWorld::insert(IHasHandle *object) {
 	World::insert(object);
 
 	Handle handle = object->getHandle();
-	if (dynamic_cast<IRenderable*>(object) != nullptr) {
-		this->renderable.push_back(handle);
+	if( dynamic_cast<IRenderable*>(object) != nullptr ) {
+		this->renderable->push_back( handle );
 	}
 }
 
 void RenderableWorld::renderAll() {
-	auto iterator = this->renderable.begin();
-	while (iterator != this->renderable.end()) {
-		IRenderable *renderable = dynamic_cast<IRenderable *>(this->get(*iterator));
 
-		if (renderable != nullptr) {
-			renderable->render();
+	for( int i = 0; i < this->renderable->size(); i++ ) {
+		IRenderable *u = this->renderable->getIndirect( i, false );
+
+		if( u != nullptr ) {
+			u->render();
 		}
-
-		iterator++;
 	}
+}
+
+void RenderableWorld::garbageCollectWorld() {
+	World::garbageCollectWorld();
+	this->renderable->collectGarbage();
 }

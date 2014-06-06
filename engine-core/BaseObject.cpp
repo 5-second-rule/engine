@@ -12,6 +12,10 @@ void BaseObject::setHandle(Handle handle){
 	this->handle = handle;
 }
 
+void BaseObject::setGC(){
+	this->handle.gc = true;
+}
+
 void BaseObject::reserveSize(IReserve& buffer) const {
 	buffer.reserve(sizeof(int));
 	handle.reserveSize(buffer);
