@@ -54,7 +54,7 @@ void Handle::deserialize(BufferReader& reader) {
 	reader.finished(sizeof(size_t) + sizeof(unsigned int)+sizeof(bool));
 }
 
-std::string Handle::toString(){
+std::string Handle::toString() const {
 	std::stringstream buffer;
 	buffer << "---Handle---" << std::endl;
 	buffer << "index: " << index << std::endl;

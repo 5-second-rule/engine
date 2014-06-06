@@ -12,16 +12,10 @@
 
 using namespace std;
 
+const string str_settings_file = "resources/Config.ini";
+const string str_template_settings_file = "resources/ConfigTemplate.ini";
+
 class COREDLL ConfigSettings {
-
-public:
-	static string str_screen_width;
-	static string str_screen_height;
-	static string str_full_screen;
-
-	static const string str_settings_file;
-	static const string str_template_settings_file;
-
 public:
 	static ConfigSettings config; // Use this static reference instead of your own call to the constructor
 	~ConfigSettings();
@@ -33,6 +27,9 @@ public:
 
 	void copySettingsTemplate();
 	void copyMissingSettings();
+
+	template< class T >
+	bool getValueOrDefault(string key, T &ret, T def);
 
 	bool getValue(string key, bool & ret);
 	bool getValue(string key, int & ret);
@@ -48,17 +45,20 @@ public:
 
 private:
 	//default parameters for a default constructor option
-	ConfigSettings(string file_name=str_settings_file, string template_file_name=str_template_settings_file);
+	ConfigSettings(string file_name = str_settings_file, string template_file_name = str_template_settings_file);
 
 
-	hash_map<string,string> settings;
+	hash_map<string, string> settings;
 	bool settings_loaded;
 
 	string file_name;
 	string template_file_name;
 };
 
-
-namespace Utility{
-	COREDLL ConfigSettings* configInstance();
+template< class T >
+bool ConfigSettings::getValueOrDefault(string key, T &ret, T def){
+	if (this->getValue(key, ret))
+		return true;
+	ret = def;
+	return false;
 }

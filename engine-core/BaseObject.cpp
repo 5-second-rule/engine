@@ -52,3 +52,7 @@ void BaseObject::update(float dt) {
 void BaseObject::enqueue(Event *evt) {
 	waitingEvents.push(evt);
 }
+
+std::string BaseObject::toString() const {
+	return this->handle.toString();
+}
