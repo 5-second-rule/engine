@@ -151,7 +151,7 @@ void World::update(float dt) {
 		for (int j = i + 1; j < this->collidable->size(); j++) {
 			ICollidable* c2 = this->collidable->getIndirect(j, false);
 
-			if( c1 == nullptr || c2 == nullptr ) return;
+			if( c1 == nullptr || c2 == nullptr ) continue;
 
 			unsigned int p1 = c1->getPriority();
 			unsigned int p2 = c2->getPriority();
