@@ -130,7 +130,7 @@ void World::printWorld() {
 	for( size_t i = 0; i < 2; ++i )
 		for( size_t j = 0; j < objects[i].size(); ++j )
 			if( this->objects[i][j] != nullptr )
-				std::cout << std::endl << this->objects[i][j]->toString() << std::endl;
+				std::cout << std::endl << this->objects[i][j]->getHandle().toString() << std::endl;
 }
 
 void World::update(float dt) {

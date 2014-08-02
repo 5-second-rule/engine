@@ -31,10 +31,4 @@ public:
 		if (T::TYPE == h->getType()) return static_cast<T*>(h);
 		else return nullptr;
 	}
-
-	virtual std::string toString() {
-		// default implementation, should be overridden
-		// to print more useful info.
-		return this->getHandle().toString();
-	}
 };
